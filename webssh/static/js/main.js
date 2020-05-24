@@ -165,6 +165,10 @@ jQuery(function($){
 
   function toggle_fullscreen(term) {
     $('#terminal .terminal').toggleClass('fullscreen');
+    generate_keyboard(document.getElementById('keyboard'));
+    document.getElementById('keyboard').style.display = 'block';
+    $('#keyboard').toggleClass('fullscreen');
+    var eCont = document.getElementById('keyboard');
     term.fitAddon.fit();
   }
 
