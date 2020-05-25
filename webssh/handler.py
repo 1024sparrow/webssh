@@ -553,6 +553,7 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
                 self.close(reason='Websocket authentication failed.')
 
     def on_message(self, message):
+        print(message)
         logging.debug('{!r} from {}:{}'.format(message, *self.src_addr))
         worker = self.worker_ref()
         try:
