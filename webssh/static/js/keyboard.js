@@ -10,104 +10,122 @@ function generate_keyboard(p_eContainer){
 	var layout = {
 		width: 48,
 		height: 18,
-		buttons: [ // rows
-			{2, {
-				{3,{{"KEY_A", "Esc"}}},
-				{3,{{"KEY_A", "F1"}}},
-				{3,{{"KEY_A", "F2"}}},
-				{3,{{"KEY_A", "F3"}}},
-				{3,{{"KEY_A", "F4"}}},
-				{3,{{"KEY_A", "F5"}}},
-				{3,{{"KEY_A", "F6"}}},
-				{3,{{"KEY_A", "F7"}}},
-				{3,{{"KEY_A", "F8"}}},
-				{3,{{"KEY_A", "F9"}}},
-				{3,{{"KEY_A", "F10"}}},
-				{3,{{"KEY_A", "F11"}}},
-				{3,{{"KEY_A", "F12"}}},
-				{3,{{"KEY_A", "PrtSc"}}},
-				//{2,{{"KEY_A", "Pause"}}},
-				{3,{{"KEY_A", "Ins"}}},
-				{3,{{"KEY_A", "Del"}}}
-			}}, // 00
-			{3, {
-				{3,{{"KEY_A", "` ~"}}},
-				{3,{{"KEY_A","1 !"}}},
-				{3,{{"KEY_A", "2 @"}}},
-				{3,{{"KEY_A", "3 #"}}},
-				{3,{{"KEY_A", "4 $"}}},
-				{3,{{"KEY_A", "5 %"}}},
-				{3,{{"KEY_A", "6 ^"}}},
-				{3,{{"KEY_A", "7 &"}}},
-				{3,{{"KEY_A", "8 *"}}},
-				{3,{{"KEY_A", "9 ("}}},
-				{3,{{"KEY_A", "0 )"}}},
-				{3,{{"KEY_A", "- _"}}},
-				{3,{{"KEY_A", "= +"}}},
-				{6,{{"KEY_A", "BS"}}},
-				{3,{{"KEY_A", "Home"}}}
-			}}, // 01
-			{3, {
-				{4,{{"KEY_A", "Tab"}}},
-				{3,{{"KEY_A", "Q"}}},
-				{3,{{"KEY_A", "W"}}},
-				{3,{{"KEY_A", "E"}}},
-				{3,{{"KEY_A", "R"}}},
-				{3,{{"KEY_A", "T"}}},
-				{3,{{"KEY_A", "Y"}}},
-				{3,{{"KEY_A", "U"}}},
-				{3,{{"KEY_A", "I"}}},
-				{3,{{"KEY_A", "O"}}},
-				{3,{{"KEY_A", "P"}}},
-				{3,{{"KEY_A", "[ {"}}},
-				{3,{{"KEY_A", "] }"}}},
-				{5,{{"KEY_A", "\\\\ |"}}},
-				{3,{{"KEY_A", "PgUp"}}}
-			}}, // 03
-			{3, {
-				{5,{{"KEY_A", "Caps"}}},
-				{3,{{"KEY_A", "A"}}},
-				{3,{{"KEY_A", "S"}}},
-				{3,{{"KEY_A", "D"}}},
-				{3,{{"KEY_A", "F"}}},
-				{3,{{"KEY_A", "G"}}},
-				{3,{{"KEY_A", "H"}}},
-				{3,{{"KEY_A", "J"}}},
-				{3,{{"KEY_A", "K"}}},
-				{3,{{"KEY_A", "L"}}},
-				{3,{{"KEY_A", ": ;"}}},
-				{3,{{"KEY_A", "' \\\""}}},
-				{7,{{"KEY_A", "Ent"}}},
-				{3,{{"KEY_A", "PgDn"}}}
-			}}, // 05
-			{3, {
-				{6,{{"KEY_A", "Sh"}}},
-				{3,{{"KEY_A", "Z"}}},
-				{3,{{"KEY_A", "X"}}},
-				{3,{{"KEY_A", "C"}}},
-				{3,{{"KEY_A", "V"}}},
-				{3,{{"KEY_A", "B"}}},
-				{3,{{"KEY_A", "N"}}},
-				{3,{{"KEY_A", "M"}}},
-				{3,{{"KEY_A", ", <"}}},
-				{3,{{"KEY_A", ". >"}}},
-				{3,{{"KEY_A", "/ ?"}}},
-				{9,{{"KEY_A", "Sh"}}},
-				{3,{{"KEY_A", "End"}}}
-			}}, // 07
-			{4, {
-				{4,{{"KEY_A", "Ctrl"}}},
-				{4,{{"KEY_A", "Win"}}},
-				{4,{{"KEY_A", "Alt"}}},
-				{16,{{"KEY_A", "Space"}}},
-				{4,{{"KEY_A", "Alt"}}},
-				{4,{{"KEY_A", "Win"}}},
-				{3,{{"KEY_A", "Ctrl"}}},
-				{3,{{"KEY_A", "<-"}}},
-				{3,{{"KEY_A", "Up"},{"KEY_A", "Down"}}},
-				{3,{{"KEY_A", "->"}}},
-			}} // 09
-		]
+		rows: [ // rows
+			{
+				size: 2,
+				buttons: [
+					// button: if id not set, use "text" field value instead
+					{ size: 3, subitems: [ { text: "Esc" } ] },
+					{ size: 3, subitems: [ { text: "F1" } ] },
+					{ size: 3, subitems: [ { text: "F2" } ] },
+					{ size: 3, subitems: [ { text: "F3" } ] },
+					{ size: 3, subitems: [ { text: "F4" } ] },
+					{ size: 3, subitems: [ { text: "F5" } ] },
+					{ size: 3, subitems: [ { text: "F6" } ] },
+					{ size: 3, subitems: [ { text: "F7" } ] },
+					{ size: 3, subitems: [ { text: "F8" } ] },
+					{ size: 3, subitems: [ { text: "F9" } ] },
+					{ size: 3, subitems: [ { text: "F10" } ] },
+					{ size: 3, subitems: [ { text: "F12" } ] },
+					{ size: 3, subitems: [ { text: "F13" } ] },
+					{ size: 3, subitems: [ { text: "PrtSc" } ] },
+					{ size: 3, subitems: [ { text: "Ins" } ] },
+					{ size: 3, subitems: [ { text: "Del" } ] }
+				]
+			},
+			{
+				size: 3,
+				buttons: [
+					{ size: 3, subitems: [ { id: "`", text: "` ~" } ] },
+					{ size: 3, subitems: [ { id: "1", text: "1 !" } ] },
+					{ size: 3, subitems: [ { id: "2", text: "2 @" } ] },
+					{ size: 3, subitems: [ { id: "3", text: "3 #" } ] },
+					{ size: 3, subitems: [ { id: "4", text: "4 $" } ] },
+					{ size: 3, subitems: [ { id: "5", text: "5 %" } ] },
+					{ size: 3, subitems: [ { id: "6", text: "6 ^" } ] },
+					{ size: 3, subitems: [ { id: "7", text: "7 &" } ] },
+					{ size: 3, subitems: [ { id: "8", text: "8 *" } ] },
+					{ size: 3, subitems: [ { id: "9", text: "9 (" } ] },
+					{ size: 3, subitems: [ { id: "0", text: "0 )" } ] },
+					{ size: 3, subitems: [ { id: "-", text: "- _" } ] },
+					{ size: 3, subitems: [ { id: "=", text: "= +" } ] },
+					{ size: 3, subitems: [ { id: "BS", text: "BS" } ] },
+					{ size: 3, subitems: [ { id: "Home", text: "Home" } ] }
+				]
+			},
+			{
+				size: 3,
+				buttons: [
+					{ size: 4, subitems: [ { text: "Tab" } ] },
+					{ size: 3, subitems: [ { text: "Q" } ] },
+					{ size: 3, subitems: [ { text: "W" } ] },
+					{ size: 3, subitems: [ { text: "E" } ] },
+					{ size: 3, subitems: [ { text: "R" } ] },
+					{ size: 3, subitems: [ { text: "T" } ] },
+					{ size: 3, subitems: [ { text: "Y" } ] },
+					{ size: 3, subitems: [ { text: "U" } ] },
+					{ size: 3, subitems: [ { text: "I" } ] },
+					{ size: 3, subitems: [ { text: "O" } ] },
+					{ size: 3, subitems: [ { text: "P" } ] },
+					{ size: 3, subitems: [ { text: "[ {" } ] },
+					{ size: 3, subitems: [ { text: "] }" } ] },
+					{ size: 5, subitems: [ { text: "\\ |" } ] },
+					{ size: 3, subitems: [ { text: "PgUp" } ] }
+				]
+			},
+			{
+				size: 3,
+				buttons: [
+					{ size: 5, subitems: [ { text: "Caps" } ] },
+					{ size: 3, subitems: [ { text: "A" } ] },
+					{ size: 3, subitems: [ { text: "S" } ] },
+					{ size: 3, subitems: [ { text: "D" } ] },
+					{ size: 3, subitems: [ { text: "F" } ] },
+					{ size: 3, subitems: [ { text: "G" } ] },
+					{ size: 3, subitems: [ { text: "H" } ] },
+					{ size: 3, subitems: [ { text: "J" } ] },
+					{ size: 3, subitems: [ { text: "K" } ] },
+					{ size: 3, subitems: [ { text: "L" } ] },
+					{ size: 3, subitems: [ { text: "; :" } ] },
+					{ size: 3, subitems: [ { text: "' \"" } ] },
+					{ size: 7, subitems: [ { text: "Ent" } ] },
+					{ size: 3, subitems: [ { text: "PgDn" } ] }
+				]
+			},
+			{
+				size: 3,
+				buttons: [
+					{ size: 6, subitems: [ { text: "Sh" } ] },
+					{ size: 3, subitems: [ { text: "Z" } ] },
+					{ size: 3, subitems: [ { text: "X" } ] },
+					{ size: 3, subitems: [ { text: "C" } ] },
+					{ size: 3, subitems: [ { text: "V" } ] },
+					{ size: 3, subitems: [ { text: "B" } ] },
+					{ size: 3, subitems: [ { text: "N" } ] },
+					{ size: 3, subitems: [ { text: "M" } ] },
+					{ size: 3, subitems: [ { text: ", <" } ] },
+					{ size: 3, subitems: [ { text: ". >" } ] },
+					{ size: 3, subitems: [ { text: "/ ?" } ] },
+					{ size: 9, subitems: [ { text: "Sh" } ] },
+					{ size: 3, subitems: [ { text: "End" } ] }
+				]
+			},
+			{
+				size: 4,
+				buttons: [
+					{ size: 4, subitems: [ { text: "CtrlL" } ] },
+					{ size: 4, subitems: [ { text: "WinL" } ] },
+					{ size: 3, subitems: [ { text: "AltL" } ] },
+					{ size: 3, subitems: [ { text: "Space" } ] },
+					{ size: 3, subitems: [ { text: "AltR" } ] },
+					{ size: 3, subitems: [ { text: "WinR" } ] },
+					{ size: 3, subitems: [ { text: "CtrlR" } ] },
+					{ size: 3, subitems: [ { text: "<-" } ] },
+					{ size: 3, subitems: [ { text: "Up" }, { text: "Down" } ] },
+					{ size: 3, subitems: [ { text: "->" } ] }
+				]
+			}
+		] // rows
 	};
 
 	var bn = document.createElement('div');
