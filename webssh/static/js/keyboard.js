@@ -3,6 +3,7 @@
 /*
 Class ScreenKeyboard.
 set Visible by method setVisible(boolean p_on). Invisible by default.
+call setLayout(string p_layout) to set keyboard layout (e.g. 'en', 'ru', 'italian' &etc.)
 */
 function ScreenKeyboard(){
 	this._layout = {
@@ -93,7 +94,7 @@ function ScreenKeyboard(){
 			{
 				height: 3,
 				buttons: [
-					{ width: 6, subitems: [ { text: "Sh" } ] },
+					{ width: 6, subitems: [ { text: "ShL" } ] },
 					{ width: 3, subitems: [ { text: "Z" } ] },
 					{ width: 3, subitems: [ { text: "X" } ] },
 					{ width: 3, subitems: [ { text: "C" } ] },
@@ -104,7 +105,7 @@ function ScreenKeyboard(){
 					{ width: 3, subitems: [ { text: ", <" } ] },
 					{ width: 3, subitems: [ { text: ". >" } ] },
 					{ width: 3, subitems: [ { text: "/ ?" } ] },
-					{ width: 9, subitems: [ { text: "Sh" } ] },
+					{ width: 9, subitems: [ { text: "ShR" } ] },
 					{ width: 3, subitems: [ { text: "End" } ] }
 				]
 			},
@@ -134,23 +135,26 @@ function ScreenKeyboard(){
 	this._eContainer = tmp;
 	tmp = tmp.style;
 	//this._eContainer.style.display = 'none';
-	tmp.border = '8px solid green';
+	tmp.border = '2px solid red';//
+	//tmp.display = 'none';
+	tmp.position = 'absolute';
+	tmp.left = 0;
+	tmp.top = 0;
+	tmp.width = '100%';
+	tmp.height = '100%';
 	document.body.appendChild(this._eContainer);
 
 	this._buttons = {};
 
-	/*
 	var bn;
 	//const CONST_W = 800; // 
 	//const CONST_H = 600; // 
-	const heightKoef = window.innerWidth / layout.height;
-	const widthKoef = window.innerHeight / layout.width;
 	var xCell, yRow = 0, yCell, wCell, hRow, hCell;
-	for (const oRow of layout.rows){
+	for (const oRow of this._layout.rows){
 		xCell = 0;
-		hRow = heightKoef * oRow.height;
+		hRow = oRow.height;
 		for (const oButton of oRow.buttons){
-			wCell = widthKoef * oButton.width;
+			wCell = oButton.width;
 
 			if (!oButton.subitems.length)
 			{
@@ -165,18 +169,22 @@ function ScreenKeyboard(){
 				bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
 
-				bn.style.top = '' + yCell + 'px';
-				bn.style.left = '' + xCell + 'px';
-				bn.style.width = '' + wCell + 'px';
-				bn.style.height = '' + hCell + 'px';
+				//bn.style.top = '' + yCell + 'px';
+				//bn.style.left = '' + xCell + 'px';
+				//bn.style.width = '' + wCell + 'px';
+				//bn.style.height = '' + hCell + 'px';
 
-				p_eContainer.appendChild(bn);
+				this._eContainer.appendChild(bn);
 				bn.addEventListener('click', fGenerateKeyEvent);
 
 				//this._buttons[oSubitem.text] = bn;
 				this._buttons[oSubitem.text] = {
 					e: bn,
 					geometry: {
+						x: xCell,
+						y: yCell,
+						w: wCell,
+						h: hCell
 					}
 				};
 
@@ -186,7 +194,6 @@ function ScreenKeyboard(){
 		}
 		yRow += hRow;
 	}
-	*/
 
 	(function(self){
 		var f = function(){
@@ -194,7 +201,7 @@ function ScreenKeyboard(){
 				w = window.innerWidth,
 				h = window.innerHeight
 			;
-			self._onResized($,h);
+			self._onResized(w,h);
 		};
 		if(window.attachEvent) {
 			window.attachEvent('onresize', f);
@@ -214,8 +221,23 @@ ScreenKeyboard.prototype.setVisible = function(p_on){
 	this._eContainer.style.display = p_on ? 'block' : 'none';
 	this._isVisible = p_on;
 };
-ScreenKeyboard.prototype._onResized = function(){
+ScreenKeyboard.prototype.setLayout = function(p_layout){
+	console.log('set keyboard layout: ', p_layout);
+};
+ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	console.log('screen keyboard resized');
+
+	const heightKoef = p_h / this._layout.height;
+	const widthKoef = p_w / this._layout.width;
+	var iBn, oBn, tmp;
+	for (iBn in this._buttons){
+		oBn = this._buttons[iBn];
+		tmp = oBn.e.style;
+		tmp.top = '' + (oBn.geometry.y * heightKoef - 1) + 'px';
+		tmp.left = '' + (oBn.geometry.x * widthKoef - 1) + 'px';
+		tmp.width = '' + (oBn.geometry.w * widthKoef - 1) + 'px';
+		tmp.height = '' + (oBn.geometry.h * heightKoef - 1) + 'px';
+	}
 };
 
 /*function generate_keyboard(p_eContainer){
