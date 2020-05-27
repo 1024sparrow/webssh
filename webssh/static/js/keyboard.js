@@ -167,11 +167,6 @@ function ScreenKeyboard(){
 				bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
 
-				//bn.style.top = '' + yCell + 'px';
-				//bn.style.left = '' + xCell + 'px';
-				//bn.style.width = '' + wCell + 'px';
-				//bn.style.height = '' + hCell + 'px';
-
 				this._eContainer.appendChild(bn);
 				bn.addEventListener('click', fGenerateKeyEvent);
 
