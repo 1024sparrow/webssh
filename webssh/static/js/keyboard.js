@@ -135,7 +135,7 @@ function ScreenKeyboard(){
 	this._eContainer = tmp;
 	tmp = tmp.style;
 	//this._eContainer.style.display = 'none';
-	tmp.border = '2px solid red';//
+	//tmp.border = '2px solid red';//
 	//tmp.display = 'none';
 	tmp.position = 'absolute';
 	tmp.left = 0;
@@ -147,8 +147,6 @@ function ScreenKeyboard(){
 	this._buttons = {};
 
 	var bn;
-	//const CONST_W = 800; // 
-	//const CONST_H = 600; // 
 	var xCell, yRow = 0, yCell, wCell, hRow, hCell;
 	for (const oRow of this._layout.rows){
 		xCell = 0;
@@ -177,7 +175,6 @@ function ScreenKeyboard(){
 				this._eContainer.appendChild(bn);
 				bn.addEventListener('click', fGenerateKeyEvent);
 
-				//this._buttons[oSubitem.text] = bn;
 				this._buttons[oSubitem.text] = {
 					e: bn,
 					geometry: {
@@ -233,66 +230,9 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	for (iBn in this._buttons){
 		oBn = this._buttons[iBn];
 		tmp = oBn.e.style;
-		tmp.top = '' + (oBn.geometry.y * heightKoef - 1) + 'px';
-		tmp.left = '' + (oBn.geometry.x * widthKoef - 1) + 'px';
-		tmp.width = '' + (oBn.geometry.w * widthKoef - 1) + 'px';
-		tmp.height = '' + (oBn.geometry.h * heightKoef - 1) + 'px';
+		tmp.top = '' + (oBn.geometry.y * heightKoef) + 'px';
+		tmp.left = '' + (oBn.geometry.x * widthKoef) + 'px';
+		tmp.width = '' + (oBn.geometry.w * widthKoef) + 'px';
+		tmp.height = '' + (oBn.geometry.h * heightKoef) + 'px';
 	}
 };
-
-/*function generate_keyboard(p_eContainer){
-	function generateKeyEvent(p_event){
-		wssh.send(JSON.stringify({data: 'q'}));
-		console.log('xx ' + p_event.target.innerHTML);
-
-	}; // function generateKeyEvent
-
-	var layout = {};
-
-    //bn.addEventListener('click', function($self){return function(){
-    //    //$self.$_onClicked();
-	//	generateKeyEvent();
-    //};}(this));
-
-	var bn;
-	//const CONST_W = 800; // 
-	//const CONST_H = 600; // 
-	const heightKoef = window.innerWidth / layout.height;
-	const widthKoef = window.innerHeight / layout.width;
-	var xCell, yRow = 0, yCell, wCell, hRow, hCell;
-	for (const oRow of layout.rows){
-		xCell = 0;
-		hRow = heightKoef * oRow.height;
-		for (const oButton of oRow.buttons){
-			wCell = widthKoef * oButton.width;
-
-			if (!oButton.subitems.length)
-			{
-				console.error("incorrect empty set of buttons in columns");
-				return;
-			}
-			hCell = hRow / oButton.subitems.length;
-			yCell = yRow;
-			for (const oSubitem of oButton.subitems){
-				// create button here
-				bn = document.createElement('div');
-				bn.innerHTML = oSubitem.text;
-				bn.className = 'keyboard__key';
-
-				bn.style.top = '' + yCell + 'px';
-				bn.style.left = '' + xCell + 'px';
-				bn.style.width = '' + wCell + 'px';
-				bn.style.height = '' + hCell + 'px';
-
-				p_eContainer.appendChild(bn);
-				bn.addEventListener('click', generateKeyEvent);
-
-				yCell += hCell;
-			}
-			xCell += wCell;
-		}
-		yRow += hRow;
-	}
-
-}; // function generate_keyboard
-*/
