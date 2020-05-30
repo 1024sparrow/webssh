@@ -8,8 +8,7 @@ var wssh = {};
   // For FormData without getter and setter
  	var
 		proto = FormData.prototype,
-		data = {},
-		skb = new ScreenKeyboard()
+		data = {}
 	;
 
   if (!proto.get) {
@@ -372,7 +371,9 @@ jQuery(function($){
           theme: {
             background: url_opts_data.bgcolor || 'black'
           }
-        });
+        }),
+        skb = false;
+        //skb = new ScreenKeyboard(term, sock);
 
     term.fitAddon = new window.FitAddon.FitAddon();
     term.loadAddon(term.fitAddon);
@@ -510,12 +511,20 @@ jQuery(function($){
     };
 
     term.onData(function(data) {
-      // console.log(data);
+      //console.log(typeof data, data, data.charCodeAt(0));//string
+      var debugString = data + ':';
+      for (let i = 0 ; i < data.length ; ++i){
+        debugString += ' ' + data.charCodeAt(i);
+      }
+      console.log(debugString);
       sock.send(JSON.stringify({'data': data}));
     });
 
     sock.onopen = function() {
       term.open(terminal);
+      if (skb){
+        skb.setVisible(true);
+      }
       toggle_fullscreen(term);
       update_font_family(term);
       term.focus();
@@ -539,6 +548,9 @@ jQuery(function($){
     sock.onclose = function(e) {
       term.dispose();
       term = undefined;
+      if (skb){
+        skb.setVisible(false);
+      }
       sock = undefined;
       reset_wssh();
       log_status(e.reason, true);

@@ -1,11 +1,17 @@
-'use strict';
+//'use strict';
 
 /*
 Class ScreenKeyboard.
 set Visible by method setVisible(boolean p_on). Invisible by default.
 call setLayout(string p_layout) to set keyboard layout (e.g. 'en', 'ru', 'italian' &etc.)
 */
-function ScreenKeyboard(){
+//var aaaa = document.create('div');
+//aaaa.innerHTML = 'aaaa';
+//document.body.appendChild(aaaa);
+
+function ScreenKeyboard(p_terminal, p_socket){
+	this._terminal = p_terminal;
+	this._socket = p_socket;
 	this._layout = {
 		width: 48,
 		height: 18,
@@ -126,22 +132,87 @@ function ScreenKeyboard(){
 			}
 		] // rows
 	}; // this._layout
-	var fGenerateKeyEvent = function(p_event){
-		wssh.send(JSON.stringify({data: 'q'}));
-		console.log('xx ' + p_event.target.innerHTML);
+	console.log('######### ', term);//
+	var fGenerateKeyEvent = (function(term){
+		var mapa = {
+			'` ~': '`',
+			'1 !': '1',
+			'2 @': '2',
+			'3 #': '3',
+			'4 $': '4',
+			'5 %': '5',
+			'6 ^': '6',
+			'7 &': '7',
+			'8 *': '8',
+			'9 (': '9',
+			'0 )': '0',
+			'- _': '-',
+			'= +': '=',
+			'BS': '\x1b[D',
+			'Tab': '	',
+			'Q': 'q',
+			'W': 'w',
+			'E': 'e',
+			'R': 'r',
+			'T': 't',
+			'Y': 'y',
+			'U': 'u',
+			'I': 'i',
+			'O': 'o',
+			'P': 'p',
+			'[ {': '[',
+			'] }': ']',
+			'A': 'a',
+			'S': 's',
+			'D': 'd',
+			'F': 'f',
+			'G': 'g',
+			'H': 'h',
+			'J': 'j',
+			'K': 'k',
+			'L': 'l',
+			'; :': ';',
+			'\' "': '\'',
+			'Ent': '\n',
+			'Z': 'z',
+			'X': 'x',
+			'C': 'c',
+			'V': 'v',
+			'B': 'b',
+			'N': 'n',
+			'M': 'm',
+			', <': ',',
+			'. >': '.',
+			'/ ?': '/',
+			'': '',
+		};
+		return function(p_event){
+			var keyId = p_event.target.keyId;
+			//term.write(keyId);
+			//term.write('\nls\n');
 
-	}; // function fGenerateKeyEvent
+			//wssh.send(JSON.stringify({data: keyId}));
+			if (mapa.hasOwnProperty(keyId)){
+				wssh.send(JSON.stringify({data: mapa[keyId]}));
+			}
+			//else if ('')
+
+			//console.log('xx ' + p_event.target.innerHTML);
+			p_event.preventDefault();
+		}
+	})(this._terminal); // function fGenerateKeyEvent
 	var tmp = document.createElement('div');
 	this._eContainer = tmp;
 	tmp = tmp.style;
 	//this._eContainer.style.display = 'none';
 	//tmp.border = '2px solid red';//
-	//tmp.display = 'none';
+	tmp.display = 'none';
 	tmp.position = 'absolute';
 	tmp.left = 0;
 	tmp.top = 0;
 	tmp.width = '100%';
 	tmp.height = '100%';
+	tmp.zIndex = '256';
 	document.body.appendChild(this._eContainer);
 
 	this._buttons = {};
@@ -166,9 +237,10 @@ function ScreenKeyboard(){
 				bn = document.createElement('div');
 				bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
+				bn.keyId = oSubitem.text;
 
 				this._eContainer.appendChild(bn);
-				bn.addEventListener('click', fGenerateKeyEvent);
+				bn.addEventListener('click', fGenerateKeyEvent, false);
 
 				this._buttons[oSubitem.text] = {
 					e: bn,
@@ -210,8 +282,16 @@ function ScreenKeyboard(){
 
 };
 ScreenKeyboard.prototype.setVisible = function(p_on){
-	this._eContainer.style.display = p_on ? 'block' : 'none';
-	this._isVisible = p_on;
+	var
+		w = window.innerWidth,
+		h = window.innerHeight
+	;
+	if (this._isVisible !== p_on){
+		this._eContainer.style.display = p_on ? 'block' : 'none';
+		if (this._isVisible = p_on){
+			this._onResized(w, h);
+		}
+	}
 };
 ScreenKeyboard.prototype.setLayout = function(p_layout){
 	console.log('set keyboard layout: ', p_layout);
