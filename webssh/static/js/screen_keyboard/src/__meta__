@@ -1,7 +1,7 @@
 {
 	"files": [
 		{
-			"target": "screen_keybo.js",
+			"target": "screen_keyboard.js",
 			"source": {
 				"template": "t.js",
 				"list": [
