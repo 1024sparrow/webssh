@@ -372,8 +372,8 @@ jQuery(function($){
             background: url_opts_data.bgcolor || 'black'
           }
         }),
-        skb = false;
-        //skb = new ScreenKeyboard(term, sock);
+        //skb = false;
+        skb = new ScreenKeyboard(term, sock);
 
     term.fitAddon = new window.FitAddon.FitAddon();
     term.loadAddon(term.fitAddon);
