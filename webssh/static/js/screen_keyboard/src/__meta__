@@ -1,0 +1,15 @@
+{
+	"files": [
+		{
+			"target": "screen_keybo.js",
+			"source": {
+				"template": "t.js",
+				"list": [
+					"baseLayout.js"
+				]
+			}
+		}
+	],
+    "dir_proc": []
+}
+
