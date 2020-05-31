@@ -15,60 +15,9 @@ function ScreenKeyboard(p_terminal, p_socket){
 	this._layout = {
 		{%% baseLayout.js %%}
 	};
+	this._currentModifier = 'normal';
 	console.log('######### ', term);//
 	var fGenerateKeyEvent = (function(term){
-		var mapa = {
-			'` ~': '`',
-			'1 !': '1',
-			'2 @': '2',
-			'3 #': '3',
-			'4 $': '4',
-			'5 %': '5',
-			'6 ^': '6',
-			'7 &': '7',
-			'8 *': '8',
-			'9 (': '9',
-			'0 )': '0',
-			'- _': '-',
-			'= +': '=',
-			'BS': '\x1b[D',
-			'Tab': '	',
-			'Q': 'q',
-			'W': 'w',
-			'E': 'e',
-			'R': 'r',
-			'T': 't',
-			'Y': 'y',
-			'U': 'u',
-			'I': 'i',
-			'O': 'o',
-			'P': 'p',
-			'[ {': '[',
-			'] }': ']',
-			'A': 'a',
-			'S': 's',
-			'D': 'd',
-			'F': 'f',
-			'G': 'g',
-			'H': 'h',
-			'J': 'j',
-			'K': 'k',
-			'L': 'l',
-			'; :': ';',
-			'\' "': '\'',
-			'Ent': '\n',
-			'Z': 'z',
-			'X': 'x',
-			'C': 'c',
-			'V': 'v',
-			'B': 'b',
-			'N': 'n',
-			'M': 'm',
-			', <': ',',
-			'. >': '.',
-			'/ ?': '/',
-			'': '',
-		};
 		return function(p_event){
 			var keyId = p_event.target.keyId;
 			//term.write(keyId);
@@ -123,8 +72,6 @@ function ScreenKeyboard(p_terminal, p_socket){
 				bn.keyId = oSubitem.text;
 
 				this._eContainer.appendChild(bn);
-				//bn.addEventListener('click', fGenerateKeyEvent, false);
-				// boris here
 				bn.addEventListener('click', (function(p_self){return function(p_event){
 					ScreenKeyboard.prototype._generateKeyEvent.call(p_self, p_event);
 				};})(this), false);
@@ -136,7 +83,8 @@ function ScreenKeyboard(p_terminal, p_socket){
 						y: yCell,
 						w: wCell,
 						h: hCell
-					}
+					},
+					keyCode: oSubitem.keycode
 				};
 
 				yCell += hCell;
@@ -200,5 +148,17 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 };
 
 ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
-	// boris here: мы должны найти соответствующее описание кнопки
+	var keyCode = p_event.target.keyId;
+	keyCode = this._buttons[keyCode].keyCode;
+	keyCode = keyCode[this._currentModifier];
+	if (keyCode.length)
+	{
+		this._socket.send(
+			JSON.stringify(
+				{
+					data: String.fromCharCode.apply(undefined, keyCode)
+				}
+			)
+		);
+	}
 };
