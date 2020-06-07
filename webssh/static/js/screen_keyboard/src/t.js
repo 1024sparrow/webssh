@@ -16,6 +16,14 @@ function ScreenKeyboard(p_terminal, p_socket){
 		{%% baseLayout.js %%}
 	};
 	this._currentModifier = 'normal';
+	this._modifiers = {
+		'ShL': 'shift',
+		'ShR': 'shift',
+		'CtrlL': 'ctrl',
+		'CtrlR': 'ctrl',
+		'AltL': 'alt',
+		'AltR': 'alt'
+	};
 	console.log('######### ', term);//
 	var fGenerateKeyEvent = (function(term){
 		return function(p_event){
@@ -148,8 +156,23 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 };
 
 ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
-	var keyCode = p_event.target.keyId;
-	keyCode = this._buttons[keyCode].keyCode;
+	var keyCode, keyId;
+	var keyId = p_event.target.keyId;
+	if (this._modifiers.hasOwnProperty(keyId)){
+		if (this._currentModifier === 'normal'){
+			this._currentModifier = this._modifiers[keyId];
+		}
+		else if (this._currentModifier === this._modifiers[keyId]){
+			this._currentModifier = 'normal';
+		}
+		else{
+			this._currentModifier = this._modifiers[keyId];
+		}
+	}
+
+	console.log('key id: ', keyId);
+	console.log('current modifier: ', this._currentModifier);
+	keyCode = this._buttons[keyId].keyCode;
 	keyCode = keyCode[this._currentModifier];
 	if (keyCode.length)
 	{
