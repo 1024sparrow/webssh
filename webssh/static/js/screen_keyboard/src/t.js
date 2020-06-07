@@ -75,6 +75,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 			for (const oSubitem of oButton.subitems){
 				// create button here
 				bn = document.createElement('div');
+				bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
 				bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
 				bn.keyId = oSubitem.text;
