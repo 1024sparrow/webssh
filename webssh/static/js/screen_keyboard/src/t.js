@@ -74,9 +74,12 @@ function ScreenKeyboard(p_terminal, p_socket){
 			yCell = yRow;
 			for (const oSubitem of oButton.subitems){
 				// create button here
-				bn = document.createElement('div');
-				bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
-				bn.innerHTML = oSubitem.text;
+				bn = document.createElement('img');
+				bn.src = `static/img/screenkeyboard/${oSubitem.text}.png`;
+				bn.alt = oSubitem.text;
+				bn.style.opacity = '0.1';
+				//bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
+				//bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
 				bn.keyId = oSubitem.text;
 
