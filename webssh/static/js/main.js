@@ -372,8 +372,10 @@ jQuery(function($){
             background: url_opts_data.bgcolor || 'black'
           }
         }),
-        //skb = false;
+        skb = false;
+    if (document.getElementById('use-screen-keyboard').checked){
         skb = new ScreenKeyboard(term, sock);
+	}
 
     term.fitAddon = new window.FitAddon.FitAddon();
     term.loadAddon(term.fitAddon);
