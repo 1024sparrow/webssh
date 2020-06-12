@@ -17,12 +17,12 @@ function ScreenKeyboard(p_terminal, p_socket){
 	};
 	this._currentModifier = 'normal';
 	this._modifiers = {
-		'ShL': 'shift',
-		'ShR': 'shift',
-		'CtrlL': 'ctrl',
-		'CtrlR': 'ctrl',
-		'AltL': 'alt',
-		'AltR': 'alt'
+		'shift_left': 'shift',
+		'shift_right': 'shift',
+		'ctrl_left': 'ctrl',
+		'ctrl_right': 'ctrl',
+		'alt_left': 'alt',
+		'alt_right': 'alt'
 	};
 	console.log('######### ', term);//
 	var fGenerateKeyEvent = (function(term){
@@ -77,7 +77,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 				bn = document.createElement('img');
 				bn.src = `static/img/screenkeyboard/${oSubitem.text}.png`;
 				bn.alt = oSubitem.text;
-				bn.style.opacity = '0.1';
+				bn.style.opacity = '0.3';
 				//bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
 				//bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
