@@ -24,6 +24,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 		'alt_left': 'alt',
 		'alt_right': 'alt'
 	};
+	this._opacity = 0.3;
 	console.log('######### ', term);//
 	var fGenerateKeyEvent = (function(term){
 		return function(p_event){
@@ -78,7 +79,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 				bn = document.createElement('img');
 				bn.src = `static/img/screenkeyboard/${oSubitem.text}.png`;
 				bn.alt = oSubitem.text;
-				bn.style.opacity = '0.3';
+				bn.style.opacity = this._opacity;
 				//bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
 				//bn.innerHTML = oSubitem.text;
 				bn.className = 'keyboard__key';
@@ -116,21 +117,29 @@ function ScreenKeyboard(p_terminal, p_socket){
 	tmp.style.zIndex = '257';
 	(function(self){
 		//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
-		var prevX, prevY, dx, dy;
+		var prevX, prevY, dx, dy, prevOpacity = 0.3;
 		var isMoved;
 
 		function processDraging(touches){
 			var
 				dx = touches[0].pageX - prevX,
 				dy = touches[0].pageY - prevY,
-				CONST_THRES_KOEF = 20
+				CONST_THRES_KOEF = 5,
+				CONST_WIDTH_KOEF = 0.7,
+				tmp
 			;
 			//consol.log(`e{${dx}:${dy}}`);
 			if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
-				consol.log(`scroll{${dx}:${dy}}`);
+				//consol.log(`scroll{${dx}:${dy}}`);
 			}
 			else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
-				consol.log(`opacity{${dx}:${dy}}`);
+				tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
+				if (tmp = parseInt(tmp * 100)){
+					tmp = prevOpacity + tmp / 100;
+					if (tmp >= 0 || tmp <= 1){
+						self.setOpacity(tmp);
+					}
+				}
 			}
 		}
 
@@ -146,6 +155,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 			//consol.log('touchstart(2):' + JSON.stringify(e.changedTouches[0].pageX));
 			prevX = e.changedTouches[0].pageX;
 			prevY = e.changedTouches[0].pageY;
+			prevOpacity = self.opacity();
 			isMoved = false;
 			e.preventDefault();
 			return false;
@@ -217,6 +227,17 @@ ScreenKeyboard.prototype.setVisible = function(p_on){
 			this._onResized(w, h);
 		}
 	}
+};
+ScreenKeyboard.prototype.setOpacity = function(p_opacity){
+	var i, bn;
+	for (i in this._buttons){
+		bn = this._buttons[i];
+		bn.e.style.opacity = p_opacity;
+	}
+	this._opacity = p_opacity;
+};
+ScreenKeyboard.prototype.opacity = function(){
+	return this._opacity;
 };
 ScreenKeyboard.prototype.setLayout = function(p_layout){
 	console.log('set keyboard layout: ', p_layout);
