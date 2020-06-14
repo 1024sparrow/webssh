@@ -119,6 +119,21 @@ function ScreenKeyboard(p_terminal, p_socket){
 		var prevX, prevY, dx, dy;
 		var isMoved;
 
+		function processDraging(touches){
+			var
+				dx = touches[0].pageX - prevX,
+				dy = touches[0].pageY - prevY,
+				CONST_THRES_KOEF = 20
+			;
+			//consol.log(`e{${dx}:${dy}}`);
+			if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
+				consol.log(`scroll{${dx}:${dy}}`);
+			}
+			else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
+				consol.log(`opacity{${dx}:${dy}}`);
+			}
+		}
+
 
 		var consol = {};
 		consol.log = function(p){
@@ -129,12 +144,8 @@ function ScreenKeyboard(p_terminal, p_socket){
 		tmp.addEventListener('touchstart', function(e){
 			//consol.log('touchstart(1):' + JSON.stringify(e.changedTouches));
 			//consol.log('touchstart(2):' + JSON.stringify(e.changedTouches[0].pageX));
-			var
-				x = e.changedTouches[0].pageX,
-				y = e.changedTouches[0].pageY
-			;
-			prevX = x;
-			prevY = y;
+			prevX = e.changedTouches[0].pageX;
+			prevY = e.changedTouches[0].pageY;
 			isMoved = false;
 			e.preventDefault();
 			return false;
@@ -142,11 +153,12 @@ function ScreenKeyboard(p_terminal, p_socket){
 		tmp.addEventListener('touchend', function(e){
 			//consol.log('touchend' + JSON.stringify(e.changedTouches));
 			var
-				x = e.changedTouches[0].pageX,
-				y = e.changedTouches[0].pageY
+				dx = e.changedTouches[0].pageX - prevX,
+				dy = e.changedTouches[0].pageY - prevY
 			;
 			if (isMoved){ // process draging
 				consol.log('process draging');
+				processDraging(e.changedTouches);
 			}
 			else{ // process click
 				consol.log('process click');
@@ -155,11 +167,16 @@ function ScreenKeyboard(p_terminal, p_socket){
 			return false;
 		});
 		tmp.addEventListener('touchmove', function(e){
+			var
+				dx = e.changedTouches[0].pageX - prevX,
+				dy = e.changedTouches[0].pageY - prevY
+			;
 			/*consol.log('mouse moved' + JSON.stringify(e.changedTouches));
 			var
 				x = e.changedTouches[0].pageX,
 				y = e.changedTouches[0].pageY
 			;*/
+			processDraging(e.changedTouches);
 			isMoved = true;
 			e.preventDefault();
 			return false;
