@@ -25,23 +25,6 @@ function ScreenKeyboard(p_terminal, p_socket){
 		'alt_right': 'alt'
 	};
 	this._opacity = 0.3;
-	console.log('######### ', term);//
-	var fGenerateKeyEvent = (function(term){
-		return function(p_event){
-			var keyId = p_event.target.keyId;
-			//term.write(keyId);
-			//term.write('\nls\n');
-
-			//wssh.send(JSON.stringify({data: keyId}));
-			if (mapa.hasOwnProperty(keyId)){
-				wssh.send(JSON.stringify({data: mapa[keyId]}));
-			}
-			//else if ('')
-
-			//console.log('xx ' + p_event.target.innerHTML);
-			p_event.preventDefault();
-		}
-	})(this._terminal); // function fGenerateKeyEvent
 	var tmp = document.createElement('div');
 	this._eContainer = tmp;
 	tmp = tmp.style;
@@ -86,19 +69,24 @@ function ScreenKeyboard(p_terminal, p_socket){
 				bn.keyId = oSubitem.text;
 
 				this._eContainer.appendChild(bn);
-				bn.addEventListener('click', (function(p_self){return function(p_event){
+				/*bn.addEventListener('click', (function(p_self){return function(p_event){
 					ScreenKeyboard.prototype._generateKeyEvent.call(p_self, p_event);
-				};})(this), false);
+				};})(this), false);*/
 
 				this._buttons[oSubitem.text] = {
 					e: bn,
-					geometry: {
+					geometry: { // geometry in internal units
 						x: xCell,
 						y: yCell,
 						w: wCell,
 						h: hCell
 					},
-					keyCode: oSubitem.keycode
+					x1: 0,
+					x2: 0,
+					y1: 0,
+					y2: 0,
+					keyCode: oSubitem.keycode,
+					modifier: this._modifiers[oSubitem.text]
 				};
 
 				yCell += hCell;
@@ -129,8 +117,13 @@ function ScreenKeyboard(p_terminal, p_socket){
 				tmp
 			;
 			//consol.log(`e{${dx}:${dy}}`);
+			//consol.log('**' + self._terminal.rows); // boris e
 			if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
 				//consol.log(`scroll{${dx}:${dy}}`);
+				tmp = dy * self._terminal.rows / window.innerHeight;
+				if (tmp = parseInt(tmp)){
+					self._terminal.scrollLines(-tmp);
+				}
 			}
 			else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
 				tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
@@ -141,6 +134,15 @@ function ScreenKeyboard(p_terminal, p_socket){
 					}
 				}
 			}
+		}
+		function processClick(touches){
+			var
+				x = touches[0].pageX,
+				y = touches[0].pageY,
+				tmp
+			;
+			//consol.log(`x: ${x}, y: ${y}`);
+			self._generateKeyEvent(x, y);
 		}
 
 
@@ -167,11 +169,12 @@ function ScreenKeyboard(p_terminal, p_socket){
 				dy = e.changedTouches[0].pageY - prevY
 			;
 			if (isMoved){ // process draging
-				consol.log('process draging');
+				//consol.log('process draging');
 				processDraging(e.changedTouches);
 			}
 			else{ // process click
-				consol.log('process click');
+				//consol.log('process click');
+				processClick(e.changedTouches);
 			}
 			e.preventDefault();
 			return false;
@@ -250,15 +253,22 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	var iBn, oBn, tmp;
 	for (iBn in this._buttons){
 		oBn = this._buttons[iBn];
+		oBn.x1 = oBn.geometry.x * widthKoef;
+		oBn.y1 = oBn.geometry.y * heightKoef;
+		oBn.x2 = oBn.geometry.w * widthKoef;
+		oBn.y2 = oBn.geometry.h * heightKoef;
 		tmp = oBn.e.style;
-		tmp.top = '' + (oBn.geometry.y * heightKoef) + 'px';
-		tmp.left = '' + (oBn.geometry.x * widthKoef) + 'px';
-		tmp.width = '' + (oBn.geometry.w * widthKoef) + 'px';
-		tmp.height = '' + (oBn.geometry.h * heightKoef) + 'px';
+		tmp.top = '' + oBn.y1 + 'px';
+		tmp.left = '' + oBn.x1 + 'px';
+		tmp.width = '' + oBn.x2 + 'px';
+		tmp.height = '' + oBn.y2 + 'px';
+		oBn.x2 += oBn.x1;
+		oBn.y2 += oBn.y1;
+		this._buttons[iBn] = oBn;
 	}
 };
 
-ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
+/*ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
 	var keyCode, keyId;
 	var keyId = p_event.target.keyId;
 	if (this._modifiers.hasOwnProperty(keyId)){
@@ -287,4 +297,41 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
 			)
 		);
 	}
+};*/
+
+ScreenKeyboard.prototype._generateKeyEvent = function(p_x, p_y){
+	var keyCode, i, bn, bnTarget;
+	for (i in this._buttons){
+		bn = this._buttons[i];
+		if (p_y >= bn.y1 && p_y < bn.y2){
+			if (p_x >= bn.x1 && p_x < bn.x2){
+				bnTarget = bn;
+			}
+		}
+	}
+	if (bnTarget){
+		if (bnTarget.modifier){
+			if (this._currentModifier === 'normal'){
+				this._currentModifier = bnTarget.modifier;
+			}
+			else if (this._currentModifier === bnTarget.modifier){
+				this._currentModifier = 'normal';
+			}
+			else{
+				this._currentModifier = bnTarget.modifier;
+			}
+		}
+		keyCode = bnTarget.keyCode[this._currentModifier];
+		if (keyCode.length)
+		{
+			this._socket.send(
+				JSON.stringify(
+					{
+						data: String.fromCharCode.apply(undefined, keyCode)
+					}
+				)
+			);
+		}
+	}
+	// else report warning
 };
