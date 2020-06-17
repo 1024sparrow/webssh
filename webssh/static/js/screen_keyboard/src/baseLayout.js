@@ -39,7 +39,7 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "0", keycode: { normal: [ 48 ], shift: [ 41 ], alt: [ 27,48 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "defis", keycode: { normal: [ 45 ], shift: [ 95 ], alt: [ 27,45 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "equal", keycode: { normal: [ 61 ], shift: [ 43 ], alt: [ 27,61 ], ctrl: [] } } ] },
-			{ width: 6, subitems: [ { text: "BS", keycode: { normal: [ 127 ], shift: [ 8 ], alt: [ 27,127 ], ctrl: [] } } ] },
+			{ width: 6, subitems: [ { text: "BS", keycode: { normal: [ 127 ], shift: [ 8 ], alt: [ 27,127 ], ctrl: [8] } } ] },
 			{ width: 3, subitems: [ { text: "home", keycode: { normal: [ 27,91,72 ], shift: [ 27,91,49,59,50,72 ], alt: [ 27,91,49,59,51,72 ], ctrl: [ 27,91,49,59,53,72 ] } } ] }
 		]
 	},
@@ -47,20 +47,20 @@ rows: [ // rows
 		height: 3,
 		buttons: [
 			{ width: 4, subitems: [ { text: "tab", keycode: { normal: [ 9 ], shift: [ 27,91,90 ], alt: [], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "q", keycode: { normal: [ 113 ], shift: [ 81 ], alt: [ 27,113 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "w", keycode: { normal: [ 119 ], shift: [ 87 ], alt: [ 27,119 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "e", keycode: { normal: [ 101 ], shift: [ 69 ], alt: [ 27,101 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "r", keycode: { normal: [ 114 ], shift: [ 82 ], alt: [ 27,114 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "t", keycode: { normal: [ 116 ], shift: [ 84 ], alt: [ 27,116 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "y", keycode: { normal: [ 121 ], shift: [ 89 ], alt: [ 27,121 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "u", keycode: { normal: [ 117 ], shift: [ 85 ], alt: [ 27,117 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "i", keycode: { normal: [ 105 ], shift: [ 73 ], alt: [ 27,105 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "o", keycode: { normal: [ 111 ], shift: [ 79 ], alt: [ 27,111 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "p", keycode: { normal: [ 112 ], shift: [ 80 ], alt: [ 27,112 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "figstart", keycode: { normal: [ 91 ], shift: [ 123 ], alt: [ 27,91 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "figend", keycode: { normal: [ 93 ], shift: [ 125 ], alt: [ 27,93 ], ctrl: [ 0 ] } } ] },
-			{ width: 5, subitems: [ { text: "backslash", keycode: { normal: [ 92 ], shift: [ 124 ], alt: [ 27,92 ], ctrl: [ 0 ] } } ] },
-			{ width: 3, subitems: [ { text: "PgUp", keycode: { normal: [ 27,91,53,126 ], shift: [], alt: [], ctrl: [] } } ] }
+			{ width: 3, subitems: [ { text: "q", keycode: { normal: [ 113 ], shift: [ 81 ], alt: [ 27,113 ], ctrl: [ 17 ] } } ] },
+			{ width: 3, subitems: [ { text: "w", keycode: { normal: [ 119 ], shift: [ 87 ], alt: [ 27,119 ], ctrl: [ 23 ] } } ] },
+			{ width: 3, subitems: [ { text: "e", keycode: { normal: [ 101 ], shift: [ 69 ], alt: [ 27,101 ], ctrl: [ 5 ] } } ] },
+			{ width: 3, subitems: [ { text: "r", keycode: { normal: [ 114 ], shift: [ 82 ], alt: [ 27,114 ], ctrl: [ 18 ] } } ] },
+			{ width: 3, subitems: [ { text: "t", keycode: { normal: [ 116 ], shift: [ 84 ], alt: [ 27,116 ], ctrl: [ 20 ] } } ] },
+			{ width: 3, subitems: [ { text: "y", keycode: { normal: [ 121 ], shift: [ 89 ], alt: [ 27,121 ], ctrl: [ 25 ] } } ] },
+			{ width: 3, subitems: [ { text: "u", keycode: { normal: [ 117 ], shift: [ 85 ], alt: [ 27,117 ], ctrl: [ 21 ] } } ] },
+			{ width: 3, subitems: [ { text: "i", keycode: { normal: [ 105 ], shift: [ 73 ], alt: [ 27,105 ], ctrl: [ 9 ] } } ] },
+			{ width: 3, subitems: [ { text: "o", keycode: { normal: [ 111 ], shift: [ 79 ], alt: [ 27,111 ], ctrl: [ 15 ] } } ] },
+			{ width: 3, subitems: [ { text: "p", keycode: { normal: [ 112 ], shift: [ 80 ], alt: [ 27,112 ], ctrl: [ 16 ] } } ] },
+			{ width: 3, subitems: [ { text: "figstart", keycode: { normal: [ 91 ], shift: [ 123 ], alt: [ 27,91 ], ctrl: [ 27 ] } } ] },
+			{ width: 3, subitems: [ { text: "figend", keycode: { normal: [ 93 ], shift: [ 125 ], alt: [ 27,93 ], ctrl: [ 29 ] } } ] },
+			{ width: 5, subitems: [ { text: "backslash", keycode: { normal: [ 92 ], shift: [ 124 ], alt: [ 27,92 ], ctrl: [ 28 ] } } ] },
+			{ width: 3, subitems: [ { text: "PgUp", keycode: { normal: [ 27,91,53,126 ], shift: [], alt: [], ctrl: [27,91,53,59,53,126] } } ] }
 		]
 	},
 	{
@@ -76,10 +76,10 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "j", keycode: { normal: [ 106 ], shift: [ 74 ], alt: [ 27,106 ], ctrl: [ 10 ] } } ] },
 			{ width: 3, subitems: [ { text: "k", keycode: { normal: [ 107 ], shift: [ 75 ], alt: [ 27,107 ], ctrl: [ 11 ] } } ] },
 			{ width: 3, subitems: [ { text: "l", keycode: { normal: [ 108 ], shift: [ 76 ], alt: [ 27,108 ], ctrl: [ 12 ] } } ] },
-			{ width: 3, subitems: [ { text: "colon", keycode: { normal: [ 59 ], shift: [ 58 ], alt: [ 27,59 ], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "quote", keycode: { normal: [ 39 ], shift: [ 34 ], alt: [ 27,39 ], ctrl: [] } } ] },
-			{ width: 7, subitems: [ { text: "enter", keycode: { normal: [ 13 ], shift: [], alt: [], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "PgDn", keycode: { normal: [ 27,91,54,126 ], shift: [], alt: [], ctrl: [] } } ] }
+			{ width: 3, subitems: [ { text: "colon", keycode: { normal: [ 59 ], shift: [ 58 ], alt: [ 27,59 ], ctrl: [ 59 ] } } ] },
+			{ width: 3, subitems: [ { text: "quote", keycode: { normal: [ 39 ], shift: [ 34 ], alt: [ 27,39 ], ctrl: [ 39 ] } } ] },
+			{ width: 7, subitems: [ { text: "enter", keycode: { normal: [ 13 ], shift: [], alt: [], ctrl: [13] } } ] },
+			{ width: 3, subitems: [ { text: "PgDn", keycode: { normal: [ 27,91,54,126 ], shift: [], alt: [], ctrl: [27,91,54,59,53,126] } } ] }
 		]
 	},
 	{
@@ -93,9 +93,9 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "b", keycode: { normal: [ 98 ], shift: [ 66 ], alt: [ 27,98 ], ctrl: [ 2 ] } } ] },
 			{ width: 3, subitems: [ { text: "n", keycode: { normal: [ 110 ], shift: [ 78 ], alt: [ 27,110 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "m", keycode: { normal: [ 109 ], shift: [ 77 ], alt: [ 27,109 ], ctrl: [ 13 ] } } ] },
-			{ width: 3, subitems: [ { text: "comma", keycode: { normal: [ 44 ], shift: [ 60 ], alt: [ 27,44 ], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "dot", keycode: { normal: [ 46 ], shift: [ 62 ], alt: [ 27,46 ], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "slash", keycode: { normal: [ 47 ], shift: [ 63 ], alt: [ 27,47 ], ctrl: [] } } ] },
+			{ width: 3, subitems: [ { text: "comma", keycode: { normal: [ 44 ], shift: [ 60 ], alt: [ 27,44 ], ctrl: [ 44 ] } } ] },
+			{ width: 3, subitems: [ { text: "dot", keycode: { normal: [ 46 ], shift: [ 62 ], alt: [ 27,46 ], ctrl: [ 46 ] } } ] },
+			{ width: 3, subitems: [ { text: "slash", keycode: { normal: [ 47 ], shift: [ 63 ], alt: [ 27,47 ], ctrl: [ 31 ] } } ] },
 			{ width: 9, subitems: [ { text: "shift_right", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "end", keycode: { normal: [ 27,91,70 ], shift: [ 27,91,49,59,50,70 ], alt: [ 27,91,49,59,51,70 ], ctrl: [ 27,91,49,59,53,70 ] } } ] }
 		]
