@@ -322,6 +322,9 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_x, p_y){
 			}
 		}
 		keyCode = bnTarget.keyCode[this._currentModifier];
+		if (!bnTarget.modifier){
+			this._currentModifier = 'normal';
+		}
 		if (keyCode.length)
 		{
 			this._socket.send(
