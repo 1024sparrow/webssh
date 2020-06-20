@@ -106,7 +106,10 @@ function ScreenKeyboard(p_terminal, p_socket){
 	(function(self){
 		//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
 		var prevX, prevY, dx, dy, prevOpacity = 0.3;
+		var curScrollPos = 0, prevScrollPos = 0;
 		var isMoved;
+
+		self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
 
 		function processDraging(touches){
 			var
@@ -120,10 +123,11 @@ function ScreenKeyboard(p_terminal, p_socket){
 			//consol.log('**' + self._terminal.rows); // boris e
 			if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
 				//consol.log(`scroll{${dx}:${dy}}`);
-				tmp = dy * self._terminal.rows / window.innerHeight;
-				if (tmp = parseInt(tmp)){
-					self._terminal.scrollLines(-tmp);
-				}
+				tmp = parseInt(dy * self._terminal.rows / window.innerHeight); // tmp - rows deviation relatively of prevScrollPos
+				tmp = prevScrollPos - tmp;
+				if (tmp < 0)
+					tmp = 0;
+				self._terminal.scrollToLine(tmp);
 			}
 			else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
 				tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
@@ -157,6 +161,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 			//consol.log('touchstart(2):' + JSON.stringify(e.changedTouches[0].pageX));
 			prevX = e.changedTouches[0].pageX;
 			prevY = e.changedTouches[0].pageY;
+			prevScrollPos = curScrollPos;
 			prevOpacity = self.opacity();
 			isMoved = false;
 			e.preventDefault();
