@@ -11,6 +11,11 @@ var wssh = {};
 		data = {}
 	;
 
+	if ('ontouchstart' in window){
+		document.getElementById('use-screen-keyboard').checked = true;
+		document.getElementById('screen-keyboard-checkbox-area').style.display = 'block';
+	}
+
   if (!proto.get) {
     proto.get = function (name) {
       if (data[name] === undefined) {
