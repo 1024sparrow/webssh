@@ -3,6 +3,14 @@
 var jQuery;
 var wssh = {};
 
+function stringToIntArray(p_string){
+	var retVal = [];
+	for (let i = 0 ; i < p_string.length ; ++i){
+		retVal.push(p_string.charCodeAt(i));
+	}
+	return retVal;
+}
+
 
 (function() {
   // For FormData without getter and setter
@@ -14,6 +22,9 @@ var wssh = {};
 	if ('ontouchstart' in window){
 		document.getElementById('use-screen-keyboard').checked = true;
 		document.getElementById('screen-keyboard-checkbox-area').style.display = 'block';
+	}
+	else{
+		document.getElementById('use-screen-keyboard').checked = false;
 	}
 
   if (!proto.get) {
@@ -396,6 +407,9 @@ jQuery(function($){
     function term_write(text) {
       if (term) {
         term.write(text);
+		if (skb){
+			skb.processTerminalData(text);
+		}
         if (!term.resized) {
           resize_terminal(term);
           term.resized = true;
@@ -518,12 +532,7 @@ jQuery(function($){
     };
 
     term.onData(function(data) {
-      //console.log(typeof data, data, data.charCodeAt(0));//string
-      var debugString = data + ':';
-      for (let i = 0 ; i < data.length ; ++i){
-        debugString += ' ' + data.charCodeAt(i);
-      }
-      console.log(debugString);
+      //console.log(data + ': ', stringToIntArray(data));
       sock.send(JSON.stringify({'data': data}));
     });
 

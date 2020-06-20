@@ -10,6 +10,7 @@ call setLayout(string p_layout) to set keyboard layout (e.g. 'en', 'ru', 'italia
 //document.body.appendChild(aaaa);
 
 function ScreenKeyboard(p_terminal, p_socket){
+	this._terminalMode = 0; // 0 - bracketed paste mode OFF, 1 - bracketed paste mode ON
 	this._terminal = p_terminal;
 	this._socket = p_socket;
 	this._layout = {
@@ -249,6 +250,43 @@ ScreenKeyboard.prototype.opacity = function(){
 };
 ScreenKeyboard.prototype.setLayout = function(p_layout){
 	console.log('set keyboard layout: ', p_layout);
+};
+ScreenKeyboard.prototype.processTerminalData = function(p_data){
+	var i, ch, state = 0;
+	if (p_data.indexOf('?2004') >= 0){
+		for (i = 0 ; i < p_data.length ; ++i){
+			ch = p_data.charCodeAt(i);
+			// https://en.wikipedia.org/wiki/ANSI_escape_code
+			// CSI ? 2004 h, [ 27, 91, 63, 50, 48, 48, 52, 104 ] - in
+			// CSI ? 2004 l, [ 27, 91, 63, 50, 48, 48, 52, 108 ] - out
+			if (state === 0 && ch === 27)
+				state = 1;
+			else if (state === 1 && ch === 91)
+				state = 2;
+			else if (state === 2 && ch === 63)
+				state = 3;
+			else if (state === 3 && ch === 50)
+				state = 4;
+			else if (state === 4 && ch === 48)
+				state = 5;
+			else if (state === 5 && ch === 48)
+				state = 6;
+			else if (state === 6 && ch === 52)
+				state = 7;
+			else if (state === 7){
+				if (ch === 104){
+					this._terminalMode = 1;
+				}
+				else if (ch === 108){
+					this._terminalMode = 0;
+				}
+				state = 0;
+			}
+			else{
+				state = 0;
+			}
+		}
+	}
 };
 ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	console.log('screen keyboard resized');
