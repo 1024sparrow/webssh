@@ -365,6 +365,14 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_x, p_y){
 			}
 		}
 		keyCode = bnTarget.keyCode[this._currentModifier];
+		if (this._terminalMode == 1){
+			if (keyCode.length === 3)
+			{
+				if (keyCode[1] === 91){
+					keyCode[1] = 79;
+				}
+			}
+		}
 		if (!bnTarget.modifier){
 			this._currentModifier = 'normal';
 		}

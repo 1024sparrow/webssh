@@ -564,6 +564,10 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
         if not isinstance(msg, dict):
             return
 
+        if 'data' in msg:
+            for i in msg['data']: # boris debug
+                print(ord(i))
+
         resize = msg.get('resize')
         if resize and len(resize) == 2:
             try:
