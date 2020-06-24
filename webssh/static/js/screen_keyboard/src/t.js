@@ -10,6 +10,13 @@ call setLayout(string p_layout) to set keyboard layout (e.g. 'en', 'ru', 'italia
 //document.body.appendChild(aaaa);
 
 function ScreenKeyboard(p_terminal, p_socket){
+	/* States:
+	  0 - normal
+	  1 - pressed. If Release
+	  2 - released (we )
+	*/
+	this._state = 0;
+
 	this._terminalMode = 0; // 0 - bracketed paste mode OFF, 1 - bracketed paste mode ON
 	this._terminal = p_terminal;
 	this._socket = p_socket;
@@ -41,7 +48,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 	tmp.zIndex = '256';
 	document.body.appendChild(this._eContainer);
 
-	this._buttons = {};
+	this._buttons = [];
 
 	var bn;
 	var xCell, yRow = 0, yCell, wCell, hRow, hCell;
@@ -74,7 +81,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 					ScreenKeyboard.prototype._generateKeyEvent.call(p_self, p_event);
 				};})(this), false);*/
 
-				this._buttons[oSubitem.text] = {
+				this._buttons.push({
 					e: bn,
 					geometry: { // geometry in internal units
 						x: xCell,
@@ -88,7 +95,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 					y2: 0,
 					keyCode: oSubitem.keycode,
 					modifier: this._modifiers[oSubitem.text]
-				};
+				});
 
 				yCell += hCell;
 			}
@@ -104,103 +111,9 @@ function ScreenKeyboard(p_terminal, p_socket){
 	tmp.style.width = '100%';
 	tmp.style.height = '100%';
 	tmp.style.zIndex = '257';
-	(function(self){
-		//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
-		var prevX, prevY, dx, dy, prevOpacity = 0.3;
-		var curScrollPos = 0, prevScrollPos = 0;
-		var isMoved;
 
-		self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
+	{%% events.js %%}
 
-		function processDraging(touches){
-			var
-				dx = touches[0].pageX - prevX,
-				dy = touches[0].pageY - prevY,
-				CONST_THRES_KOEF = 5,
-				CONST_WIDTH_KOEF = 0.7,
-				tmp
-			;
-			//consol.log(`e{${dx}:${dy}}`);
-			//consol.log('**' + self._terminal.rows); // boris e
-			if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
-				//consol.log(`scroll{${dx}:${dy}}`);
-				tmp = parseInt(dy * self._terminal.rows / window.innerHeight); // tmp - rows deviation relatively of prevScrollPos
-				tmp = prevScrollPos - tmp;
-				if (tmp < 0)
-					tmp = 0;
-				self._terminal.scrollToLine(tmp);
-			}
-			else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
-				tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
-				if (tmp = parseInt(tmp * 100)){
-					tmp = prevOpacity + tmp / 100;
-					if (tmp >= 0 || tmp <= 1){
-						self.setOpacity(tmp);
-					}
-				}
-			}
-		}
-		function processClick(touches){
-			var
-				x = touches[0].pageX,
-				y = touches[0].pageY,
-				tmp
-			;
-			//consol.log(`x: ${x}, y: ${y}`);
-			self._generateKeyEvent(x, y);
-		}
-
-
-		var consol = {};
-		consol.log = function(p){
-			console.log(p);
-			self._terminal.write(p + '\t');
-		};
-
-		tmp.addEventListener('touchstart', function(e){
-			//consol.log('touchstart(1):' + JSON.stringify(e.changedTouches));
-			//consol.log('touchstart(2):' + JSON.stringify(e.changedTouches[0].pageX));
-			prevX = e.changedTouches[0].pageX;
-			prevY = e.changedTouches[0].pageY;
-			prevScrollPos = curScrollPos;
-			prevOpacity = self.opacity();
-			isMoved = false;
-			e.preventDefault();
-			return false;
-		});
-		tmp.addEventListener('touchend', function(e){
-			//consol.log('touchend' + JSON.stringify(e.changedTouches));
-			var
-				dx = e.changedTouches[0].pageX - prevX,
-				dy = e.changedTouches[0].pageY - prevY
-			;
-			if (isMoved){ // process draging
-				//consol.log('process draging');
-				processDraging(e.changedTouches);
-			}
-			else{ // process click
-				//consol.log('process click');
-				processClick(e.changedTouches);
-			}
-			e.preventDefault();
-			return false;
-		});
-		tmp.addEventListener('touchmove', function(e){
-			var
-				dx = e.changedTouches[0].pageX - prevX,
-				dy = e.changedTouches[0].pageY - prevY
-			;
-			/*consol.log('mouse moved' + JSON.stringify(e.changedTouches));
-			var
-				x = e.changedTouches[0].pageX,
-				y = e.changedTouches[0].pageY
-			;*/
-			processDraging(e.changedTouches);
-			isMoved = true;
-			e.preventDefault();
-			return false;
-		});
-	})(this);
 	this._eContainer.appendChild(tmp);
 
 	(function(self){
@@ -238,9 +151,8 @@ ScreenKeyboard.prototype.setVisible = function(p_on){
 	}
 };
 ScreenKeyboard.prototype.setOpacity = function(p_opacity){
-	var i, bn;
-	for (i in this._buttons){
-		bn = this._buttons[i];
+	var bn;
+	for (bn of this._buttons){
 		bn.e.style.opacity = p_opacity;
 	}
 	this._opacity = p_opacity;
@@ -302,7 +214,7 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 		heightKoef = widthKoef;
 	}
 	var iBn, oBn, tmp;
-	for (iBn in this._buttons){
+	for (iBn = 0 ; iBn < this._buttons.length ; ++iBn){
 		oBn = this._buttons[iBn];
 		oBn.x1 = oBn.geometry.x * widthKoef;
 		oBn.y1 = oBn.geometry.y * heightKoef;
@@ -319,60 +231,23 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	}
 };
 
-/*ScreenKeyboard.prototype._generateKeyEvent = function(p_event){
-	var keyCode, keyId;
-	var keyId = p_event.target.keyId;
-	if (this._modifiers.hasOwnProperty(keyId)){
-		if (this._currentModifier === 'normal'){
-			this._currentModifier = this._modifiers[keyId];
-		}
-		else if (this._currentModifier === this._modifiers[keyId]){
-			this._currentModifier = 'normal';
-		}
-		else{
-			this._currentModifier = this._modifiers[keyId];
-		}
-	}
-
-	console.log('key id: ', keyId);
-	console.log('current modifier: ', this._currentModifier);
-	keyCode = this._buttons[keyId].keyCode;
-	keyCode = keyCode[this._currentModifier];
-	if (keyCode.length)
-	{
-		this._socket.send(
-			JSON.stringify(
-				{
-					data: String.fromCharCode.apply(undefined, keyCode)
-				}
-			)
-		);
-	}
-};*/
-
-ScreenKeyboard.prototype._generateKeyEvent = function(p_x, p_y){
-	var keyCode, i, bn, bnTarget;
-	for (i in this._buttons){
-		bn = this._buttons[i];
+ScreenKeyboard.prototype._hitButton = function(p_x, p_y){
+	var bn;
+	for (bn of this._buttons){
 		if (p_y >= bn.y1 && p_y < bn.y2){
 			if (p_x >= bn.x1 && p_x < bn.x2){
-				bnTarget = bn;
+				return bn;
 			}
 		}
 	}
-	if (bnTarget){
-		if (bnTarget.modifier){
-			if (this._currentModifier === 'normal'){
-				this._currentModifier = bnTarget.modifier;
-			}
-			else if (this._currentModifier === bnTarget.modifier){
-				this._currentModifier = 'normal';
-			}
-			else{
-				this._currentModifier = bnTarget.modifier;
-			}
-		}
-		keyCode = bnTarget.keyCode[this._currentModifier];
+};
+
+ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
+	var keyCode = p_button.keyCode[p_modifier || 'normal'];
+	if (!keyCode || !keyCode.length){ // default value if not specified
+		keyCode = p_button.keyCode['normal'];
+	}
+	if (keyCode && keyCode.length){
 		if (this._terminalMode == 1){
 			if (keyCode.length === 3)
 			{
@@ -381,19 +256,12 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_x, p_y){
 				}
 			}
 		}
-		if (!bnTarget.modifier){
-			this._currentModifier = 'normal';
-		}
-		if (keyCode.length)
-		{
-			this._socket.send(
-				JSON.stringify(
-					{
-						data: String.fromCharCode.apply(undefined, keyCode)
-					}
-				)
-			);
-		}
+		this._socket.send(
+			JSON.stringify(
+				{
+					data: String.fromCharCode.apply(undefined, keyCode)
+				}
+			)
+		);
 	}
-	// else report warning
 };

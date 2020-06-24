@@ -41,9 +41,6 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "equal", keycode: { normal: [ 61 ], shift: [ 43 ], alt: [ 27,61 ], ctrl: [] } } ] },
 			{ width: 6, subitems: [ { text: "BS", keycode: { normal: [ 127 ], shift: [ 8 ], alt: [ 27,127 ], ctrl: [8] } } ] },
 			{ width: 3, subitems: [ { text: "home", keycode: { normal: [ 27,91,72 ], shift: [ 27,91,49,59,50,72 ], alt: [ 27,91,49,59,51,72 ], ctrl: [ 27,91,49,59,53,72 ] } } ] }
-			// boris here:
-			// Home: [27,91,72] in application mode, [27,48,72] in normal mode. VIM runs in normal mode.
-			// For End, Arrows - analoguosly.
 		]
 	},
 	{
