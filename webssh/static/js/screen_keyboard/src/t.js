@@ -291,8 +291,16 @@ ScreenKeyboard.prototype.processTerminalData = function(p_data){
 ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	console.log('screen keyboard resized');
 
-	const heightKoef = p_h / this._layout.height;
-	const widthKoef = p_w / this._layout.width;
+	var heightKoef = p_h / this._layout.height;
+	var widthKoef = p_w / this._layout.width;
+
+	/*if (p_h > p_w){
+		heightKoef = heightKoef * p_w / p_h;
+	}*/
+
+	if (heightKoef > widthKoef){
+		heightKoef = widthKoef;
+	}
 	var iBn, oBn, tmp;
 	for (iBn in this._buttons){
 		oBn = this._buttons[iBn];
