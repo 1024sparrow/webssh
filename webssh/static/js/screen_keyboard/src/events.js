@@ -1,6 +1,8 @@
 (function(self){
 	//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
 	var
+		REPEAT_INTERVAL = 100, // in ms
+		REPEAT_THREASHOLD = 5, // in tacts
 		prevX,
 		prevY,
 		prevOpacity = 0.3,
@@ -101,7 +103,7 @@
 			else if (e == 400){
 				// thinning and press-repeating here
 				if (repeatCounter >= 0){
-					if (++repeatCounter > 5){
+					if (++repeatCounter > REPEAT_THREASHOLD){
 						self._generateKeyEvent(bn, modifier);// null modifier
 					}
 				}
@@ -112,6 +114,7 @@
 				if (bn = self._hitButton(x,y)){
 					if (!bn.modifier){
 						self._generateKeyEvent(bn, modifier);
+						repeatCounter = 0;
 					}
 				}
 			}
@@ -126,8 +129,14 @@
 						state = 0;
 					}
 				}
+				repeatCounter = -1;
 			}
 			else if (e === 400){
+				if (repeatCounter >= 0){
+					if (++repeatCounter > REPEAT_THREASHOLD){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+				}
 			}
 		}
 		else if (state === 2){
@@ -228,5 +237,5 @@
 		e.preventDefault();
 		return false;
 	});*/
-	setInterval(function(){processEvent(400);}, 100);
+	setInterval(function(){processEvent(400);}, REPEAT_INTERVAL);
 })(this);
