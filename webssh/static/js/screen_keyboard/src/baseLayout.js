@@ -18,7 +18,7 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "f10", keycode: { normal: [ 27,91,50,49,126 ], shift: [ 27,91,50,49,59,50,126 ], alt: [ 27,91,50,49,59,51,126 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "f11", keycode: { normal: [ 27,91,50,51,126 ], shift: [ 27,91,50,51,59,50,126 ], alt: [ 27,91,50,51,59,51,126 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "f12", keycode: { normal: [ 27,91,50,52,126 ], shift: [ 27,91,50,52,59,50,126 ], alt: [ 27,91,50,52,59,51,126 ], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "PrtSc", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
+			{ width: 3, subitems: [ { text: "scrolllock", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "insert", keycode: { normal: [ 27,91,50,126 ], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "delete", keycode: { normal: [ 27,91,51,126 ], shift: [], alt: [], ctrl: [ 27,91,51,59,53,126 ] } } ] }
 		]

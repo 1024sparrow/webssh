@@ -60,7 +60,6 @@
 		3 - pressed second key (we\ll don't wait release event - we already have two keys)
 		4 - moving
 		5 - released (process dragging)
-		6 - released key while another keeping pressed (modifier)
 	*/
 	var state = 0;
 	function processEvent(e, p){ // e: 100 - pressed, 200 - moved, 300 - released, 400 - timerTick (reserved)
@@ -84,7 +83,6 @@
 				prevScrollPos = curScrollPos;
 				prevOpacity = self.opacity();
 				if (bn = self._hitButton(x, y)){
-					//self._terminal.write(`%%${bn.modifier}`);
 					if (modifier = self._currentModifier = bn.modifier){
 						self._updateKeyImages();
 						state = 1;
@@ -96,6 +94,27 @@
 				}
 			}
 			else if (e === 200){ // ignore
+				/*if (prevX !== x || prevY !== y){
+					repeatCounter = -1;
+				}*/
+				if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){
+					repeatCounter = -1;
+					state = 4;
+				}
+				/*bnPrev = bn;
+				bn = self._hitButton(x,y);
+				if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
+					self._terminal.write(`%${bn.image}%`);//
+					repeatCounter = -1;
+					bn = undefined;
+					if (modifier){
+						self._currentModifier = modifier = undefined;
+						self._updateKeyImages();
+					}
+					state = 4;
+				}
+				bn = bnPrev;//
+				*/
 			}
 			else if (e === 300){ // ignore
 				repeatCounter = -1;
@@ -111,6 +130,8 @@
 		}
 		else if (state === 1){
 			if (e === 100){ // two keys: only MODIFIER + ORDINARY_KEY
+				prevX = x;
+				prevY = y;
 				if (bn = self._hitButton(x,y)){
 					if (!bn.modifier){
 						self._generateKeyEvent(bn, modifier);
@@ -119,7 +140,32 @@
 				}
 			}
 			else if (e === 200){
-				state = 4;
+				/*repeatCounter = -1;
+				bn = undefined;
+				if (modifier){
+					self._currentModifier = modifier = undefined;
+					self._updateKeyImages();
+				}
+				state = 4;*/
+
+				/*if (prevX !== x || prevY !== y){
+					bnPrev = bn;
+					bn = self._hitButton(x,y);
+					if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
+						self._terminal.write(`%${bn.image}%`);//
+						repeatCounter = -1;
+						bn = undefined;
+						if (modifier){
+							self._currentModifier = modifier = undefined;
+							self._updateKeyImages();
+						}
+						state = 4;
+					}
+					bn = bnPrev;//
+					//else{
+					//	bn = bnPrev;
+					//}
+				}*/
 			}
 			else if (e === 300){
 				if (bn = self._hitButton(x,y)){
@@ -180,39 +226,12 @@
 			else if (e === 400){
 			}
 		}*/
-		/*else if (state === 6){
-			if (e === 100){
-			}
-			else if (e === 200){
-				if (modifier){
-					self._currentModifier = undefined;
-					modifier = undefined;
-					self._updateKeyImages();
-				}
-				state = 0;
-			}
-			else if (e === 300){
-				if (bn = self._hitButton(x,y)){
-					self._terminal.write('#'+bn.modifier+'#');//
-					if (bn.modifier){
-						modifier = undefined;
-						self._currentModifier = undefined;
-						self._updateKeyImages();
-						state = 0;
-					}
-				}
-				else{
-					state = 0; // oops...
-				}
-			}
-			else if (e === 400){
-			}
-		}*/
 
-		//consol.log(state);
 		if ((state === 4) || (state === 5)){
 			processDraging(x - prevX, y - prevY);
-			state = 0;
+			if (state === 5){
+				state = 0;
+			}
 		}
 	}
 
@@ -232,10 +251,10 @@
 		e.preventDefault();
 		return false;
 	});
-	/*tmp.addEventListener('touchmove', function(e){
+	tmp.addEventListener('touchmove', function(e){
 		processEvent(200, e.changedTouches);
 		e.preventDefault();
 		return false;
-	});*/
+	});
 	setInterval(function(){processEvent(400);}, REPEAT_INTERVAL);
 })(this);
