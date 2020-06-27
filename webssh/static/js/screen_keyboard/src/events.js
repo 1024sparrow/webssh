@@ -7,7 +7,8 @@
 		curScrollPos = 0,
 		prevScrollPos = 0,
 		modifier,
-		bn
+		bn,
+		repeatCounter = 0
 	;
 	//var isMoved;
 
@@ -66,11 +67,13 @@
 			y,
 			bnPrev
 		;
-		if (state !== 400){
+		if (e !== 400){
 			x = p[0].pageX;
 			y = p[0].pageY;
 		}
-		//self._terminal.write(`[${state}-${e}]`);//
+		if (e !== 400){
+			//self._terminal.write(`[${state}-${e}]`);//
+		}
 
 		if (state === 0){
 			if (e === 100){
@@ -85,16 +88,23 @@
 						state = 1;
 					}
 					else{
-						self._generateKeyEvent(bn, modifier);
+						repeatCounter = 0;
+						self._generateKeyEvent(bn, modifier); // null modifier
 					}
 				}
 			}
 			else if (e === 200){ // ignore
 			}
 			else if (e === 300){ // ignore
+				repeatCounter = -1;
 			}
 			else if (e == 400){
 				// thinning and press-repeating here
+				if (repeatCounter >= 0){
+					if (++repeatCounter > 5){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+				}
 			}
 		}
 		else if (state === 1){
@@ -218,4 +228,5 @@
 		e.preventDefault();
 		return false;
 	});*/
+	setInterval(function(){processEvent(400);}, 100);
 })(this);
