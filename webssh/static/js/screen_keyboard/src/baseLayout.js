@@ -76,8 +76,8 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "j", keycode: { normal: [ 106 ], shift: [ 74 ], alt: [ 27,106 ], ctrl: [ 10 ] } } ] },
 			{ width: 3, subitems: [ { text: "k", keycode: { normal: [ 107 ], shift: [ 75 ], alt: [ 27,107 ], ctrl: [ 11 ] } } ] },
 			{ width: 3, subitems: [ { text: "l", keycode: { normal: [ 108 ], shift: [ 76 ], alt: [ 27,108 ], ctrl: [ 12 ] } } ] },
-			{ width: 3, subitems: [ { text: "colon", keycode: { normal: [ 59 ], shift: [ 58 ], alt: [ 27,59 ], ctrl: [ 59 ] } } ] },
-			{ width: 3, subitems: [ { text: "quote", keycode: { normal: [ 39 ], shift: [ 34 ], alt: [ 27,39 ], ctrl: [ 39 ] } } ] },
+			{ width: 3, subitems: [ { text: "colon", shift_text: "shift_colon", keycode: { normal: [ 59 ], shift: [ 58 ], alt: [ 27,59 ], ctrl: [ 59 ] } } ] },
+			{ width: 3, subitems: [ { text: "quote", shift_text: "shift_quote", keycode: { normal: [ 39 ], shift: [ 34 ], alt: [ 27,39 ], ctrl: [ 39 ] } } ] },
 			{ width: 7, subitems: [ { text: "enter", keycode: { normal: [ 13 ], shift: [], alt: [], ctrl: [13] } } ] },
 			{ width: 3, subitems: [ { text: "PgDn", keycode: { normal: [ 27,91,54,126 ], shift: [], alt: [], ctrl: [27,91,54,59,53,126] } } ] }
 		]

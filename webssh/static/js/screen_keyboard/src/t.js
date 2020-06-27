@@ -24,6 +24,7 @@ function ScreenKeyboard(p_terminal, p_socket){
 		{%% baseLayout.js %%}
 	};
 	this._currentModifier = 'normal';
+	//this._currentLanguage = undefined;
 	this._modifiers = {
 		'shift_left': 'shift',
 		'shift_right': 'shift',
@@ -93,6 +94,8 @@ function ScreenKeyboard(p_terminal, p_socket){
 					x2: 0,
 					y1: 0,
 					y2: 0,
+					image: oSubitem.text,
+					shift_image: oSubitem.shift_text,
 					keyCode: oSubitem.keycode,
 					modifier: this._modifiers[oSubitem.text]
 				});
@@ -263,5 +266,25 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 				}
 			)
 		);
+	}
+};
+
+ScreenKeyboard.prototype._updateKeyImages = function(){
+	var pathPrefix = 'static/img/screenkeyboard/';
+	if (this._currentLanguage){
+		pathPrefix += this._currentLanguage + '/';
+	}
+	var tmp;
+	for (let bn of this._buttons){
+		tmp = pathPrefix;
+		if (this._currentModifier === 'shift'){
+			tmp += (bn.shift_image || bn.image);
+		}
+		else{
+			tmp += bn.image;
+		}
+		tmp += '.png';
+		//this._terminal.write('*' + tmp + '*\n');//
+		bn.e.src = tmp;
 	}
 };
