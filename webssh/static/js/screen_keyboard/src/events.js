@@ -1,8 +1,8 @@
 (function(self){
 	//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
 	var
-		REPEAT_INTERVAL = 100, // in ms
-		REPEAT_THREASHOLD = 5, // in tacts
+		REPEAT_INTERVAL = 50, // in ms
+		REPEAT_THREASHOLD = 10, // in tacts
 		prevX,
 		prevY,
 		prevOpacity = 0.3,
