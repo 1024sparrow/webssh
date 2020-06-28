@@ -390,7 +390,12 @@ jQuery(function($){
         }),
         skb = false;
     if (document.getElementById('use-screen-keyboard').checked){
-        skb = new ScreenKeyboard(term, sock);
+        skb = new ScreenKeyboard(
+            term,
+            sock,
+            document.getElementById('hostname').value,
+            document.getElementById('username').value
+        );
 	}
 
     term.fitAddon = new window.FitAddon.FitAddon();

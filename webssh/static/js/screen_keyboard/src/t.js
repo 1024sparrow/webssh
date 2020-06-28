@@ -1,15 +1,11 @@
-//'use strict';
+'use strict';
 
 /*
 Class ScreenKeyboard.
 set Visible by method setVisible(boolean p_on). Invisible by default.
-call setLayout(string p_layout) to set keyboard layout (e.g. 'en', 'ru', 'italian' &etc.)
 */
-//var aaaa = document.create('div');
-//aaaa.innerHTML = 'aaaa';
-//document.body.appendChild(aaaa);
 
-function ScreenKeyboard(p_terminal, p_socket){
+function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 	/* States:
 	  0 - normal
 	  1 - pressed. If Release
