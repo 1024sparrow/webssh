@@ -12,6 +12,8 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 	  2 - released (we )
 	*/
 	this._state = 0;
+	this._hostname = p_hostname;
+	this._username = p_username;
 
 	this._terminalMode = 0; // 0 - bracketed paste mode OFF, 1 - bracketed paste mode ON
 	this._terminal = p_terminal;
@@ -19,6 +21,7 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 	this._layout = {
 		{%% baseLayout.js %%}
 	};
+	this._currentTty = 'q';
 	this._currentModifier = 'normal';
 	//this._currentLanguage = undefined;
 	this._modifiers = {
@@ -27,7 +30,9 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 		'ctrl_left': 'ctrl',
 		'ctrl_right': 'ctrl',
 		'alt_left': 'alt',
-		'alt_right': 'alt'
+		'alt_right': 'alt',
+		'win_left': 'win',
+		'win_right': 'win'
 	};
 	this._opacity = 0.3;
 	var tmp = document.createElement('div');
@@ -135,7 +140,18 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 			console.log('epic fail.')
 		}
 	})(this);
-
+	(function(self){
+		var tmp = self._username + ':' + self._currentTty;
+		setTimeout(function(){
+			self._socket.send(
+				JSON.stringify(
+					{
+						data: 'screen -r ' + tmp + ' || screen -S ' + tmp + '\r'
+					}
+				)
+			);
+		}, 3000);
+	})(this);
 };
 ScreenKeyboard.prototype.setVisible = function(p_on){
 	var
@@ -242,26 +258,62 @@ ScreenKeyboard.prototype._hitButton = function(p_x, p_y){
 };
 
 ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
-	var keyCode = p_button.keyCode[p_modifier || 'normal'];
-	if (!keyCode || !keyCode.length){ // default value if not specified
-		keyCode = p_button.keyCode['normal'];
-	}
-	if (keyCode && keyCode.length){
-		if (this._terminalMode == 1){
-			if (keyCode.length === 3)
-			{
-				if (keyCode[1] === 91){
-					keyCode[1] = 79;
-				}
+
+	var keyCode;
+	var tmp;
+	if (p_modifier === 'win'){
+		if ('qwertyuiopasdfghjklzxcvbnm'.indexOf(p_button.image) >= 0){
+			if (p_button.image !== this._currentTty){
+				this._currentTty = p_button.image;
+				tmp = this._username + ':' + this._currentTty;
+				/*this._socket.send(
+					JSON.stringify(
+						{
+							data:  String.fromCharCode.apply(undefined, [1,100]) + '\r' + 'screen -r ' + tmp + ' || screen -S ' + tmp + '\r' // [1,100] is "Ctrl+a, d"
+						}
+					)
+				);*/
+
+				this._socket.send(
+					JSON.stringify(
+						{
+							data:  String.fromCharCode.apply(undefined, [1,100]) // [1,100] is "Ctrl+a, d"
+						}
+					)
+				);
+
+				this._socket.send(
+					JSON.stringify(
+						{
+							data:  'screen -r ' + tmp + ' || screen -S ' + tmp + '\r'
+						}
+					)
+				);
 			}
 		}
-		this._socket.send(
-			JSON.stringify(
+	}
+	else{
+		keyCode = p_button.keyCode[p_modifier || 'normal'];
+		if (!keyCode || !keyCode.length){ // default value if not specified
+			keyCode = p_button.keyCode['normal'];
+		}
+		if (keyCode && keyCode.length){
+			if (this._terminalMode === 1){
+				if (keyCode.length === 3)
 				{
-					data: String.fromCharCode.apply(undefined, keyCode)
+					if (keyCode[1] === 91){
+						keyCode[1] = 79;
+					}
 				}
-			)
-		);
+			}
+			this._socket.send(
+				JSON.stringify(
+					{
+						data: String.fromCharCode.apply(undefined, keyCode)
+					}
+				)
+			);
+		}
 	}
 };
 
