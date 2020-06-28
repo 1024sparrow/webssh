@@ -266,18 +266,19 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 			if (p_button.image !== this._currentTty){
 				this._currentTty = p_button.image;
 				tmp = this._username + ':' + this._currentTty;
-				/*this._socket.send(
-					JSON.stringify(
-						{
-							data:  String.fromCharCode.apply(undefined, [1,100]) + '\r' + 'screen -r ' + tmp + ' || screen -S ' + tmp + '\r' // [1,100] is "Ctrl+a, d"
-						}
-					)
-				);*/
-
 				this._socket.send(
 					JSON.stringify(
 						{
 							data:  String.fromCharCode.apply(undefined, [1,100]) // [1,100] is "Ctrl+a, d"
+						}
+					)
+				);
+
+				// protect if there was not screen session activated (e.g. closed by user)
+				this._socket.send(
+					JSON.stringify(
+						{
+							data:  '\r'
 						}
 					)
 				);
