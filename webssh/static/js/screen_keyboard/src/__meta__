@@ -6,7 +6,8 @@
 				"template": "t.js",
 				"list": [
 					"events.js",
-					"baseLayout.js"
+					"baseLayout.js",
+					"screenMark"
 				]
 			}
 		}

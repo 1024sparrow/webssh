@@ -141,7 +141,7 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 		}
 	})(this);
 	(function(self){
-		var tmp = self._username + ':' + self._currentTty;
+		var tmp = self._username + {%% screenMark %%} + self._currentTty;
 		setTimeout(function(){
 			self._socket.send(
 				JSON.stringify(
