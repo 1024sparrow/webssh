@@ -180,6 +180,13 @@ ScreenKeyboard.prototype.setLayout = function(p_layout){
 };
 ScreenKeyboard.prototype.processTerminalData = function(p_data){
 	var i, ch, state = 0;
+	/*var debugString = '';
+	for (i = 0 ; i < p_data.length ; ++i){
+		//this._terminal.write(`(${ch})`);
+		debugString += `(${p_data[i]}: ${p_data.charCodeAt(i)})`;
+
+	}
+	this._socket.send(debugString);*/
 	if (p_data.indexOf('?2004') >= 0){
 		for (i = 0 ; i < p_data.length ; ++i){
 			ch = p_data.charCodeAt(i);
@@ -196,11 +203,13 @@ ScreenKeyboard.prototype.processTerminalData = function(p_data){
 				state = 4;
 			else if (state === 4 && ch === 48)
 				state = 5;
+			else if (state === 4 && ch === 53)
+				state = 15;
 			else if (state === 5 && ch === 48)
 				state = 6;
 			else if (state === 6 && ch === 52)
 				state = 7;
-			else if (state === 7){
+			else if (state === 7 || state === 15){
 				if (ch === 104){
 					this._terminalMode = 1;
 				}
