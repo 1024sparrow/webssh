@@ -7,6 +7,7 @@ import traceback
 import weakref
 import paramiko
 import tornado.web
+from users import allowed_users, allowed_ips
 
 from concurrent.futures import ThreadPoolExecutor
 from tornado.ioloop import IOLoop
@@ -442,6 +443,13 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
         return 'utf-8'
 
     def ssh_connect(self, args):
+        allowed = False
+        if args[0] in allowed_users:
+            if args[1] in allowed_users[args[0]]:
+                if args[2] in allowed_users[args[0]][args[1]]:
+                    allowed = True
+        if not allowed:
+            raise ValueError('Authentication failed.')
         ssh = self.ssh_client
         dst_addr = args[:2]
         logging.info('Connecting to {}:{}'.format(*dst_addr))
@@ -532,6 +540,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
         self.src_addr = self.get_client_addr()
         logging.info('Connected from {}:{}'.format(*self.src_addr))
 
+        if not self.src_addr[0] in allowed_ips:
+            self.close(reason='Websocket authentication failed.')
         workers = clients.get(self.src_addr[0])
         if not workers:
             self.close(reason='Websocket authentication failed.')
@@ -565,8 +575,9 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
             return
 
         if 'data' in msg:
-            for i in msg['data']: # boris debug
-                print(ord(i))
+            # for i in msg['data']: # boris debug
+            #    print(ord(i))
+            pass
 
         resize = msg.get('resize')
         if resize and len(resize) == 2:
