@@ -89,7 +89,7 @@
 					}
 					else{
 						repeatCounter = 0;
-						self._generateKeyEvent(bn, modifier); // null modifier
+						//self._generateKeyEvent(bn, modifier); // null modifier
 					}
 				}
 			}
@@ -97,10 +97,12 @@
 				/*if (prevX !== x || prevY !== y){
 					repeatCounter = -1;
 				}*/
-				if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){
+
+				/*if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){*/
 					repeatCounter = -1;
 					state = 4;
-				}
+				//}
+
 				/*bnPrev = bn;
 				bn = self._hitButton(x,y);
 				if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
@@ -117,12 +119,18 @@
 				*/
 			}
 			else if (e === 300){ // ignore
+				if (repeatCounter >= 0 && repeatCounter < 2){
+					self._generateKeyEvent(bn, modifier);
+				}
 				repeatCounter = -1;
 			}
 			else if (e == 400){
 				// thinning and press-repeating here
 				if (repeatCounter >= 0){
 					if (++repeatCounter > REPEAT_THREASHOLD){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+					else if (repeatCounter === 2){
 						self._generateKeyEvent(bn, modifier);// null modifier
 					}
 				}
