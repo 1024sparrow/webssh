@@ -62,7 +62,7 @@
 		5 - released (process dragging)
 	*/
 	var state = 0;
-	function processEvent(e, p){ // e: 100 - pressed, 200 - moved, 300 - released, 400 - timerTick (reserved)
+	function processEvent(e, p){ // e: 100 - pressed, 200 - moved, 300 - released, 400 - timerTick
 		var
 			x,
 			y,
@@ -73,7 +73,7 @@
 			y = p[0].pageY;
 		}
 		if (e !== 400){
-			//self._terminal.write(`[${state}-${e}]`);//
+			//self._terminal.write(`[${state}-${e}]`);// boris debug
 		}
 
 		if (state === 0){
@@ -89,7 +89,8 @@
 					}
 					else{
 						repeatCounter = 0;
-						self._generateKeyEvent(bn, modifier); // null modifier
+						//self._generateKeyEvent(bn, modifier); // null modifier
+						state = 1;
 					}
 				}
 			}
@@ -97,10 +98,20 @@
 				/*if (prevX !== x || prevY !== y){
 					repeatCounter = -1;
 				}*/
-				if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){
+
+				/*if (Math.abs(x - prevX) > 4 || Math.abs(y - prevY > 4))*/{
 					repeatCounter = -1;
 					state = 4;
 				}
+
+				/*if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){
+					repeatCounter = -1;
+					state = 4;
+				}
+				else{
+					repeatCounter = -1;
+					state = 0;
+				}*/
 				/*bnPrev = bn;
 				bn = self._hitButton(x,y);
 				if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
@@ -121,11 +132,11 @@
 			}
 			else if (e == 400){
 				// thinning and press-repeating here
-				if (repeatCounter >= 0){
+				/*if (repeatCounter >= 0){
 					if (++repeatCounter > REPEAT_THREASHOLD){
 						self._generateKeyEvent(bn, modifier);// null modifier
 					}
-				}
+				}*/
 			}
 		}
 		else if (state === 1){
@@ -133,8 +144,8 @@
 				prevX = x;
 				prevY = y;
 				if (bn = self._hitButton(x,y)){
-					if (!bn.modifier){
-						self._generateKeyEvent(bn, modifier);
+					if (modifier && !bn.modifier){
+						//self._generateKeyEvent(bn, modifier);
 						repeatCounter = 0;
 					}
 				}
@@ -166,6 +177,8 @@
 					//	bn = bnPrev;
 					//}
 				}*/
+				repeatCounter = -1;
+				state = 4;
 			}
 			else if (e === 300){
 				if (bn = self._hitButton(x,y)){
@@ -175,11 +188,18 @@
 						state = 0;
 					}
 				}
+				if (!modifier){
+					repeatCounter = -1;
+					state = 0;
+				}
 				repeatCounter = -1;
 			}
 			else if (e === 400){
 				if (repeatCounter >= 0){
 					if (++repeatCounter > REPEAT_THREASHOLD){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+					else if (repeatCounter === 2){
 						self._generateKeyEvent(bn, modifier);// null modifier
 					}
 				}
@@ -226,10 +246,27 @@
 			else if (e === 400){
 			}
 		}*/
+		else if (state === 10){
+			if (e === 100){
+			}
+			else if (e === 200){
+				repeatCounter = -1;
+				state = 4;
+			}
+			else if (e === 300){
+				repeatCounter = -1;
+				state = 0; // boris e: and also print symbol
+			}
+			else if (e === 400){
+				self._generateKeyEvent(bn, modifier); // null modifier
+				state = 1;
+			}
+		}
 
 		if ((state === 4) || (state === 5)){
 			processDraging(x - prevX, y - prevY);
 			if (state === 5){
+				repeatCounter = -1;
 				state = 0;
 			}
 		}
