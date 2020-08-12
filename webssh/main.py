@@ -1,3 +1,4 @@
+import os
 import logging
 import tornado.web
 import tornado.ioloop
@@ -6,18 +7,31 @@ from tornado.options import options
 from webssh import handler
 from webssh.handler import IndexHandler, WsockHandler, NotFoundHandler
 from webssh.settings import (
-    get_app_settings,  get_host_keys_settings, get_policy_setting,
+    get_app_settings, get_host_keys_settings, get_policy_setting,
     get_ssl_context, get_server_settings, check_encoding_setting
 )
+
+def get_sound_settings():
+    soundPipeP = os.environ['SOUND_PIPE_P']
+    soundPipeC = os.environ['SOUND_PIPE_C']
+    settings = dict(
+        use_sound = True if len(soundPipeP) or len(soundPipeC) else False,
+        use_p = True if len(soundPipeP) else False,
+        use_c = True if len(soundPipeC) else False,
+        playbackPipe = soundPipeP,
+        capturePipe = soundPipeC
+    )
+    return settings
 
 
 def make_handlers(loop, options):
     host_keys_settings = get_host_keys_settings(options)
     policy = get_policy_setting(options, host_keys_settings)
+    sound = get_sound_settings()
 
     handlers = [
         (r'/', IndexHandler, dict(loop=loop, policy=policy,
-                                  host_keys_settings=host_keys_settings)),
+            host_keys_settings=host_keys_settings, sound=sound)),
         (r'/ws', WsockHandler, dict(loop=loop))
     ]
     return handlers

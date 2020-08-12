@@ -318,14 +318,16 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 
     executor = ThreadPoolExecutor(max_workers=cpu_count()*5)
 
-    def initialize(self, loop, policy, host_keys_settings):
+    def initialize(self, loop, policy, host_keys_settings, sound):
         super(IndexHandler, self).initialize(loop)
         self.policy = policy
         self.host_keys_settings = host_keys_settings
+        self.sound_settings = sound
         self.ssh_client = self.get_ssh_client()
         self.debug = self.settings.get('debug', False)
         self.font = self.settings.get('font', '')
         self.result = dict(id=None, status=None, encoding=None)
+        print(sound) # boris debug
 
     def write_error(self, status_code, **kwargs):
         if swallow_http_errors and self.request.method == 'POST':
@@ -491,7 +493,14 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
         pass
 
     def get(self):
-        self.render('index.html', debug=self.debug, font=self.font)
+        self.render(
+            'index.html',
+            debug=self.debug,
+            font=self.font,
+            sound=self.sound_settings['use_sound'],
+            soundPlayback=self.sound_settings['use_p'],
+            soundCapturing=self.sound_settings['use_c']
+        )
 
     @tornado.gen.coroutine
     def post(self):

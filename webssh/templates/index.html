@@ -88,6 +88,21 @@
           <div class="col">
           </div>
         </div>
+		<!-- boris here -->
+		{% if sound %}
+		<div id="sound-checkbox-area" class="row">
+			<div class="col">
+				{% if soundPlayback %}
+				<label><input type="checkbox" id="use-sound-playback">Use sound playback</label>
+				{% end %}
+			</div>
+			<div class="col">
+				{% if soundCapturing %}
+				<label><input type="checkbox" id="use-sound-capturing">Use sound capturing</label>
+				{% end %}
+			</div>
+		</div>
+		{% end %}
         <input type="hidden" id="term" name="term" value="xterm-256color">
         {% module xsrf_form_html() %}
         <button type="submit" class="btn btn-primary">Connect</button>
