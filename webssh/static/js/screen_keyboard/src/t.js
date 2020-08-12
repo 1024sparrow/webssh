@@ -228,13 +228,13 @@ ScreenKeyboard.prototype._onResized = function(p_w, p_h){
 	var heightKoef = p_h / this._layout.height;
 	var widthKoef = p_w / this._layout.width;
 
-	/*if (p_h > p_w){
-		heightKoef = heightKoef * p_w / p_h;
-	}*/
+	//if (p_h > p_w){
+	//	heightKoef = heightKoef * p_w / p_h;
+	//}
 
-	if (heightKoef > widthKoef){
-		heightKoef = widthKoef;
-	}
+	//if (heightKoef > widthKoef){
+	//	heightKoef = widthKoef;
+	//}
 	var iBn, oBn, tmp;
 	for (iBn = 0 ; iBn < this._buttons.length ; ++iBn){
 		oBn = this._buttons[iBn];
