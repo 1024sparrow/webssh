@@ -388,7 +388,29 @@ jQuery(function($){
             background: url_opts_data.bgcolor || 'black'
           }
         }),
-        skb = false;
+        skb = false,
+		sound,
+		tmp;
+	if (tmp = document.getElementById('use-sound-playback')){
+		if (tmp.checked){
+			sound = {playback: true};
+		}
+	}
+	if (tmp = document.getElementById('use-sound-capturing')){
+		if (tmp.checked){
+			if (!sound)
+				sound = {};
+			sound.capture = true;
+		}
+	}
+	if (sound){
+		sound = new Sound(
+            sock,
+            document.getElementById('hostname').value,
+            document.getElementById('username').value,
+			sound
+		);
+	}
     if (document.getElementById('use-screen-keyboard').checked){
         skb = new ScreenKeyboard(
             term,
@@ -543,9 +565,13 @@ jQuery(function($){
 
     sock.onopen = function() {
       term.open(terminal);
+	  if (sound){
+		sound.init();
+	  }
       if (skb){
         skb.setVisible(true);
       }
+	  alert('====');
       toggle_fullscreen(term);
       update_font_family(term);
       term.focus();
@@ -559,7 +585,7 @@ jQuery(function($){
     };
 
     sock.onmessage = function(msg) {
-      read_file_as_text(msg.data, term_write, decoder);
+      read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
     };
 
     sock.onerror = function(e) {
@@ -569,6 +595,9 @@ jQuery(function($){
     sock.onclose = function(e) {
       term.dispose();
       term = undefined;
+	  if (sound){
+		sound.stopAll();
+	  }
       if (skb){
         skb.setVisible(false);
       }

@@ -93,12 +93,12 @@
 		<div id="sound-checkbox-area" class="row">
 			<div class="col">
 				{% if soundPlayback %}
-				<label><input type="checkbox" id="use-sound-playback">Use sound playback</label>
+				<label><input type="checkbox" id="use-sound-playback" checked>Use sound playback</label>
 				{% end %}
 			</div>
 			<div class="col">
 				{% if soundCapturing %}
-				<label><input type="checkbox" id="use-sound-capturing">Use sound capturing</label>
+				<label><input type="checkbox" id="use-sound-capturing" checked>Use sound capturing</label>
 				{% end %}
 			</div>
 		</div>
@@ -125,6 +125,8 @@
     <script src="static/js/bootstrap.min.js"></script>
     <script src="static/js/xterm.min.js"></script>
     <script src="static/js/xterm-addon-fit.min.js"></script>
+    <script src="static/js/Recorderjs/recorder.js"></script>
+    <script src="static/js/sound.js"></script>
     <script src="static/js/main.js"></script>
   </body>
 </html>
