@@ -389,7 +389,7 @@ jQuery(function($){
           }
         }),
         skb = false,
-		sound,
+		sound = false,
 		tmp;
 	if (tmp = document.getElementById('use-sound-playback')){
 		if (tmp.checked){
@@ -443,6 +443,15 @@ jQuery(function($){
         }
       }
     }
+
+	function processSoundFromServer(text) {
+		var asObject = JSON.parse(text);
+		if (!asObject)
+			return;
+		if (sound) {
+			sound.processDataFromServer(asObject);
+		}
+	}
 
     function set_encoding(new_encoding) {
       // for console use
@@ -571,7 +580,6 @@ jQuery(function($){
       if (skb){
         skb.setVisible(true);
       }
-	  alert('====');
       toggle_fullscreen(term);
       update_font_family(term);
       term.focus();
@@ -586,6 +594,9 @@ jQuery(function($){
 
     sock.onmessage = function(msg) {
       read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
+	  if (sound) {
+		  read_file_as_text(msg.sound, processSoundFromServer, decoder);
+	  }
     };
 
     sock.onerror = function(e) {

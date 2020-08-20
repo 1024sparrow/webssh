@@ -17,13 +17,7 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	catch(e){
 		alert('Your browser no supports audio');
 	}
-	navigator.getUserMedia({audio:true}, this.startStream.bind(this), function(e) {
-		alert('no audio stream...');
-	});
-
-	// boris here
-	//var self = this;
-	//window.addeventListener('load', function(){self.onLoad()});
+	//setInterval(this._onTimer);
 }
 /*Sound.prototype.onLoad = function(){
 	navigator.getUserMedia({audio:true}, this.startStream.bind(this), function(e) {
@@ -32,7 +26,6 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	});        
 }*/
 Sound.prototype.startStream = function(stream){
-	alert('boris 1');
 	//var microphone = this._context.createMediaStreamSource(stream);
 
 	//Create virtual input from empty amplification factor object
@@ -51,22 +44,40 @@ Sound.prototype.startStream = function(stream){
 	virtualInput.connect( analyserNode );
 
 	//Set the stream to RecorderJs from Matt Diamond
-	alert('1');
 	this.Recorder           = new Recorder( virtualInput );
-	alert('2');
+	window.boris = this.Recorder;//
 
 	//Set volume to zero
 	var amplificationFactor = this._context.createGain();
+	//amplificationFactor.gain.value = 1.0;
 	//amplificationFactor.gain.value     = 0.0;
 
 	//We set volume to zero to output, so we cancel echo
 	amplificationFactor.connect( this._context.destination );        
-	alert('ready');
+	console.log('ready');
+	this.Recorder.record();
 }
 
 Sound.prototype.stopAll = function(){
 }
 
 Sound.prototype.init = function(){ // start data streaming
-	this.startStream();
+	navigator.getUserMedia({audio:true}, this.startStream.bind(this), function(e) {
+		alert('no audio stream...');
+	});
+}
+
+Sound.prototype.processDataFromServer = function(object){
+	var data, requested;
+	if (this._flags.playback){
+		// read and apply object.data, write requested
+	}
+	if (this._flags.capture){
+		// read object.requested and write to data
+		// boris here
+		this.Recorder // boris.exportWAV(function(blob){console.log(blob);})
+	}
+	if (data || requested){
+		this._socket.send(JSON.stringify({requested: requested, data: data}));
+	}
 }
