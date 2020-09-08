@@ -41,7 +41,13 @@ function startServer {
 		openssl req -x509 -nodes -newkey rsa:2048 -days 365 -keyout "${dirpath}/https/key" -subj /C=RU/ST=./L=./O=./CN=${targetDomain} -out "${dirpath}/https/cert"
 	fi
 	popd > /dev/null # $dirpath
-	SOUND_PIPE_P=qq SOUND_PIPE_C=ww python "$dirpath"/run.py --certfile="$dirpath"/https/cert --keyfile="$dirpath"/https/key --sslport=$port --port=$httpPort
+	SOUND_PIPE_P=boris/playback.pipe \
+	SOUND_PIPE_C=boris/capture.pipe \
+	 python "$dirpath"/run.py \
+		--certfile="$dirpath"/https/cert \
+		--keyfile="$dirpath"/https/key \
+		--sslport=$port \
+		--port=$httpPort
 }
 
 for i in $*
