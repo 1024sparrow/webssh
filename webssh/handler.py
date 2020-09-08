@@ -549,8 +549,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
         self.src_addr = self.get_client_addr()
         logging.info('Connected from {}:{}'.format(*self.src_addr))
 
-        if not self.src_addr[0] in allowed_ips:
-            self.close(reason='Websocket authentication failed.')
+        #if not self.src_addr[0] in allowed_ips:
+        #    self.close(reason='Websocket authentication failed.')
         workers = clients.get(self.src_addr[0])
         if not workers:
             self.close(reason='Websocket authentication failed.')
