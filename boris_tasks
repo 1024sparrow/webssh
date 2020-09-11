@@ -1,17 +1,5 @@
 Задачи:
 
 boris here:
-scroll.
-1. Key "scroll lock". moving --> auto enabling scroll mode.
-2. Prevent key pressing when scrolling.
-3. Scroll mode indication (different images on the button)
-
-+ работа клавиш (стрелки) и (HOME/END) в разных режимах консоли.
-+ Возможность нажать Ctrl, и, удерживая её, нажимаьт другие клавиши.
--- Поправить функции, связанные с перетаскиванием (прозрачность клавиатуры и прокрутка консоли)
-+ Автоповтор при удержании клавиши нажатой.
-- Прореживание событий смещения при изменении прозрачности клавиатуры и при прокрутке.
-
-+ Смена картинок у части клавиш при активном модификаторе Shift.
-+ ... (множественные терминалы, использование клавиши "Windows")
-- ... (альтернативные раскладки клавиатуры, CapsLock как клавиша для быстрого переключения раскладки, Windows + CapsLock для выбора раскладки из списка доступных раскладок)
+1. Shift+PgUp, Shift+ArrowUp, Shift+End. There must be not scrolling by moving.
+2. To change keyboard opacity start moving from <Space> key.

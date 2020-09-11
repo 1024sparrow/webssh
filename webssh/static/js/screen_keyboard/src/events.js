@@ -12,7 +12,6 @@
 		bn,
 		repeatCounter = 0
 	;
-	//var isMoved;
 
 	self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
 
