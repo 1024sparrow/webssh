@@ -549,6 +549,7 @@ jQuery(function($){
       toggle_fullscreen(term);
       update_font_family(term);
       term.focus();
+      term.blur();
       state = CONNECTED;
       title_element.text = url_opts_data.title || default_title;
       if (url_opts_data.command) {
