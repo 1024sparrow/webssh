@@ -443,11 +443,12 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
         return 'utf-8'
 
     def ssh_connect(self, args):
-        allowed = False
-        if args[0] in allowed_users:
-            if args[1] in allowed_users[args[0]]:
-                if args[2] in allowed_users[args[0]][args[1]]:
-                    allowed = True
+        allowed = True#
+        #allowed = False
+        #if args[0] in allowed_users:
+        #    if args[1] in allowed_users[args[0]]:
+        #        if args[2] in allowed_users[args[0]][args[1]]:
+        #            allowed = True
         if not allowed:
             raise ValueError('Authentication failed.')
         ssh = self.ssh_client
@@ -540,8 +541,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
         self.src_addr = self.get_client_addr()
         logging.info('Connected from {}:{}'.format(*self.src_addr))
 
-        if not self.src_addr[0] in allowed_ips:
-            self.close(reason='Websocket authentication failed.')
+        #if not self.src_addr[0] in allowed_ips:
+        #    self.close(reason='Websocket authentication failed.')
         workers = clients.get(self.src_addr[0])
         if not workers:
             self.close(reason='Websocket authentication failed.')
