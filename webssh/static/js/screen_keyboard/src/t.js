@@ -300,6 +300,10 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 			}
 		}
 	}
+	//else if ((this._terminalMode === 0) && p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){
+	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){//
+		//this._terminal.write('+(' + this._terminalMode + ')'); // boris here: make scroll here
+	}
 	else{
 		keyCode = p_button.keyCode[p_modifier || 'normal'];
 		if (!keyCode || !keyCode.length){ // default value if not specified
