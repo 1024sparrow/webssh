@@ -1,5 +1,5 @@
 Задачи:
 
 boris here:
-1. Shift+PgUp, Shift+ArrowUp, Shift+End. There must be not scrolling by moving.
-2. To change keyboard opacity start moving from <Space> key.
+1. To change keyboard opacity start moving from <Ctrl> key. Or any modifier key. If not moved then modifier else dragging. THere's have to change events.js .
+	Change dragging rules: no horizontal and vertical now (must be). Must be analized angle of final moving, for opacity only.

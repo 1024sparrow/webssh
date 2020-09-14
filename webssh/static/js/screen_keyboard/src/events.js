@@ -31,7 +31,7 @@
 			tmp = prevScrollPos - tmp;
 			if (tmp < 0)
 				tmp = 0;
-			self._terminal.scrollToLine(tmp);
+			self._terminal.scrollToLine(tmp); // boris dm
 		}
 		else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
 			tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
@@ -229,6 +229,7 @@
 		}*/
 
 		if ((state === 4) || (state === 5)){
+			// boris here
 			processDraging(x - prevX, y - prevY);
 			if (state === 5){
 				state = 0;
