@@ -18,6 +18,26 @@
 	function processDraging(dx, dy){
 		// boris here
 		var
+			CONST_DISTANCE_THRESHOLD = 5,
+			resetValue = 0.3, // boris e: take actual value
+			dist = dx * dx + dy * dy,
+			angle
+		;
+		//consol.log(`<dx(${dx}),dy(${dy}),dist(${dist}>)`);
+		if (!dx || !dy)
+			return;
+		if (dist > 50000) { // boris here
+			//angle = dy
+
+			self.setOpacity(0.6);
+		}
+		else {
+			self.setOpacity(resetValue);
+		}
+		//
+
+		/*
+		var
 			//dx = touches[0].pageX - prevX,
 			//dy = touches[0].pageY - prevY,
 			CONST_THRES_KOEF = 5,
@@ -42,7 +62,7 @@
 					self.setOpacity(tmp);
 				}
 			}
-		}
+		}*/
 	}
 	/*function processClick(touches){
 		var
