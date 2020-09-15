@@ -1,5 +1,4 @@
 (function(self){
-	//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
 	var
 		REPEAT_INTERVAL = 50, // in ms
 		REPEAT_THREASHOLD = 10, // in tacts
@@ -21,7 +20,6 @@
 			dist = dx * dx + dy * dy,
 			angle
 		;
-		//consol.log(`<dx(${dx}),dy(${dy}),dist(${dist}>)`);
 		if (!dx || !dy)
 			return;
 		if (dist > 50000) {
@@ -62,45 +60,7 @@
 		else {
 			self.setOpacity(prevOpacity);
 		}
-		//
-
-		/*
-		var
-			//dx = touches[0].pageX - prevX,
-			//dy = touches[0].pageY - prevY,
-			CONST_THRES_KOEF = 5,
-			CONST_WIDTH_KOEF = 0.7,
-			tmp
-		;
-		//consol.log(`e{${dx}:${dy}}`);
-		//consol.log('**' + self._terminal.rows); // boris e
-		if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
-			//consol.log(`scroll{${dx}:${dy}}`);
-			tmp = parseInt(dy * self._terminal.rows / window.innerHeight); // tmp - rows deviation relatively of prevScrollPos
-			tmp = prevScrollPos - tmp;
-			if (tmp < 0)
-				tmp = 0;
-			self._terminal.scrollToLine(tmp); // boris dm
-		}
-		else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
-			tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
-			if (tmp = parseInt(tmp * 100)){
-				tmp = prevOpacity + tmp / 100;
-				if (tmp >= 0 || tmp <= 1){
-					self.setOpacity(tmp);
-				}
-			}
-		}*/
 	}
-	/*function processClick(touches){
-		var
-			x = touches[0].pageX,
-			y = touches[0].pageY,
-			tmp
-		;
-		//consol.log(`x: ${x}, y: ${y}`);
-		self._generateKeyEvent(x, y);
-	}*/
 	/* States:
 		0 - normal
 		1 - pressed
@@ -149,25 +109,9 @@
 
 				if (tmp !== self._hitButton(x, y)){
 					bn = tmp;
-					//self._terminal.write('/');
 					repeatCounter = -1;
-					//state = 4; // boris here commented
+					//state = 4; // boris e: remove this part
 				}
-
-				/*bnPrev = bn;
-				bn = self._hitButton(x,y);
-				if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
-					self._terminal.write(`%${bn.image}%`);//
-					repeatCounter = -1;
-					bn = undefined;
-					if (modifier){
-						self._currentModifier = modifier = undefined;
-						self._updateKeyImages();
-					}
-					state = 4;
-				}
-				bn = bnPrev;//
-				*/
 			}
 			else if (e === 300){ // ignore
 				repeatCounter = -1;
@@ -200,32 +144,6 @@
 					repeatCounter = -1;
 					state = 4; // boris here commented
 				}
-				/*repeatCounter = -1;
-				bn = undefined;
-				if (modifier){
-					self._currentModifier = modifier = undefined;
-					self._updateKeyImages();
-				}
-				state = 4;*/
-
-				/*if (prevX !== x || prevY !== y){
-					bnPrev = bn;
-					bn = self._hitButton(x,y);
-					if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
-						self._terminal.write(`%${bn.image}%`);//
-						repeatCounter = -1;
-						bn = undefined;
-						if (modifier){
-							self._currentModifier = modifier = undefined;
-							self._updateKeyImages();
-						}
-						state = 4;
-					}
-					bn = bnPrev;//
-					//else{
-					//	bn = bnPrev;
-					//}
-				}*/
 			}
 			else if (e === 300){
 				if (bn = self._hitButton(x,y)){
@@ -291,8 +209,6 @@
 			if (bn.image === 'ctrl_left'){
 				processDraging(x - prevX, y - prevY);
 			}
-			//self._terminal.write(bn.image);
-			//processDraging(x - prevX, y - prevY);
 			if (state === 5){
 				state = 0;
 				prevOpacity = self.opacity();
