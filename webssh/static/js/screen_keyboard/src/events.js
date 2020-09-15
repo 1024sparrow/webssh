@@ -142,7 +142,7 @@
 				if (tmp !== self._hitButton(x, y)){
 					bn = tmp;
 					repeatCounter = -1;
-					state = 4; // boris here commented
+					state = 4;
 				}
 			}
 			else if (e === 300){
