@@ -16,6 +16,7 @@
 	self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
 
 	function processDraging(dx, dy){
+		// boris here
 		var
 			//dx = touches[0].pageX - prevX,
 			//dy = touches[0].pageY - prevY,
@@ -96,10 +97,13 @@
 				/*if (prevX !== x || prevY !== y){
 					repeatCounter = -1;
 				}*/
+				tmp = self._hitButton(prevX, prevY);
 
-				if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){
+				if (tmp !== self._hitButton(x, y)){
+					bn = tmp;
+					//self._terminal.write('/');
 					repeatCounter = -1;
-					state = 4;
+					//state = 4; // boris here commented
 				}
 
 				/*bnPrev = bn;
@@ -141,6 +145,13 @@
 				}
 			}
 			else if (e === 200){
+				tmp = self._hitButton(prevX, prevY);
+
+				if (tmp !== self._hitButton(x, y)){
+					bn = tmp;
+					repeatCounter = -1;
+					state = 4; // boris here commented
+				}
 				/*repeatCounter = -1;
 				bn = undefined;
 				if (modifier){
@@ -229,8 +240,11 @@
 		}*/
 
 		if ((state === 4) || (state === 5)){
-			// boris here
-			processDraging(x - prevX, y - prevY);
+			if (bn.image === 'ctrl_left'){
+				processDraging(x - prevX, y - prevY);
+			}
+			//self._terminal.write(bn.image);
+			//processDraging(x - prevX, y - prevY);
 			if (state === 5){
 				state = 0;
 			}
