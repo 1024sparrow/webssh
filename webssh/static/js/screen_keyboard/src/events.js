@@ -16,11 +16,8 @@
 	self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
 
 	function processDraging(dx, dy){
-		// boris here
 		var
 			CONST_DISTANCE_THRESHOLD = 5,
-			resetValue = 0.3, // boris e: take actual value
-			//resetValue = self.opacity(), // boris e: take actual value
 			dist = dx * dx + dy * dy,
 			angle
 		;
@@ -63,7 +60,7 @@
 			self.setOpacity(angle / 10);
 		}
 		else {
-			self.setOpacity(resetValue);
+			self.setOpacity(prevOpacity);
 		}
 		//
 
@@ -298,6 +295,7 @@
 			//processDraging(x - prevX, y - prevY);
 			if (state === 5){
 				state = 0;
+				prevOpacity = self.opacity();
 			}
 		}
 	}
