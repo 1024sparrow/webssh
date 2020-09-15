@@ -20,16 +20,47 @@
 		var
 			CONST_DISTANCE_THRESHOLD = 5,
 			resetValue = 0.3, // boris e: take actual value
+			//resetValue = self.opacity(), // boris e: take actual value
 			dist = dx * dx + dy * dy,
 			angle
 		;
 		//consol.log(`<dx(${dx}),dy(${dy}),dist(${dist}>)`);
 		if (!dx || !dy)
 			return;
-		if (dist > 50000) { // boris here
-			//angle = dy
+		if (dist > 50000) {
+			angle = dx * 100;
+			if (angle < (16 * Math.abs(dy))) {
+				angle = 0;
+			}
+			else if (angle < (32 * Math.abs(dy))) {
+				angle = 1;
+			}
+			else if (angle < (51 * Math.abs(dy))) {
+				angle = 2;
+			}
+			else if (angle < (73 * Math.abs(dy))) {
+				angle = 3;
+			}
+			else if (angle < (100 * Math.abs(dy))) {
+				angle = 4;
+			}
+			else if (angle < (138 * Math.abs(dy))) {
+				angle = 5;
+			}
+			else if (angle < (196 * Math.abs(dy))) {
+				angle = 6;
+			}
+			else if (angle < (308 * Math.abs(dy))) {
+				angle = 7;
+			}
+			else if (angle < (631 * Math.abs(dy))) {
+				angle = 8;
+			}
+			else {
+				angle = 9;
+			}
 
-			self.setOpacity(0.6);
+			self.setOpacity(angle / 10);
 		}
 		else {
 			self.setOpacity(resetValue);
