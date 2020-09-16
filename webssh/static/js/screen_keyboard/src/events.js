@@ -68,6 +68,7 @@
 		3 - pressed second key (we\ll don't wait release event - we already have two keys)
 		4 - moving
 		5 - released (process dragging)
+		6 - repeating (two keys pressed)
 	*/
 	var state = 0;
 	function processEvent(e, p){ // e: 100 - pressed, 200 - moved, 300 - released, 400 - timerTick (reserved)
@@ -137,20 +138,13 @@
 				}
 			}
 			else if (e === 200){
-				// boris here:
-				//   commented - shift+D repeating works
-				//   uncommented - opacity control works
-				// But not both at the same time
-
-				//self._terminal.write(`{${x}}`);
-				///if (p[1])
-				//	self._terminal.write(`<${p[1].pageX}>`);
-
 				tmp = self._hitButton(prevX, prevY);
 
 				if (tmp !== self._hitButton(x, y)){
-					if (!p[1])
-					{
+					if (p[1]){
+						state = 6;
+					}
+					else {
 						bn = tmp;
 						repeatCounter = -1;
 						state = 4;
@@ -206,16 +200,37 @@
 			else if (e === 400){
 			}
 		}
-		/*else if (state === 5){
+		else if (state === 6){
 			if (e === 100){
+				prevX = x;
+				prevY = y;
+				if (bn = self._hitButton(x,y)){
+					if (!bn.modifier){
+						self._generateKeyEvent(bn, modifier);
+						repeatCounter = 0;
+					}
+				}
 			}
 			else if (e === 200){
 			}
 			else if (e === 300){
+				if (bn = self._hitButton(x,y)){
+					if (bn.modifier){
+						modifier = self._currentModifier = undefined;
+						self._updateKeyImages();
+						state = 0;
+					}
+				}
+				repeatCounter = -1;
 			}
 			else if (e === 400){
+				if (repeatCounter >= 0){
+					if (++repeatCounter > REPEAT_THREASHOLD){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+				}
 			}
-		}*/
+		}
 
 		if ((state === 4) || (state === 5)){
 			if (bn.image === 'ctrl_left'){
