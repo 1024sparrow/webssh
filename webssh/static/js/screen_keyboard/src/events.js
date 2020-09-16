@@ -137,12 +137,24 @@
 				}
 			}
 			else if (e === 200){
+				// boris here:
+				//   commented - shift+D repeating works
+				//   uncommented - opacity control works
+				// But not both at the same time
+
+				//self._terminal.write(`{${x}}`);
+				///if (p[1])
+				//	self._terminal.write(`<${p[1].pageX}>`);
+
 				tmp = self._hitButton(prevX, prevY);
 
 				if (tmp !== self._hitButton(x, y)){
-					bn = tmp;
-					repeatCounter = -1;
-					state = 4;
+					if (!p[1])
+					{
+						bn = tmp;
+						repeatCounter = -1;
+						state = 4;
+					}
 				}
 			}
 			else if (e === 300){
