@@ -1,5 +1,4 @@
 (function(self){
-	//tmp.addEventListener('click', function(e){console.log('clicked');e.preventDefault();});
 	var
 		REPEAT_INTERVAL = 50, // in ms
 		REPEAT_THREASHOLD = 10, // in tacts
@@ -12,47 +11,56 @@
 		bn,
 		repeatCounter = 0
 	;
-	//var isMoved;
 
 	self._terminal.onScroll(function(p_pos){curScrollPos = p_pos;});
 
 	function processDraging(dx, dy){
 		var
-			//dx = touches[0].pageX - prevX,
-			//dy = touches[0].pageY - prevY,
-			CONST_THRES_KOEF = 5,
-			CONST_WIDTH_KOEF = 0.7,
-			tmp
+			CONST_DISTANCE_THRESHOLD = 5,
+			dist = dx * dx + dy * dy,
+			angle
 		;
-		//consol.log(`e{${dx}:${dy}}`);
-		//consol.log('**' + self._terminal.rows); // boris e
-		if (Math.abs(dy) > CONST_THRES_KOEF * Math.abs(dx)){
-			//consol.log(`scroll{${dx}:${dy}}`);
-			tmp = parseInt(dy * self._terminal.rows / window.innerHeight); // tmp - rows deviation relatively of prevScrollPos
-			tmp = prevScrollPos - tmp;
-			if (tmp < 0)
-				tmp = 0;
-			self._terminal.scrollToLine(tmp);
-		}
-		else if (Math.abs(dx) > CONST_THRES_KOEF * Math.abs(dy)){
-			tmp = dx / (window.innerWidth * CONST_WIDTH_KOEF);
-			if (tmp = parseInt(tmp * 100)){
-				tmp = prevOpacity + tmp / 100;
-				if (tmp >= 0 || tmp <= 1){
-					self.setOpacity(tmp);
-				}
+		if (!dx || !dy)
+			return;
+		if (dist > 50000) {
+			angle = dx * 100;
+			if (angle < (16 * Math.abs(dy))) {
+				angle = 0;
 			}
+			else if (angle < (32 * Math.abs(dy))) {
+				angle = 1;
+			}
+			else if (angle < (51 * Math.abs(dy))) {
+				angle = 2;
+			}
+			else if (angle < (73 * Math.abs(dy))) {
+				angle = 3;
+			}
+			else if (angle < (100 * Math.abs(dy))) {
+				angle = 4;
+			}
+			else if (angle < (138 * Math.abs(dy))) {
+				angle = 5;
+			}
+			else if (angle < (196 * Math.abs(dy))) {
+				angle = 6;
+			}
+			else if (angle < (308 * Math.abs(dy))) {
+				angle = 7;
+			}
+			else if (angle < (631 * Math.abs(dy))) {
+				angle = 8;
+			}
+			else {
+				angle = 9;
+			}
+
+			self.setOpacity(angle / 10);
+		}
+		else {
+			self.setOpacity(prevOpacity);
 		}
 	}
-	/*function processClick(touches){
-		var
-			x = touches[0].pageX,
-			y = touches[0].pageY,
-			tmp
-		;
-		//consol.log(`x: ${x}, y: ${y}`);
-		self._generateKeyEvent(x, y);
-	}*/
 	/* States:
 		0 - normal
 		1 - pressed
@@ -60,6 +68,7 @@
 		3 - pressed second key (we\ll don't wait release event - we already have two keys)
 		4 - moving
 		5 - released (process dragging)
+		6 - repeating (two keys pressed)
 	*/
 	var state = 0;
 	function processEvent(e, p){ // e: 100 - pressed, 200 - moved, 300 - released, 400 - timerTick (reserved)
@@ -89,7 +98,7 @@
 					}
 					else{
 						repeatCounter = 0;
-						//self._generateKeyEvent(bn, modifier); // null modifier
+						self._generateKeyEvent(bn, modifier); // null modifier
 					}
 				}
 			}
@@ -97,40 +106,21 @@
 				/*if (prevX !== x || prevY !== y){
 					repeatCounter = -1;
 				}*/
+				tmp = self._hitButton(prevX, prevY);
 
-				/*if (self._hitButton(x,y) !== self._hitButton(prevX, prevY)){*/
+				if (tmp !== self._hitButton(x, y)){
+					bn = tmp;
 					repeatCounter = -1;
-					state = 4;
-				//}
-
-				/*bnPrev = bn;
-				bn = self._hitButton(x,y);
-				if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
-					self._terminal.write(`%${bn.image}%`);//
-					repeatCounter = -1;
-					bn = undefined;
-					if (modifier){
-						self._currentModifier = modifier = undefined;
-						self._updateKeyImages();
-					}
-					state = 4;
+					//state = 4; // boris e: remove this part
 				}
-				bn = bnPrev;//
-				*/
 			}
 			else if (e === 300){ // ignore
-				if (repeatCounter >= 0 && repeatCounter < 2){
-					self._generateKeyEvent(bn, modifier);
-				}
 				repeatCounter = -1;
 			}
 			else if (e == 400){
 				// thinning and press-repeating here
 				if (repeatCounter >= 0){
 					if (++repeatCounter > REPEAT_THREASHOLD){
-						self._generateKeyEvent(bn, modifier);// null modifier
-					}
-					else if (repeatCounter === 2){
 						self._generateKeyEvent(bn, modifier);// null modifier
 					}
 				}
@@ -148,32 +138,18 @@
 				}
 			}
 			else if (e === 200){
-				/*repeatCounter = -1;
-				bn = undefined;
-				if (modifier){
-					self._currentModifier = modifier = undefined;
-					self._updateKeyImages();
-				}
-				state = 4;*/
+				tmp = self._hitButton(prevX, prevY);
 
-				/*if (prevX !== x || prevY !== y){
-					bnPrev = bn;
-					bn = self._hitButton(x,y);
-					if (!bn || (modifier && (bn.modifier !== modifier) && (bn !== bnPrev))){
-						self._terminal.write(`%${bn.image}%`);//
+				if (tmp !== self._hitButton(x, y)){
+					if (p[1]){
+						state = 6;
+					}
+					else {
+						bn = tmp;
 						repeatCounter = -1;
-						bn = undefined;
-						if (modifier){
-							self._currentModifier = modifier = undefined;
-							self._updateKeyImages();
-						}
 						state = 4;
 					}
-					bn = bnPrev;//
-					//else{
-					//	bn = bnPrev;
-					//}
-				}*/
+				}
 			}
 			else if (e === 300){
 				if (bn = self._hitButton(x,y)){
@@ -224,21 +200,45 @@
 			else if (e === 400){
 			}
 		}
-		/*else if (state === 5){
+		else if (state === 6){
 			if (e === 100){
+				prevX = x;
+				prevY = y;
+				if (bn = self._hitButton(x,y)){
+					if (!bn.modifier){
+						self._generateKeyEvent(bn, modifier);
+						repeatCounter = 0;
+					}
+				}
 			}
 			else if (e === 200){
 			}
 			else if (e === 300){
+				if (bn = self._hitButton(x,y)){
+					if (bn.modifier){
+						modifier = self._currentModifier = undefined;
+						self._updateKeyImages();
+						state = 0;
+					}
+				}
+				repeatCounter = -1;
 			}
 			else if (e === 400){
+				if (repeatCounter >= 0){
+					if (++repeatCounter > REPEAT_THREASHOLD){
+						self._generateKeyEvent(bn, modifier);// null modifier
+					}
+				}
 			}
-		}*/
+		}
 
 		if ((state === 4) || (state === 5)){
-			processDraging(x - prevX, y - prevY);
+			if (bn.image === 'ctrl_left'){
+				processDraging(x - prevX, y - prevY);
+			}
 			if (state === 5){
 				state = 0;
+				prevOpacity = self.opacity();
 			}
 		}
 	}

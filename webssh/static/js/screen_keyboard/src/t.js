@@ -300,6 +300,28 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 			}
 		}
 	}
+	//else if ((this._terminalMode === 0) && p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){
+	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){//
+		//this._terminal.write('+(' + this._terminalMode + ')');
+		if (p_button.image === 'up'){
+			this._terminal.scrollLines(-1);
+		}
+		else if (p_button.image === 'down'){
+			this._terminal.scrollLines(1);
+		}
+		else if (p_button.image === 'PgUp'){
+			this._terminal.scrollPages(-1);
+		}
+		else if (p_button.image === 'PgDn'){
+			this._terminal.scrollPages(1);
+		}
+		else if (p_button.image === 'home'){
+			this._terminal.scrollToLine(0);
+		}
+		else if (p_button.image === 'end'){
+			this._terminal.scrollToBottom();
+		}
+	}
 	else{
 		keyCode = p_button.keyCode[p_modifier || 'normal'];
 		if (!keyCode || !keyCode.length){ // default value if not specified
