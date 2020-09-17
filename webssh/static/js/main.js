@@ -448,7 +448,7 @@ jQuery(function($){
 		var asObject = JSON.parse(text);
 		if (!asObject)
 			return;
-		if (sound) {
+		if (sound) { // boris e: "this"?
 			sound.processDataFromServer(asObject);
 		}
 	}
