@@ -30,12 +30,12 @@ def recycle_worker(worker):
 
 
 class Worker(object):
-	def __init__(self, loop, ssh, chan, sound, st_addr):
+	def __init__(self, loop, ssh, chan, sound, dst_addr):
 		self.loop = loop
 		self.ssh = ssh
 		self.chan = chan
 		self.sound = sound
-		print('boris debug 00917.1:', sound)
+		# print('boris debug 00917.1:', sound)
 		self.dst_addr = dst_addr
 		self.fd = chan.fileno()
 		self.id = str(id(self))

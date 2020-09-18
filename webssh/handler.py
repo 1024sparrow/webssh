@@ -345,8 +345,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 			super(IndexHandler, self).write_error(status_code, **kwargs)
 
 	def get_sound(self, p_sound):
-		print(p_sound)
-		sound = Sound(1, 2) # boris stub
+		sound = Sound(p_sound)
 		return sound
 
 	def get_ssh_client(self):

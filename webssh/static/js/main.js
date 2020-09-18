@@ -404,12 +404,13 @@ jQuery(function($){
 		}
 	}
 	if (sound){
-		sound = new Sound(
+		/*sound = new Sound( // boris commented
             sock,
             document.getElementById('hostname').value,
             document.getElementById('username').value,
 			sound
 		);
+		*/
 	}
     if (document.getElementById('use-screen-keyboard').checked){
         skb = new ScreenKeyboard(
@@ -574,9 +575,9 @@ jQuery(function($){
 
     sock.onopen = function() {
       term.open(terminal);
-	  if (sound){
-		sound.init();
-	  }
+	  //if (sound){ // boris commented
+	  //	sound.init();
+	  //}
       if (skb){
         skb.setVisible(true);
       }
