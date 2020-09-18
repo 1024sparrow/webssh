@@ -344,8 +344,9 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		else:
 			super(IndexHandler, self).write_error(status_code, **kwargs)
 
-	def get_sound(self):
-		sound = Sound()
+	def get_sound(self, p_sound):
+		print(p_sound)
+		sound = Sound(1, 2) # boris stub
 		return sound
 
 	def get_ssh_client(self):
@@ -460,7 +461,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		if not allowed:
 			raise ValueError('Authentication failed.')
 		ssh = self.ssh_client
-		sound = self.sound // boris here
+		sound = self.sound # boris here
 		dst_addr = args[:2]
 		logging.info('Connecting to {}:{}'.format(*dst_addr))
 
@@ -478,7 +479,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		term = self.get_argument('term', u'') or u'xterm'
 		chan = ssh.invoke_shell(term=term)
 		chan.setblocking(0)
-		worker = Worker(self.loop, ssh, chan, dst_addr)
+		worker = Worker(self.loop, ssh, chan, sound, dst_addr)
 		worker.encoding = options.encoding if options.encoding else \
 			self.get_default_encoding(ssh)
 		return worker
