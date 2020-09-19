@@ -11,3 +11,11 @@ class Sound:
 		# self._pipe_p = pipe_p
 		# self._pipe_c = pipe_c
 		pass
+
+	# read data from a pipe and get the data to write to web-client
+	def data_to_write(self):
+		return ''
+
+	# extract audio data from web-client's side and write that to pipe
+	def extract_audio_response(self, message):
+		return message
