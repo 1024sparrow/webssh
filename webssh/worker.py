@@ -35,7 +35,6 @@ class Worker(object):
 		self.ssh = ssh
 		self.chan = chan
 		self.sound = sound
-		# print('boris debug 00917.1:', sound)
 		self.dst_addr = dst_addr
 		self.fd = chan.fileno()
 		self.id = str(id(self))
@@ -79,17 +78,21 @@ class Worker(object):
 
 			logging.debug('{!r} to {}:{}'.format(data, *self.handler.src_addr))
 			try:
-				self.handler.write_message(data, binary=True)
+				self.handler.write_message('123' + data, binary=True) # boris here. boris test.
 			except tornado.websocket.WebSocketClosedError:
 				self.close(reason='websocket closed')
+			else:
+				print('boris debug 00919_read: ', data) # read from ssh
 
 	def on_write(self):
+		# boris here 1
 		logging.debug('worker {} on write'.format(self.id))
 		if not self.data_to_dst:
 			return
 
 		data = ''.join(self.data_to_dst)
 		logging.debug('{!r} to {}:{}'.format(data, *self.dst_addr))
+		print('boris debug 00919_write: ', data) # read from ssh
 
 		try:
 			sent = self.chan.send(data)

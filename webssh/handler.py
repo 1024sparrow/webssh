@@ -329,7 +329,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		self.debug = self.settings.get('debug', False)
 		self.font = self.settings.get('font', '')
 		self.result = dict(id=None, status=None, encoding=None)
-		print(sound) # boris debug
+		print('boris debug 00919.01', sound) # boris debug
 
 	def write_error(self, status_code, **kwargs):
 		if swallow_http_errors and self.request.method == 'POST':
@@ -580,7 +580,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 				self.close(reason='Websocket authentication failed.')
 
 	def on_message(self, message):
-		print(message)
+		# boris here 2
+		print('boris debug 00919.02', message)
 		logging.debug('{!r} from {}:{}'.format(message, *self.src_addr))
 		worker = self.worker_ref()
 		try:
