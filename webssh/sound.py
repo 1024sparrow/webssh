@@ -59,11 +59,11 @@ class Sound:
 
 	# extract audio data from web-client's side and write that to pipe
 	def extract_audio_response(self, message):
-		# boris here 1
 		retVal = bytes()
 		dataToWrite = bytes()
 		buffer = bytes()
 		state = 0
+		prevState = 0
 		for i in message:
 			if state == 0 and i == 27:
 				state = 1
@@ -75,12 +75,20 @@ class Sound:
 				state = 13
 			else if i == 122:
 				if state == 3:
-					state = 4
+					state = prevState = 4
 				else if state == 13:
-					state = 0
+					state = prevState = 0
+				else:
+					state = prevState
+			else:
+				state = prevState
 			if state == 0:
 				retVal += buffer + i
 			else if state == 4:
 				dataToWrite += buffer + i
 			else:
 				buffer += i
+		if dataToWrite:
+			async with self._mutexC:
+				self._bufferC += dataToWrite
+		return retVal
