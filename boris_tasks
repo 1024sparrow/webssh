@@ -1,5 +1,10 @@
 Задачи:
 
 boris here:
+
+read from FIFO ber byte
+
+GOOGLE: python getc() analigue with timeout (how to stop listening)
+
 1. To change keyboard opacity start moving from <Ctrl> key. Or any modifier key. If not moved then modifier else dragging. THere's have to change events.js .
 	Change dragging rules: no horizontal and vertical now (must be). Must be analized angle of final moving, for opacity only.
