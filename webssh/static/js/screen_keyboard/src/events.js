@@ -82,7 +82,7 @@
 			y = p[0].pageY;
 		}
 		if (e !== 400){
-			self._terminal.write(`[${state}-${e}]`);//
+			//self._terminal.write(`[${state}-${e}]`);//
 		}
 
 		if (state === 0){
@@ -138,17 +138,18 @@
 				}
 			}
 			else if (e === 200){
-				// boris here
-				tmp = self._hitButton(prevX, prevY);
+				if (!modifier){
+					tmp = self._hitButton(prevX, prevY);
 
-				if (tmp !== self._hitButton(x, y)){
-					if (p[1]){
-						state = 6;
-					}
-					else {
-						bn = tmp;
-						repeatCounter = -1;
-						state = 4;
+					if (tmp !== self._hitButton(x, y)){
+						if (p[1]){
+							state = 6;
+						}
+						else {
+							bn = tmp;
+							repeatCounter = -1;
+							state = 4;
+						}
 					}
 				}
 			}
