@@ -7,7 +7,7 @@ import traceback
 import weakref
 import paramiko
 import tornado.web
-from users import allowed_users, allowed_ips
+from .users import allowed_users, allowed_ips
 
 from concurrent.futures import ThreadPoolExecutor
 from tornado.ioloop import IOLoop

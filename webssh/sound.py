@@ -1,6 +1,6 @@
 import threading
 import pipes
-import asincio
+import asyncio
 
 
 class Sound:
@@ -23,7 +23,7 @@ class Sound:
 	def run_stub(self):
 		return
 
-	def run_p(self):
+	async def run_p(self):
 		f = open(self._pP, 'rb')
 		while self._running:
 			chunk = f.read()
@@ -32,8 +32,14 @@ class Sound:
 		f.close()
 		# write request, read response
 
-	def run_c(self):
-		# boris here 2 (use self._mutexC and self._bufferC)
+	async def run_c(self):
+		# boris here: loop this and use conditional variable linked with API method
+		async with self._mutexC:
+			if self._bufferC:
+				f = open(self._pC, 'wb')
+				f.write(self._bufferC)
+				self._bufferC = bytes()
+				f.close()
 		return
 
 	def start(self, p_hostname, p_username):
@@ -50,7 +56,7 @@ class Sound:
 		self._tC.join()
 
 	# read data from a pipe and get the data to write to web-client
-	def data_to_write(self):
+	async def data_to_write(self):
 		retVal = bytes()
 		async with self._mutexP:
 			retVal = self._bufferP
@@ -58,7 +64,7 @@ class Sound:
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
 
 	# extract audio data from web-client's side and write that to pipe
-	def extract_audio_response(self, message):
+	async def extract_audio_response(self, message):
 		retVal = bytes()
 		dataToWrite = bytes()
 		buffer = bytes()
@@ -67,16 +73,16 @@ class Sound:
 		for i in message:
 			if state == 0 and i == 27:
 				state = 1
-			else if state == 1 and i == 91:
+			elif state == 1 and i == 91:
 				state = 2
-			else if state == 2 and i == 48:
+			elif state == 2 and i == 48:
 				state = 3
-			else if state == 2 and i == 49:
+			elif state == 2 and i == 49:
 				state = 13
-			else if i == 122:
+			elif i == 122:
 				if state == 3:
 					state = prevState = 4
-				else if state == 13:
+				elif state == 13:
 					state = prevState = 0
 				else:
 					state = prevState
@@ -84,7 +90,7 @@ class Sound:
 				state = prevState
 			if state == 0:
 				retVal += buffer + i
-			else if state == 4:
+			elif state == 4:
 				dataToWrite += buffer + i
 			else:
 				buffer += i
