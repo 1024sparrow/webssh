@@ -82,7 +82,7 @@
 			y = p[0].pageY;
 		}
 		if (e !== 400){
-			//self._terminal.write(`[${state}-${e}]`);//
+			self._terminal.write(`[${state}-${e}]`);//
 		}
 
 		if (state === 0){
@@ -138,6 +138,7 @@
 				}
 			}
 			else if (e === 200){
+				// boris here
 				tmp = self._hitButton(prevX, prevY);
 
 				if (tmp !== self._hitButton(x, y)){
@@ -210,6 +211,15 @@
 						repeatCounter = 0;
 					}
 				}
+				/*
+				tmp = self._hitButton(prevX, prevY);
+
+				if (tmp !== self._hitButton(x, y)){
+					bn = tmp;
+					repeatCounter = -1;
+					//state = 4; // boris e: remove this part
+				}
+				*/
 			}
 			else if (e === 200){
 			}
