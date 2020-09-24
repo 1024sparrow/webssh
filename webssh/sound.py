@@ -1,4 +1,4 @@
-import threading
+from threading import Thread
 import pipes
 import asyncio
 
@@ -14,10 +14,10 @@ class Sound:
 		self._pC = p_sound['capturePipe']
 		self._tP = Thread(target=self.run_p)
 		self._tC = Thread(target=self.run_c)
-		self._running = false
-		self._mutexP = asincio.Lock()
+		self._running = False
+		self._mutexP = asyncio.Lock()
 		self._bufferP = bytes()
-		self._mutexC = asincio.Lock()
+		self._mutexC = asyncio.Lock()
 		self._bufferC = bytes()
 
 	def run_stub(self):
@@ -46,12 +46,12 @@ class Sound:
 		if p_hostname != 'localhost':
 			print('can not start sound for any host but "localhost": not implemented')
 			return
-		self._running = true
+		self._running = True
 		self._tP.start()
 		self._tC.start()
 
 	def stop(self):
-		self._running = false
+		self._running = False
 		self._tP.join()
 		self._tC.join()
 
@@ -90,8 +90,10 @@ class Sound:
 				state = prevState
 			if state == 0:
 				retVal += buffer + i
+				buffer = bytes()
 			elif state == 4:
 				dataToWrite += buffer + i
+				buffer = bytes()
 			else:
 				buffer += i
 		if dataToWrite:
