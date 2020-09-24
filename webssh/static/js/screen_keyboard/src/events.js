@@ -4,6 +4,8 @@
 		REPEAT_THREASHOLD = 10, // in tacts
 		prevX,
 		prevY,
+		modifierX,
+		modifierY,
 		prevOpacity = 0.3,
 		curScrollPos = 0,
 		prevScrollPos = 0,
@@ -93,6 +95,8 @@
 				prevOpacity = self.opacity();
 				if (bn = self._hitButton(x, y)){
 					if (modifier = self._currentModifier = bn.modifier){
+						modifierX = x;
+						modifierY = y;
 						self._updateKeyImages();
 						state = 1;
 					}
@@ -138,9 +142,9 @@
 				}
 			}
 			else if (e === 200){
-				if (!modifier){
-					tmp = self._hitButton(prevX, prevY);
 
+				if (modifier) {
+					tmp = self._hitButton(prevX, prevY);
 					if (tmp !== self._hitButton(x, y)){
 						if (p[1]){
 							state = 6;
@@ -152,6 +156,7 @@
 						}
 					}
 				}
+
 			}
 			else if (e === 300){
 				if (bn = self._hitButton(x,y)){
