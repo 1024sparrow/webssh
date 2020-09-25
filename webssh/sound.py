@@ -1,6 +1,5 @@
-from threading import Thread
+import threading
 import pipes
-import asyncio
 
 
 class Sound:
@@ -13,29 +12,29 @@ class Sound:
 
 		self._pP = p_sound['playbackPipe']
 		self._pC = p_sound['capturePipe']
-		self._tP = Thread(target=self.run_p)
-		self._tC = Thread(target=self.run_c)
+		self._tP = threading.Thread(target=self.run_p)
+		self._tC = threading.Thread(target=self.run_c)
 		self._running = False
-		self._mutexP = asyncio.Lock()
+		self._mutexP = threading.Lock()
 		self._bufferP = bytes()
-		self._mutexC = asyncio.Lock()
+		self._mutexC = threading.Lock()
 		self._bufferC = bytes()
 
 	def run_stub(self):
 		return
 
-	async def run_p(self):
+	def run_p(self):
 		f = open(self._pP, 'rb')
 		while self._running:
 			chunk = f.read()
-			async with self._mutexP:
+			with self._mutexP:
 				self._bufferP += chunk
 		f.close()
 		# write request, read response
 
-	async def run_c(self):
+	def run_c(self):
 		# boris here: loop this and use conditional variable linked with API method
-		async with self._mutexC:
+		with self._mutexC:
 			if self._bufferC:
 				f = open(self._pC, 'wb')
 				f.write(self._bufferC)
@@ -57,15 +56,15 @@ class Sound:
 		self._tC.join()
 
 	# read data from a pipe and get the data to write to web-client
-	async def data_to_write(self):
+	def data_to_write(self):
 		retVal = bytes()
-		async with self._mutexP:
+		with self._mutexP:
 			retVal = self._bufferP
 			self._bufferP = bytes()
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
 
 	# extract audio data from web-client's side and write that to pipe
-	async def extract_audio_response(self, message):
+	def extract_audio_response(self, message):
 		retVal = bytes()
 		dataToWrite = bytes()
 		buffer = bytes()
@@ -98,6 +97,6 @@ class Sound:
 			else:
 				buffer += i
 		if dataToWrite:
-			async with self._mutexC:
+			with self._mutexC:
 				self._bufferC += dataToWrite
 		return retVal
