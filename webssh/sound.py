@@ -10,6 +10,7 @@ class Sound:
 		# ('boris debug 009181: ', {'use_sound': True, 'capturePipe': 'boris/capture.pipe', 'use_c': True, 'playbackPipe': 'boris/playback.pipe', 'use_p': True})
 		# self._pipe_p = pipe_p
 		# self._pipe_c = pipe_c
+
 		self._pP = p_sound['playbackPipe']
 		self._pC = p_sound['capturePipe']
 		self._tP = Thread(target=self.run_p)

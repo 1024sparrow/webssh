@@ -1,7 +1,6 @@
 'use strict';
 
 function Sound(p_socket, p_hostname, p_username, p_flags) {
-	window.alert('b00924.1');
 	this._socket = p_socket;
 	this._hostname = p_hostname;
 	this._username = p_username;

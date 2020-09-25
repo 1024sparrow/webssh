@@ -1,3 +1,4 @@
+'use strict';
 /*jslint browser:true */
 
 var jQuery;
@@ -595,9 +596,9 @@ jQuery(function($){
 
     sock.onmessage = function(msg) {
       read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
-	  if (sound) { // boris here 00924
-		  read_file_as_text(msg.sound, processSoundFromServer, decoder);
-	  }
+	  //if (sound) { // boris here 00924
+        //read_file_as_text(msg.sound, processSoundFromServer, decoder);
+	  //}
     };
 
     sock.onerror = function(e) {
@@ -607,9 +608,9 @@ jQuery(function($){
     sock.onclose = function(e) {
       term.dispose();
       term = undefined;
-	  if (sound){
+	  /*if (sound){
 		sound.stopAll();
-	  }
+	  }*/
       if (skb){
         skb.setVisible(false);
       }
