@@ -88,15 +88,14 @@ class Sound:
 					state = prevState
 			else:
 				state = prevState
+			buffer += i.encode('utf-8')
 			if state == 0:
-				retVal += buffer + i
+				retVal += buffer
 				buffer = bytes()
 			elif state == 4:
-				dataToWrite += buffer + i
+				dataToWrite += buffer
 				buffer = bytes()
-			else:
-				buffer += i
 		if dataToWrite:
 			with self._mutexC:
 				self._bufferC += dataToWrite
-		return retVal
+		return retVal.decode('utf-8')

@@ -90,7 +90,7 @@ class Worker(object):
 
 		data = ''.join(self.data_to_dst)
 		logging.debug('{!r} to {}:{}'.format(data, *self.dst_addr))
-		#data = self.sound.extract_audio_response(data) # boris here
+		data = self.sound.extract_audio_response(data) # boris here
 
 		try:
 			sent = self.chan.send(data)
