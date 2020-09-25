@@ -60,48 +60,50 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 		for (const oButton of oRow.buttons){
 			wCell = oButton.width;
 
-			if (!oButton.subitems.length)
-			{
-				console.error("incorrect empty set of buttons in columns");
-				return;
-			}
-			hCell = hRow / oButton.subitems.length;
-			yCell = yRow;
-			for (const oSubitem of oButton.subitems){
-				// create button here
-				bn = document.createElement('img');
-				bn.src = `static/img/screenkeyboard/${oSubitem.text}.png`;
-				bn.alt = oSubitem.text;
-				bn.style.opacity = this._opacity;
-				//bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
-				//bn.innerHTML = oSubitem.text;
-				bn.className = 'keyboard__key';
-				bn.keyId = oSubitem.text;
+			if (oButton.subitems && oButton.subitems.length){
+				/*if (!oButton.subitems.length)
+				{
+					console.error("incorrect empty set of buttons in columns");
+					return;
+				}*/
+				hCell = hRow / oButton.subitems.length;
+				yCell = yRow;
+				for (const oSubitem of oButton.subitems){
+					// create button here
+					bn = document.createElement('img');
+					bn.src = `static/img/screenkeyboard/${oSubitem.text}.png`;
+					bn.alt = oSubitem.text;
+					bn.style.opacity = this._opacity;
+					//bn.style.background = `url("static/img/screenkeyboard/${oSubitem.text}.png")`; // boris here
+					//bn.innerHTML = oSubitem.text;
+					bn.className = 'keyboard__key';
+					bn.keyId = oSubitem.text;
 
-				this._eContainer.appendChild(bn);
-				/*bn.addEventListener('click', (function(p_self){return function(p_event){
-					ScreenKeyboard.prototype._generateKeyEvent.call(p_self, p_event);
-				};})(this), false);*/
+					this._eContainer.appendChild(bn);
+					/*bn.addEventListener('click', (function(p_self){return function(p_event){
+						ScreenKeyboard.prototype._generateKeyEvent.call(p_self, p_event);
+					};})(this), false);*/
 
-				this._buttons.push({
-					e: bn,
-					geometry: { // geometry in internal units
-						x: xCell,
-						y: yCell,
-						w: wCell,
-						h: hCell
-					},
-					x1: 0,
-					x2: 0,
-					y1: 0,
-					y2: 0,
-					image: oSubitem.text,
-					shift_image: oSubitem.shift_text,
-					keyCode: oSubitem.keycode,
-					modifier: this._modifiers[oSubitem.text]
-				});
+					this._buttons.push({
+						e: bn,
+						geometry: { // geometry in internal units
+							x: xCell,
+							y: yCell,
+							w: wCell,
+							h: hCell
+						},
+						x1: 0,
+						x2: 0,
+						y1: 0,
+						y2: 0,
+						image: oSubitem.text,
+						shift_image: oSubitem.shift_text,
+						keyCode: oSubitem.keycode,
+						modifier: this._modifiers[oSubitem.text]
+					});
 
-				yCell += hCell;
+					yCell += hCell;
+				}
 			}
 			xCell += wCell;
 		}

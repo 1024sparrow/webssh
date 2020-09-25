@@ -138,16 +138,18 @@
 				}
 			}
 			else if (e === 200){
-				tmp = self._hitButton(prevX, prevY);
+				if (!modifier){
+					tmp = self._hitButton(prevX, prevY);
 
-				if (tmp !== self._hitButton(x, y)){
-					if (p[1]){
-						state = 6;
-					}
-					else {
-						bn = tmp;
-						repeatCounter = -1;
-						state = 4;
+					if (tmp !== self._hitButton(x, y)){
+						if (p[1]){
+							state = 6;
+						}
+						else {
+							bn = tmp;
+							repeatCounter = -1;
+							state = 4;
+						}
 					}
 				}
 			}
@@ -210,6 +212,15 @@
 						repeatCounter = 0;
 					}
 				}
+				/*
+				tmp = self._hitButton(prevX, prevY);
+
+				if (tmp !== self._hitButton(x, y)){
+					bn = tmp;
+					repeatCounter = -1;
+					//state = 4; // boris e: remove this part
+				}
+				*/
 			}
 			else if (e === 200){
 			}

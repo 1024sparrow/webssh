@@ -1,5 +1,5 @@
-width: 48,
-height: 18,
+width: 47,
+height: 17,
 rows: [ // rows
 	{
 		height: 2,
@@ -18,7 +18,7 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "f10", keycode: { normal: [ 27,91,50,49,126 ], shift: [ 27,91,50,49,59,50,126 ], alt: [ 27,91,50,49,59,51,126 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "f11", keycode: { normal: [ 27,91,50,51,126 ], shift: [ 27,91,50,51,59,50,126 ], alt: [ 27,91,50,51,59,51,126 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "f12", keycode: { normal: [ 27,91,50,52,126 ], shift: [ 27,91,50,52,59,50,126 ], alt: [ 27,91,50,52,59,51,126 ], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "scrolllock", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
+			{ width: 2 },
 			{ width: 3, subitems: [ { text: "insert", keycode: { normal: [ 27,91,50,126 ], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "delete", keycode: { normal: [ 27,91,51,126 ], shift: [], alt: [], ctrl: [ 27,91,51,59,53,126 ] } } ] }
 		]
@@ -39,14 +39,14 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "0", shift_text: "shift_0", keycode: { normal: [ 48 ], shift: [ 41 ], alt: [ 27,48 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "defis", shift_text: "shift_defis", keycode: { normal: [ 45 ], shift: [ 95 ], alt: [ 27,45 ], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "equal", shift_text: "shift_equal", keycode: { normal: [ 61 ], shift: [ 43 ], alt: [ 27,61 ], ctrl: [] } } ] },
-			{ width: 6, subitems: [ { text: "BS", keycode: { normal: [ 127 ], shift: [ 8 ], alt: [ 27,127 ], ctrl: [8] } } ] },
+			{ width: 5, subitems: [ { text: "BS", keycode: { normal: [ 127 ], shift: [ 8 ], alt: [ 27,127 ], ctrl: [8] } } ] },
 			{ width: 3, subitems: [ { text: "home", keycode: { normal: [ 27,91,72 ], shift: [ 27,91,49,59,50,72 ], alt: [ 27,91,49,59,51,72 ], ctrl: [ 27,91,49,59,53,72 ] } } ] }
 		]
 	},
 	{
 		height: 3,
 		buttons: [
-			{ width: 4, subitems: [ { text: "tab", keycode: { normal: [ 9 ], shift: [ 27,91,90 ], alt: [], ctrl: [ 0 ] } } ] },
+			{ width: 5, subitems: [ { text: "tab", keycode: { normal: [ 9 ], shift: [ 27,91,90 ], alt: [], ctrl: [ 0 ] } } ] },
 			{ width: 3, subitems: [ { text: "q", keycode: { normal: [ 113 ], shift: [ 81 ], alt: [ 27,113 ], ctrl: [ 17 ] } } ] },
 			{ width: 3, subitems: [ { text: "w", keycode: { normal: [ 119 ], shift: [ 87 ], alt: [ 27,119 ], ctrl: [ 23 ] } } ] },
 			{ width: 3, subitems: [ { text: "e", keycode: { normal: [ 101 ], shift: [ 69 ], alt: [ 27,101 ], ctrl: [ 5 ] } } ] },
@@ -59,14 +59,14 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "p", keycode: { normal: [ 112 ], shift: [ 80 ], alt: [ 27,112 ], ctrl: [ 16 ] } } ] },
 			{ width: 3, subitems: [ { text: "figstart", shift_text: "shift_figstart", keycode: { normal: [ 91 ], shift: [ 123 ], alt: [ 27,91 ], ctrl: [ 27 ] } } ] },
 			{ width: 3, subitems: [ { text: "figend", shift_text: "shift_figend", keycode: { normal: [ 93 ], shift: [ 125 ], alt: [ 27,93 ], ctrl: [ 29 ] } } ] },
-			{ width: 5, subitems: [ { text: "backslash", shift_text: "shift_backslash", keycode: { normal: [ 92 ], shift: [ 124 ], alt: [ 27,92 ], ctrl: [ 28 ] } } ] },
+			{ width: 3, subitems: [ { text: "backslash", shift_text: "shift_backslash", keycode: { normal: [ 92 ], shift: [ 124 ], alt: [ 27,92 ], ctrl: [ 28 ] } } ] },
 			{ width: 3, subitems: [ { text: "PgUp", keycode: { normal: [ 27,91,53,126 ], shift: [], alt: [], ctrl: [27,91,53,59,53,126] } } ] }
 		]
 	},
 	{
 		height: 3,
 		buttons: [
-			{ width: 5, subitems: [ { text: "capslock", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
+			{ width: 6, subitems: [ { text: "capslock", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "a", keycode: { normal: [ 97 ], shift: [ 65 ], alt: [ 27,97 ], ctrl: [ 1 ] } } ] },
 			{ width: 3, subitems: [ { text: "s", keycode: { normal: [ 115 ], shift: [ 83 ], alt: [ 27,115 ], ctrl: [ 19 ] } } ] },
 			{ width: 3, subitems: [ { text: "d", keycode: { normal: [ 100 ], shift: [ 68 ], alt: [ 27,100 ], ctrl: [ 4 ] } } ] },
@@ -78,14 +78,14 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "l", keycode: { normal: [ 108 ], shift: [ 76 ], alt: [ 27,108 ], ctrl: [ 12 ] } } ] },
 			{ width: 3, subitems: [ { text: "colon", shift_text: "shift_colon", keycode: { normal: [ 59 ], shift: [ 58 ], alt: [ 27,59 ], ctrl: [ 59 ] } } ] },
 			{ width: 3, subitems: [ { text: "quote", shift_text: "shift_quote", keycode: { normal: [ 39 ], shift: [ 34 ], alt: [ 27,39 ], ctrl: [ 39 ] } } ] },
-			{ width: 7, subitems: [ { text: "enter", keycode: { normal: [ 13 ], shift: [], alt: [], ctrl: [13] } } ] },
+			{ width: 5, subitems: [ { text: "enter", keycode: { normal: [ 13 ], shift: [], alt: [], ctrl: [13] } } ] },
 			{ width: 3, subitems: [ { text: "PgDn", keycode: { normal: [ 27,91,54,126 ], shift: [], alt: [], ctrl: [27,91,54,59,53,126] } } ] }
 		]
 	},
 	{
 		height: 3,
 		buttons: [
-			{ width: 6, subitems: [ { text: "shift_left", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
+			{ width: 7, subitems: [ { text: "shift_left", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 3, subitems: [ { text: "z", keycode: { normal: [ 122 ], shift: [ 90 ], alt: [ 27,122 ], ctrl: [ 26 ] } } ] },
 			{ width: 3, subitems: [ { text: "x", keycode: { normal: [ 120 ], shift: [ 88 ], alt: [ 27,120 ], ctrl: [ 24 ] } } ] },
 			{ width: 3, subitems: [ { text: "c", keycode: { normal: [ 99 ], shift: [ 67 ], alt: [ 27,99 ], ctrl: [ 3 ] } } ] },
@@ -96,26 +96,24 @@ rows: [ // rows
 			{ width: 3, subitems: [ { text: "comma", shift_text: "shift_comma", keycode: { normal: [ 44 ], shift: [ 60 ], alt: [ 27,44 ], ctrl: [ 44 ] } } ] },
 			{ width: 3, subitems: [ { text: "dot", shift_text: "shift_dot", keycode: { normal: [ 46 ], shift: [ 62 ], alt: [ 27,46 ], ctrl: [ 46 ] } } ] },
 			{ width: 3, subitems: [ { text: "slash", shift_text: "shift_slash", keycode: { normal: [ 47 ], shift: [ 63 ], alt: [ 27,47 ], ctrl: [ 31 ] } } ] },
-			{ width: 9, subitems: [ { text: "shift_right", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
+			{ width: 1 },
+			{ width: 4, subitems: [ { text: "up", keycode: { normal: [27,91,65], shift: [27,91,49,59,50,65], alt: [27,91,49,51,66], ctrl: [27,91,49,59,53,65] } } ] },
+			{ width: 2 },
 			{ width: 3, subitems: [ { text: "end", keycode: { normal: [ 27,91,70 ], shift: [ 27,91,49,59,50,70 ], alt: [ 27,91,49,59,51,70 ], ctrl: [ 27,91,49,59,53,70 ] } } ] }
 		]
 	},
 	{
-		height: 4,
+		height: 3,
 		buttons: [
 			{ width: 4, subitems: [ { text: "ctrl_left", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 4, subitems: [ { text: "win_left", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 4, subitems: [ { text: "alt_left", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
 			{ width: 16, subitems: [ { text: "space", keycode: { normal: [ 32 ], shift: [ 0 ], alt: [ 0 ], ctrl: [ 0 ] } } ] },
-			{ width: 4, subitems: [ { text: "alt_right", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
-			{ width: 4, subitems: [ { text: "win_right", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "ctrl_right", keycode: { normal: [], shift: [], alt: [], ctrl: [] } } ] },
-			{ width: 3, subitems: [ { text: "left", keycode: { normal: [ 27,91,68 ], shift: [ 27,91,49,59,50,68 ], alt: [ 27,91,49,59,51,68 ], ctrl: [ 27,91,49,59,53,68 ] } } ] },
-			{ width: 3, subitems: [
-				{ text: "up",	keycode: { normal: [ 27,91,65 ], shift: [ 27,91,49,59,50,65 ], alt: [ 27,91,49,51,65 ], ctrl: [ 27,91,49,59,53,65 ] } },
-				{ text: "down",	keycode: { normal: [ 27,91,66 ], shift: [ 27,91,49,59,50,66 ], alt: [ 27,91,49,51,66 ], ctrl: [ 27,91,49,59,53,66 ] } },
-			] },
-			{ width: 3, subitems: [ { text: "right", keycode: { normal: [ 27,91,67 ], shift: [ 27,91,49,59,50,67 ], alt: [ 27,91,49,59,51,67 ], ctrl: [ 27,91,49,59,51,67 ] } } ] }
+			{ width: 6 },
+			{ width: 4, subitems: [ { text: "left", keycode: { normal: [ 27,91,68 ], shift: [ 27,91,49,59,50,68 ], alt: [ 27,91,49,59,51,68 ], ctrl: [ 27,91,49,59,53,68 ] } } ] },
+			{ width: 4, subitems: [ { text: "down",	keycode: { normal: [ 27,91,66 ], shift: [ 27,91,49,59,50,66 ], alt: [ 27,91,49,51,66 ], ctrl: [ 27,91,49,59,53,66 ] } } ] },
+			{ width: 4, subitems: [ { text: "right", keycode: { normal: [ 27,91,67 ], shift: [ 27,91,49,59,50,67 ], alt: [ 27,91,49,59,51,67 ], ctrl: [ 27,91,49,59,51,67 ] } } ] },
+			{ width: 1 }
 		]
 	}
 ] // rows
