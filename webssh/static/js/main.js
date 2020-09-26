@@ -406,6 +406,7 @@ jQuery(function($){
 	}
 	if (sound){
 		sound = new Sound(
+            term,
             sock,
             document.getElementById('hostname').value,
             document.getElementById('username').value,
@@ -444,15 +445,6 @@ jQuery(function($){
         }
       }
     }
-
-	function processSoundFromServer(text) {
-		var asObject = JSON.parse(text);
-		if (!asObject)
-			return;
-		/*if (sound) { // boris e: "this"?
-			sound.processDataFromServer(asObject);
-		}*/
-	}
 
     function set_encoding(new_encoding) {
       // for console use
@@ -595,10 +587,11 @@ jQuery(function($){
     };
 
     sock.onmessage = function(msg) { // boris here 1
+      var data = msg.data;
+      if (sound){
+        data = sound.extract_audio_data(data);
+      }
       read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
-	  //if (sound) { // boris here 00924
-        //read_file_as_text(msg.sound, processSoundFromServer, decoder);
-	  //}
     };
 
     sock.onerror = function(e) {

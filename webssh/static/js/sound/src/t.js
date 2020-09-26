@@ -1,6 +1,7 @@
 'use strict';
 
-function Sound(p_socket, p_hostname, p_username, p_flags) {
+function Sound(p_terminal, p_socket, p_hostname, p_username, p_flags) {
+	this._term = p_terminal;
 	this._socket = p_socket;
 	this._hostname = p_hostname;
 	this._username = p_username;
@@ -68,7 +69,7 @@ Sound.prototype.init = function(){ // start data streaming
 }
 
 // boris here 2
-Sound.prototype.processDataFromServer = function(object){
+/*Sound.prototype.processDataFromServer = function(object){
 	var data, requested;
 	if (this._flags.playback){
 		// read and apply object.data, write requested
@@ -81,4 +82,12 @@ Sound.prototype.processDataFromServer = function(object){
 	if (data || requested){
 		this._socket.send(JSON.stringify({requested: requested, data: data}));
 	}
+}*/
+
+Sound.prototype.extract_audio_data = function(p_data){
+	//this._term.write('echo ' + (typeof p_data) + '\r\n');
+	this._term.write('echo ' + HSON.stringify(p_data) + '\r\n');
+}
+
+Sound.prototype.data_to_write = function(){
 }
