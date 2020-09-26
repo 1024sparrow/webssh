@@ -433,7 +433,14 @@ jQuery(function($){
       console.log('The deault encoding of your server is ' + msg.encoding);
     }
 
-    function term_write(text) {
+    function term_write(p_text) {
+      var text;
+      if (sound) {
+        text = sound.extract_audio_data(p_text);
+      }
+      else {
+        text = p_text;
+      }
       if (term) {
         term.write(text);
 		if (skb){
@@ -587,11 +594,7 @@ jQuery(function($){
     };
 
     sock.onmessage = function(msg) { // boris here 1
-      var data = msg.data;
-      if (sound){
-        data = sound.extract_audio_data(data);
-      }
-      read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
+      read_file_as_text(msg.data, term_write, decoder);
     };
 
     sock.onerror = function(e) {

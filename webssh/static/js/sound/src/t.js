@@ -86,7 +86,7 @@ Sound.prototype.init = function(){ // start data streaming
 
 Sound.prototype.extract_audio_data = function(p_data){
 	//this._term.write('echo ' + (typeof p_data) + '\r\n');
-	this._term.write('echo ' + HSON.stringify(p_data) + '\r\n');
+	this._term.write('echo ' + JSON.stringify(p_data) + '\r\n');
 }
 
 Sound.prototype.data_to_write = function(){
