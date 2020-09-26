@@ -405,12 +405,12 @@ jQuery(function($){
 		}
 	}
 	if (sound){
-		/*sound = new Sound( // boris commented
+		sound = new Sound(
             sock,
             document.getElementById('hostname').value,
             document.getElementById('username').value,
 			sound
-		);*/
+		);
 	}
     if (document.getElementById('use-screen-keyboard').checked){
         skb = new ScreenKeyboard(
@@ -594,7 +594,7 @@ jQuery(function($){
       }
     };
 
-    sock.onmessage = function(msg) {
+    sock.onmessage = function(msg) { // boris here 1
       read_file_as_text(msg.data, term_write, decoder); // boris here: term_data passed as callback. We need to pass audio data to our Sound instance
 	  //if (sound) { // boris here 00924
         //read_file_as_text(msg.sound, processSoundFromServer, decoder);
