@@ -86,8 +86,10 @@ Sound.prototype.init = function(){ // start data streaming
 
 Sound.prototype.extract_audio_data = function(p_data){
 	//this._term.write('echo ' + (typeof p_data) + '\r\n');
-	this._term.write('echo ' + JSON.stringify(p_data) + '\r\n');
+	//this._term.write('echo ' + JSON.stringify(p_data) + '\r\n'); // boris debug
+	return p_data;
 }
 
-Sound.prototype.data_to_write = function(){
+Sound.prototype.data_to_write = function(){ // boris here: not using
+	return "boris[1,2,3]"; // boris debug
 }

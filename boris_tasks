@@ -1,5 +1,13 @@
 Задачи:
 
+boris here (01003):
+1. Extend Recorder for per-chunk recording (to get next step right way)
+2. generate some pseudo-sound data on the client-side
+3. get the same data in the server's logs
+
+
+
+
 boris here:
 
 read from FIFO ber byte

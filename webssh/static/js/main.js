@@ -437,6 +437,7 @@ jQuery(function($){
       var text;
       if (sound) {
         text = sound.extract_audio_data(p_text);
+        //text = p_text;//
       }
       else {
         text = p_text;
@@ -574,9 +575,9 @@ jQuery(function($){
 
     sock.onopen = function() {
       term.open(terminal);
-	  //if (sound){ // boris commented
-	  //	sound.init();
-	  //}
+	  if (sound){ // boris commented
+	  	sound.init();
+	  }
       if (skb){
         skb.setVisible(true);
       }

@@ -61,6 +61,7 @@ class Sound:
 		with self._mutexP:
 			retVal = self._bufferP
 			self._bufferP = bytes()
+		print('############', self._bufferP)
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
 
 	# extract audio data from web-client's side and write that to pipe
@@ -98,4 +99,5 @@ class Sound:
 		if dataToWrite:
 			with self._mutexC:
 				self._bufferC += dataToWrite
+		print('%%%%%%%%%%%%%%%', dataToWrite)
 		return retVal.decode('utf-8')

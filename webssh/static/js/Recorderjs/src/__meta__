@@ -1,0 +1,14 @@
+{
+	"files": [
+		{
+			"target": "recorder.js",
+			"source": {
+				"template": "t.js",
+				"list": [
+				]
+			}
+		}
+	],
+    "dir_proc": []
+}
+
