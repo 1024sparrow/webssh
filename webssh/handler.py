@@ -597,6 +597,10 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 			#	 print(ord(i))
 			pass
 
+		if 'sound' in msg:
+			# boris here
+			pass
+
 		resize = msg.get('resize')
 		if resize and len(resize) == 2:
 			try:

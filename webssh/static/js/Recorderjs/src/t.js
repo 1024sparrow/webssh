@@ -1,5 +1,6 @@
 'use strict';
 
+/* {%% recorder_help.txt %%}*/
 function Recorder(p_source, p_config) {
 	var
 		WORKER_PATH = 'static/js/Recorderjs/recorderWorker.js',

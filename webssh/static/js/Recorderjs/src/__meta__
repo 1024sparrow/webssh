@@ -5,6 +5,7 @@
 			"source": {
 				"template": "t.js",
 				"list": [
+					"recorder_help.txt"
 				]
 			}
 		}

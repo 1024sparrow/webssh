@@ -6,6 +6,8 @@ function Sound(p_terminal, p_socket, p_hostname, p_username, p_flags) {
 	this._hostname = p_hostname;
 	this._username = p_username;
 	this._flags = p_flags; // {playback: true|false, capture: true|false}
+	this._recordBufferSize = 4096;
+	//this._nodeRecorder;
 
 	if (!navigator.getUserMedia) {
 		navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -44,9 +46,18 @@ Sound.prototype.startStream = function(stream){
 	analyserNode.fftSize    = 2048; // this.fftSize;
 	virtualInput.connect( analyserNode );
 
-	//Set the stream to RecorderJs from Matt Diamond
-	this.Recorder           = new Recorder( virtualInput );
-	window.boris = this.Recorder;//
+	var nodeRecorder = virtualInput.context.createScriptProcessor || virtualInput.context.createJavaScriptNode;
+	nodeRecorder = nodeRecorder.call(virtualInput.context, this._recordBufferSize, 2, 2);
+	nodeRecorder.onaudioprocess = (function(self){
+		return function(e){
+			self._takeChunkRecord(
+				e.inputBuffer.getChannelData(0),
+				e.inputBuffer.getChannelData(1)
+			);
+		};
+	})(this);
+	nodeRecorder.connect(virtualInput.context.destination);
+	this._nodeRecorder = nodeRecorder;
 
 	//Set volume to zero
 	var amplificationFactor = this._context.createGain();
@@ -56,7 +67,27 @@ Sound.prototype.startStream = function(stream){
 	//We set volume to zero to output, so we cancel echo
 	amplificationFactor.connect( this._context.destination );        
 	console.log('ready');
-	this.Recorder.record();
+}
+
+Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
+	console.log(p_chan_1);
+	var buffer1 = [], buffer2 = [];
+	var i;
+	for (i = 0 ; i < this._recordBufferSize ; ++i)
+	{
+		buffer1.push(p_chan_1[i]);
+		buffer2.push(p_chan_2[i]);
+	}
+	this._socket.send(
+		JSON.stringify(
+			{
+				sound: {
+					chan1: buffer1,
+					chan2: buffer2
+				}
+			}
+		)
+	);
 }
 
 Sound.prototype.stopAll = function(){
