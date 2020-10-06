@@ -1,9 +1,16 @@
 Задачи:
 
-boris here (01003):
-1. Extend Recorder for per-chunk recording (to get next step right way)
-2. generate some pseudo-sound data on the client-side
-3. get the same data in the server's logs
+01006:
+Recorderjs - deprecated (will be removed)
+1. Take sound data on server side, write that into FIFO, get them in console via "cat" command.
+2. Pass data from server to client side. Take data from FIFO and get them in JS logs.
+
+
+01003:
+Recorderjs - deprecated (will be removed)
++1. Extend Recorder for per-chunk recording (to get next step right way)
++2. generate some pseudo-sound data on the client-side
++3. get the same data in the server's logs
 
 
 
