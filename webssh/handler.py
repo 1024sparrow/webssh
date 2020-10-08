@@ -324,7 +324,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		self.policy = policy
 		self.host_keys_settings = host_keys_settings
 		self.sound_settings = sound
-		self.sound = self.get_sound(sound)
+		#self.sound = self.get_sound(sound)
 		self.ssh_client = self.get_ssh_client()
 		self.debug = self.settings.get('debug', False)
 		self.font = self.settings.get('font', '')
@@ -344,9 +344,9 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		else:
 			super(IndexHandler, self).write_error(status_code, **kwargs)
 
-	def get_sound(self, p_sound):
-		sound = Sound(p_sound)
-		return sound
+	#def get_sound(self, p_sound):
+	#	sound = Sound(p_sound)
+	#	return sound
 
 	def get_ssh_client(self):
 		ssh = SSHClient()
@@ -460,7 +460,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		if not allowed:
 			raise ValueError('Authentication failed.')
 		ssh = self.ssh_client
-		sound = self.sound # boris here
+		#sound = self.sound # boris here
 		dst_addr = args[:2]
 		logging.info('Connecting to {}:{}'.format(*dst_addr))
 
@@ -478,7 +478,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		term = self.get_argument('term', u'') or u'xterm'
 		chan = ssh.invoke_shell(term=term)
 		chan.setblocking(0)
-		worker = Worker(self.loop, ssh, chan, sound, dst_addr)
+		worker = Worker(self.loop, ssh, chan, 'sound', dst_addr)
 		worker.encoding = options.encoding if options.encoding else \
 			self.get_default_encoding(ssh)
 		return worker
@@ -549,9 +549,17 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 
 class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 
-	def initialize(self, loop):
+	# boris here
+	# Каждый раз новый экземпляр создаётся при каждом новом сеансе связи
+	#  т.е. при перелогинивании пересоздаётся этот экземпляр
+	#  Это то, что надо, только надо деструктор тут определить, где останавливать наш Sound (ну, или лучше прописать деструктор самого Sound)
+
+	def initialize(self, loop, sound):
 		super(WsockHandler, self).initialize(loop)
 		self.worker_ref = None
+		self.sound = Sound(sound)
+		self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
+		print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2')
 
 	def open(self):
 		self.src_addr = self.get_client_addr()
@@ -581,7 +589,7 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 
 	def on_message(self, message):
 		# boris here 2
-		print('boris debug 00919.02', message)
+		#print('boris debug 00919.02', message)
 		logging.debug('{!r} from {}:{}'.format(message, *self.src_addr))
 		worker = self.worker_ref()
 		try:
@@ -597,9 +605,6 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 			#	 print(ord(i))
 			pass
 
-		if 'sound' in msg:
-			# boris here
-			pass
 
 		resize = msg.get('resize')
 		if resize and len(resize) == 2:
@@ -612,6 +617,12 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		if data and isinstance(data, UnicodeType):
 			worker.data_to_dst.append(data)
 			worker.on_write()
+		sound = msg.get('sound')
+		if sound: # type object
+			sound = json.dumps(sound) # type string
+			sound = str.encode(sound) # type bytes
+			self.sound.write_captured_data(sound)
+		
 
 	def on_close(self):
 		logging.info('Disconnected from {}:{}'.format(*self.src_addr))

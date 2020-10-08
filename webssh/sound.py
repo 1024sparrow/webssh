@@ -24,22 +24,28 @@ class Sound:
 		return
 
 	def run_p(self):
-		f = open(self._pP, 'rb')
-		while self._running:
-			chunk = f.read()
-			with self._mutexP:
-				self._bufferP += chunk
-		f.close()
+		#f = open(self._pP, 'rb')
+		#while self._running:
+		#	chunk = f.read()
+		#	with self._mutexP:
+		#		self._bufferP += chunk
+		#f.close()
 		# write request, read response
+		return
 
 	def run_c(self):
 		# boris here: loop this and use conditional variable linked with API method
-		with self._mutexC:
-			if self._bufferC:
-				f = open(self._pC, 'wb')
-				f.write(self._bufferC)
-				self._bufferC = bytes()
-				f.close()
+		print('boris debug 01008')
+		while True:
+			with self._mutexC:
+				if not self._running:
+					break
+				if self._bufferC:
+					with open(self._pC, 'wb') as f:
+						f.write(self._bufferC)
+						self._bufferC = bytes()
+				if not self._running:
+					break
 		return
 
 	def start(self, p_hostname, p_username):
@@ -64,7 +70,14 @@ class Sound:
 		print('############', self._bufferP)
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
 
+	# write captured data to the Pipe
+	def write_captured_data(self, p_data):
+		#print('UYTRUYTRUYTRUYTRUYTRUYTRUYTR:', p_data)
+		with self._mutexC:
+			self._bufferC += p_data
+
 	# extract audio data from web-client's side and write that to pipe
+	'''
 	def extract_audio_response(self, message):
 		retVal = bytes()
 		dataToWrite = bytes()
@@ -101,3 +114,4 @@ class Sound:
 				self._bufferC += dataToWrite
 		print('%%%%%%%%%%%%%%%', dataToWrite)
 		return retVal.decode('utf-8')
+	'''

@@ -77,7 +77,7 @@ class Worker(object):
 				return
 
 			logging.debug('{!r} to {}:{}'.format(data, *self.handler.src_addr))
-			data = self.sound.data_to_write() + data
+			#data = self.sound.data_to_write() + data
 			try:
 				self.handler.write_message(data, binary=True)
 			except tornado.websocket.WebSocketClosedError:
@@ -90,7 +90,7 @@ class Worker(object):
 
 		data = ''.join(self.data_to_dst)
 		logging.debug('{!r} to {}:{}'.format(data, *self.dst_addr))
-		data = self.sound.extract_audio_response(data)
+		#data = self.sound.extract_audio_response(data)
 
 		try:
 			sent = self.chan.send(data)

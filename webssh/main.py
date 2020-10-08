@@ -32,7 +32,7 @@ def make_handlers(loop, options):
     handlers = [
         (r'/', IndexHandler, dict(loop=loop, policy=policy,
             host_keys_settings=host_keys_settings, sound=sound)),
-        (r'/ws', WsockHandler, dict(loop=loop))
+        (r'/ws', WsockHandler, dict(loop=loop, sound=sound))
     ]
     return handlers
 
