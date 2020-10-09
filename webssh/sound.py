@@ -19,6 +19,12 @@ class Sound:
 		self._bufferP = bytes()
 		self._mutexC = threading.Lock()
 		self._bufferC = bytes()
+		self._mutexRunning = threading.Lock() # boris here 01008: incorrect thread stoping
+
+	def __del__(self):
+		print('sound destructor')
+		with self._mutexRunning:
+			self._running = False
 
 	def run_stub(self):
 		return
@@ -31,6 +37,7 @@ class Sound:
 		#		self._bufferP += chunk
 		#f.close()
 		# write request, read response
+		print('PLAYBACK THREAD NORMALLY CLOSED')
 		return
 
 	def run_c(self):
@@ -38,14 +45,14 @@ class Sound:
 		print('boris debug 01008')
 		while True:
 			with self._mutexC:
-				if not self._running:
-					break
 				if self._bufferC:
 					with open(self._pC, 'wb') as f:
 						f.write(self._bufferC)
 						self._bufferC = bytes()
+			with self._mutexRunning:
 				if not self._running:
 					break
+		print('CAPTURE THREAD NORMALLY CLOSED')
 		return
 
 	def start(self, p_hostname, p_username):
@@ -57,9 +64,12 @@ class Sound:
 		self._tC.start()
 
 	def stop(self):
-		self._running = False
+		print('sound stopping...')
+		with self._mutexRunning:
+			self._running = False
 		self._tP.join()
 		self._tC.join()
+		print('sounf stopped')
 
 	# read data from a pipe and get the data to write to web-client
 	def data_to_write(self):
