@@ -47,8 +47,11 @@ class Sound:
 			with self._mutexC:
 				if self._bufferC:
 					with open(self._pC, 'wb') as f:
-						f.write(self._bufferC)
-						self._bufferC = bytes()
+						try:
+							f.write(self._bufferC)
+							self._bufferC = bytes()
+						except IOError as e:
+							pass
 			with self._mutexRunning:
 				if not self._running:
 					break
@@ -69,7 +72,7 @@ class Sound:
 			self._running = False
 		self._tP.join()
 		self._tC.join()
-		print('sounf stopped')
+		print('sound stopped')
 
 	# read data from a pipe and get the data to write to web-client
 	def data_to_write(self):

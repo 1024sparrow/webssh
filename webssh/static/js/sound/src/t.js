@@ -70,7 +70,7 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
-	console.log(p_chan_1);
+	//console.log(p_chan_1);
 	var buffer1 = [], buffer2 = [];
 	var i;
 	for (i = 0 ; i < this._recordBufferSize ; ++i)
