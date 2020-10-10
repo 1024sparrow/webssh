@@ -30,11 +30,11 @@ def recycle_worker(worker):
 
 
 class Worker(object):
-	def __init__(self, loop, ssh, chan, sound, dst_addr):
+	def __init__(self, loop, ssh, chan, dst_addr):
 		self.loop = loop
 		self.ssh = ssh
 		self.chan = chan
-		self.sound = sound
+		#self.sound = sound
 		self.dst_addr = dst_addr
 		self.fd = chan.fileno()
 		self.id = str(id(self))
@@ -62,7 +62,7 @@ class Worker(object):
 		if mode == IOLoop.WRITE:
 			self.loop.call_later(0.1, self, self.fd, IOLoop.WRITE)
 
-	def on_read(self):
+	def on_read(self): # обработчик ввода симолов с клавиатуры
 		logging.debug('worker {} on read'.format(self.id))
 		try:
 			data = self.chan.recv(BUF_SIZE)
@@ -82,9 +82,11 @@ class Worker(object):
 				self.handler.write_message(data, binary=True)
 			except tornado.websocket.WebSocketClosedError:
 				self.close(reason='websocket closed')
+		#print('////////////////////', data)
 
 	def on_write(self):
 		logging.debug('worker {} on write'.format(self.id))
+		#print('/////////////////////')
 		if not self.data_to_dst:
 			return
 

@@ -106,16 +106,16 @@ class Sound:
 			self._tC.join()
 		print('sound stopped')
 
-	'''
 	# read data from a pipe and get the data to write to web-client
 	def data_to_write(self):
 		retVal = bytes()
+		if self._pP is None:
+			return retVal
 		with self._mutexP:
 			retVal = self._bufferP
 			self._bufferP = bytes()
 		print('############', self._bufferP)
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
-	'''
 
 	# write captured data to the Pipe
 	def write_captured_data(self, p_data):

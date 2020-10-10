@@ -324,13 +324,12 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		self.policy = policy
 		self.host_keys_settings = host_keys_settings
 		self.sound_settings = sound
-		#self.sound = self.get_sound(sound)
-		self.sound = None
-		if sound['use_p']:
-			self.sound = Sound({
-				'use_p': True,
-				'playbackPipe': sound['playbackPipe']
-			})
+		#self.sound = None
+		#if sound['use_p']:
+		#	self.sound = Sound({
+		#		'use_p': True,
+		#		'playbackPipe': sound['playbackPipe']
+		#	})
 		self.ssh_client = self.get_ssh_client()
 		self.debug = self.settings.get('debug', False)
 		self.font = self.settings.get('font', '')
@@ -349,10 +348,6 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 			self.finish(self.result)
 		else:
 			super(IndexHandler, self).write_error(status_code, **kwargs)
-
-	#def get_sound(self, p_sound):
-	#	sound = Sound(p_sound)
-	#	return sound
 
 	def get_ssh_client(self):
 		ssh = SSHClient()
@@ -466,7 +461,6 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		if not allowed:
 			raise ValueError('Authentication failed.')
 		ssh = self.ssh_client
-		#sound = self.sound # boris here
 		dst_addr = args[:2]
 		logging.info('Connecting to {}:{}'.format(*dst_addr))
 
@@ -484,7 +478,7 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		term = self.get_argument('term', u'') or u'xterm'
 		chan = ssh.invoke_shell(term=term)
 		chan.setblocking(0)
-		worker = Worker(self.loop, ssh, chan, 'sound', dst_addr)
+		worker = Worker(self.loop, ssh, chan, dst_addr)
 		worker.encoding = options.encoding if options.encoding else \
 			self.get_default_encoding(ssh)
 		return worker
@@ -648,3 +642,12 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 
 		if self.sound:
 			self.sound.stop()
+
+
+class SoundHandler(MixinHandler, tornado.web.RequestHandler):
+	def initialize(self, loop):
+		super(SoundHandler, self).initialize(loop)
+	def head(self):
+		pass
+	def get(self):
+		self.write('hello boris') # boris here: here must be sound (playback)
