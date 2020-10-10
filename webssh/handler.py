@@ -325,6 +325,12 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		self.host_keys_settings = host_keys_settings
 		self.sound_settings = sound
 		#self.sound = self.get_sound(sound)
+		self.sound = None
+		if sound['use_p']:
+			self.sound = Sound({
+				'use_p': True,
+				'playbackPipe': sound['playbackPipe']
+			})
 		self.ssh_client = self.get_ssh_client()
 		self.debug = self.settings.get('debug', False)
 		self.font = self.settings.get('font', '')
@@ -557,8 +563,14 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 	def initialize(self, loop, sound):
 		super(WsockHandler, self).initialize(loop)
 		self.worker_ref = None
-		self.sound = Sound(sound)
-		self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
+		print('01010.WsockHandler: ', sound)
+		self.sound = None
+		if sound['use_c']:
+			self.sound = Sound({
+				'use_c': True,
+				'capturePipe': sound['capturePipe']
+			}) # boris here: pass mode: CAPTURE
+			self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
 		print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2')
 
 	def open(self):
@@ -617,12 +629,13 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		if data and isinstance(data, UnicodeType):
 			worker.data_to_dst.append(data)
 			worker.on_write()
-		sound = msg.get('sound')
-		if sound: # type object
-			sound = json.dumps(sound) # type string
-			sound = str.encode(sound) # type bytes
-			self.sound.write_captured_data(sound)
-		
+		if self.sound:
+			sound = msg.get('sound')
+			if sound: # type object
+				sound = json.dumps(sound) # type string
+				sound = str.encode(sound) # type bytes
+				self.sound.write_captured_data(sound)
+			
 
 	def on_close(self):
 		logging.info('Disconnected from {}:{}'.format(*self.src_addr))
@@ -633,4 +646,5 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		if worker:
 			worker.close(reason=self.close_reason)
 
-		self.sound.stop()
+		if self.sound:
+			self.sound.stop()
