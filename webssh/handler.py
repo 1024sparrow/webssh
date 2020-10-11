@@ -645,9 +645,23 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 
 
 class SoundHandler(MixinHandler, tornado.web.RequestHandler):
-	def initialize(self, loop):
+	def initialize(self, loop, sound):
 		super(SoundHandler, self).initialize(loop)
+		self.sound = None
+		if sound['use_p']:
+			self.sound = Sound({
+				'use_p': True,
+				'playbackPipe': sound['playbackPipe']
+			})
+			self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
 	def head(self):
 		pass
 	def get(self):
-		self.write('hello boris') # boris here: here must be sound (playback)
+		# boris here 01010
+		#self.set_header('Content-type', 'sound/wav')
+		#self.sdt_header('Content-length')
+		src_data = self.sound.data_to_write()
+		self.write('hello boris. sound data: %s' % len(src_data)) # boris here: here must be sound (playback)
+		#print(src_data)
+		print('boris debug 01011')
+		self.finish()

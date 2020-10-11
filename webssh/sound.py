@@ -114,7 +114,7 @@ class Sound:
 		with self._mutexP:
 			retVal = self._bufferP
 			self._bufferP = bytes()
-		print('############', self._bufferP)
+		#print('############', self._bufferP)
 		return b'\x1b[0z' + retVal + b'\x1b[1z'
 
 	# write captured data to the Pipe
