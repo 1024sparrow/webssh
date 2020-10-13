@@ -7,6 +7,7 @@ import traceback
 import weakref
 import paramiko
 import tornado.web
+import wave
 from .users import allowed_users, allowed_ips
 
 from concurrent.futures import ThreadPoolExecutor
@@ -558,13 +559,13 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		super(WsockHandler, self).initialize(loop)
 		self.worker_ref = None
 		print('01010.WsockHandler: ', sound)
-		self.sound = None
-		if sound['use_c']:
-			self.sound = Sound({
-				'use_c': True,
-				'capturePipe': sound['capturePipe']
-			}) # boris here: pass mode: CAPTURE
-			self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
+		self.sound = sound
+		#if sound['use_c']:
+		#	self.sound = Sound({
+		#		'use_c': True,
+		#		'capturePipe': sound['capturePipe']
+		#	}) # boris here: pass mode: CAPTURE
+		#	self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
 		print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2')
 
 	def open(self):
@@ -647,13 +648,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 class SoundHandler(MixinHandler, tornado.web.RequestHandler):
 	def initialize(self, loop, sound):
 		super(SoundHandler, self).initialize(loop)
-		self.sound = None
-		if sound['use_p']:
-			self.sound = Sound({
-				'use_p': True,
-				'playbackPipe': sound['playbackPipe']
-			})
-			self.sound.start('localhost', 'boris'); # boris stub: 'localhost' and 'boris' are stubs
+		print('boris 01013 p')
+		self.sound = sound
 	def head(self):
 		pass
 	def get(self):
@@ -662,6 +658,7 @@ class SoundHandler(MixinHandler, tornado.web.RequestHandler):
 		#self.sdt_header('Content-length')
 		src_data = self.sound.data_to_write()
 		self.write('hello boris. sound data: %s' % len(src_data)) # boris here: here must be sound (playback)
-		#print(src_data)
+		print('123212321232123212321')
+		print(src_data)
 		print('boris debug 01011')
 		self.finish()

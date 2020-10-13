@@ -1,5 +1,6 @@
 import threading
 import pipes
+import time
 
 
 class Sound:
@@ -39,24 +40,28 @@ class Sound:
 		return
 
 	def run_p(self):
-		#f = open(self._pP, 'rb')
-		#while self._running:
-		#	chunk = f.read()
-		#	with self._mutexP:
-		#		self._bufferP += chunk
-		#f.close()
-		# write request, read response
-
-		while True:
+		while True: # boris stub
+			time.sleep(1)
+			print('boris 01013')
 			with self._mutexP:
-				with open(self._pP, 'rb') as f:
-					try:
-						self._bufferP += f.read() # boris here 01010
-					except IOError as e:
-						pass
+				tmp = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 '
+				tmp = tmp.encode('utf-8')
+				self._bufferP += tmp
+				print('boris 01013 a')
 			with self._mutexRunning:
 				if not self._running:
 					break
+
+		#while True:
+		#	with self._mutexP:
+		#		with open(self._pP, 'rb') as f:
+		#			try:
+		#				self._bufferP += f.read() # boris here 01010
+		#			except IOError as e:
+		#				pass
+		#	with self._mutexRunning:
+		#		if not self._running:
+		#			break
 
 		print('PLAYBACK THREAD NORMALLY CLOSED')
 		return
@@ -115,7 +120,8 @@ class Sound:
 			retVal = self._bufferP
 			self._bufferP = bytes()
 		#print('############', self._bufferP)
-		return b'\x1b[0z' + retVal + b'\x1b[1z'
+		#return b'\x1b[0z' + retVal + b'\x1b[1z'
+		return retVal
 
 	# write captured data to the Pipe
 	def write_captured_data(self, p_data):
