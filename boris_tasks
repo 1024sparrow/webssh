@@ -1,5 +1,8 @@
 Задачи:
 
+01014:
+Сделать отдельный WebSocket для звука (duplex). Рядом с /ws, /sound.
+
 01006:
 Recorderjs - deprecated (will be removed)
 1. Take sound data on server side, write that into FIFO, get them in console via "cat" command.

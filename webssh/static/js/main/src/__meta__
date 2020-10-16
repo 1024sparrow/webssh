@@ -1,0 +1,15 @@
+{
+	"files": [
+		{
+			"target": "main.js",
+			"source": {
+				"template": "t.js",
+				"list": [
+					"sock.js"
+				]
+			}
+		}
+	],
+	"dir_proc": []
+}
+

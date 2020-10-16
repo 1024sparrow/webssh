@@ -6,7 +6,7 @@ import tornado.ioloop
 from tornado.options import options
 from webssh import handler
 from webssh.sound import Sound
-from webssh.handler import IndexHandler, WsockHandler, SoundHandler, NotFoundHandler
+from webssh.handler import IndexHandler, WsockHandler, SoundHandler, NotFoundHandler, WsockSoundHandler
 from webssh.settings import (
 	get_app_settings, get_host_keys_settings, get_policy_setting,
 	get_ssl_context, get_server_settings, check_encoding_setting
@@ -40,7 +40,8 @@ def make_handlers(loop, options):
 		(r'/', IndexHandler, dict(loop=loop, policy=policy,
 			host_keys_settings=host_keys_settings, sound=sound_settings)),
 		(r'/ws', WsockHandler, dict(loop=loop, sound=sound)),
-		(r'/sound', SoundHandler, dict(loop=loop, sound=sound))
+		(r'/sound', SoundHandler, dict(loop=loop, sound=sound)),
+		(r'/s', WsockSoundHandler, dict(loop=loop, sound=sound))
 	]
 	return handlers
 

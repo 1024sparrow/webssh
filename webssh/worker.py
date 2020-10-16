@@ -30,18 +30,21 @@ def recycle_worker(worker):
 
 
 class Worker(object):
-	def __init__(self, loop, ssh, chan, dst_addr):
+	def __init__(self, loop, ssh, chan, dst_addr, username):
 		self.loop = loop
 		self.ssh = ssh
 		self.chan = chan
 		#self.sound = sound
 		self.dst_addr = dst_addr
+		self.username = username
 		self.fd = chan.fileno()
 		self.id = str(id(self))
 		self.data_to_dst = []
 		self.handler = None
 		self.mode = IOLoop.READ
 		self.closed = False
+		print('01013 worker: dst_addr:', dst_addr)
+		print('01013 worker: username:', username)
 
 	def __call__(self, fd, events):
 		if events & IOLoop.READ:
@@ -50,6 +53,13 @@ class Worker(object):
 			self.on_write()
 		if events & IOLoop.ERROR:
 			self.close(reason='error event occurred')
+
+	def sound_identifier(self):
+		return {
+			'user': self.username,
+			'host': self.dst_addr[0],
+			'port': self.dst_addr[1]
+		}
 
 	def set_handler(self, handler):
 		if not self.handler:
@@ -91,6 +101,7 @@ class Worker(object):
 			return
 
 		data = ''.join(self.data_to_dst)
+		print('## ', data, type(data))
 		logging.debug('{!r} to {}:{}'.format(data, *self.dst_addr))
 		#data = self.sound.extract_audio_response(data)
 
@@ -110,6 +121,9 @@ class Worker(object):
 				self.update_handler(IOLoop.WRITE)
 			else:
 				self.update_handler(IOLoop.READ)
+
+	def write_sound_playback_data(self, p_data):
+		return
 
 	def close(self, reason=None):
 		if self.closed:

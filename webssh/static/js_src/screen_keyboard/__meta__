@@ -1,0 +1,16 @@
+{
+	"files": [
+		{
+			"target": "screen_keyboard.js",
+			"source": {
+				"template": "t.js",
+				"list": [
+					"events.js",
+					"baseLayout.js",
+					"screenMark"
+				]
+			}
+		}
+	]
+}
+

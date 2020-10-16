@@ -120,12 +120,15 @@ class Sound:
 			retVal = self._bufferP
 			self._bufferP = bytes()
 		#print('############', self._bufferP)
-		#return b'\x1b[0z' + retVal + b'\x1b[1z'
+		#retVal = b'\x1b[0z' + retVal + b'\x1b[1z'
+		retVal = b'\x1b[0z' + retVal + b'\x1b[1z'
+		#return '\e[0z' + retVal.decode('utf-8') + '\e1z'
+		#return retVal.encode('ascii')
 		return retVal
 
 	# write captured data to the Pipe
-	def write_captured_data(self, p_data):
-		#print('UYTRUYTRUYTRUYTRUYTRUYTRUYTR:', p_data)
+	def write_captured_data(self, p_data, p_sound_identifier):
+		#print('UYTRUYTRUYTRUYTRUYTRUYTRUYTR:', p_sound_identifier)
 		with self._mutexC:
 			self._bufferC += p_data
 

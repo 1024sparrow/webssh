@@ -479,7 +479,8 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 		term = self.get_argument('term', u'') or u'xterm'
 		chan = ssh.invoke_shell(term=term)
 		chan.setblocking(0)
-		worker = Worker(self.loop, ssh, chan, dst_addr)
+		print('boris 01013 ssh_connect: args: ', args)
+		worker = Worker(self.loop, ssh, chan, dst_addr, args[2])
 		worker.encoding = options.encoding if options.encoding else \
 			self.get_default_encoding(ssh)
 		return worker
@@ -624,12 +625,19 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		if data and isinstance(data, UnicodeType):
 			worker.data_to_dst.append(data)
 			worker.on_write()
-		if self.sound:
-			sound = msg.get('sound')
-			if sound: # type object
-				sound = json.dumps(sound) # type string
-				sound = str.encode(sound) # type bytes
-				self.sound.write_captured_data(sound)
+		#if self.sound:
+		#	sound = msg.get('sound')
+		#	if sound: # type object
+		#		sound = json.dumps(sound) # type string
+		#		sound = str.encode(sound) # type bytes
+		#		self.sound.write_captured_data(sound, worker.sound_identifier())
+		#		#print(self.sound.data_to_write().decode('ascii'))
+		#		#worker.data_to_dst.append(self.sound.data_to_write().decode('ascii'))
+		#		#worker.on_write()
+		#
+		#		#worker.inject_command(self.sound.data_to_write())
+		#
+		#		#worker.ssh.exec_command();
 			
 
 	def on_close(self):
@@ -641,8 +649,8 @@ class WsockHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		if worker:
 			worker.close(reason=self.close_reason)
 
-		if self.sound:
-			self.sound.stop()
+		#if self.sound:
+		#	self.sound.stop()
 
 
 class SoundHandler(MixinHandler, tornado.web.RequestHandler):
@@ -662,3 +670,35 @@ class SoundHandler(MixinHandler, tornado.web.RequestHandler):
 		print(src_data)
 		print('boris debug 01011')
 		self.finish()
+
+class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
+	def initialize(self, loop, sound):
+		super(WsockSoundHandler)
+		self.worker_ref = None
+		self.sound = sound
+	def open(self):
+		workers = clients.get(self.src_addr[0])
+		if not workers:
+			self.close(reason='Websocket authentication failed.')
+			return
+		try:
+			worker_id = self.get_value('id')
+		except (tornado.web.MissingArgumentError, InvalidValueError) as exc:
+			self.close(reason=str(exc))
+		else:
+			worker = workers.get(worker_id)
+			if worker:
+				workers[worker_id] = None
+				self.set_nodelay(True)
+				worker.set_handler(self)
+				self.worker_ref = weakref.ref(worker)
+				self.loop.add_handler(worker.fd, worker, IOLoop.READ)
+			else:
+				self.close(reason='Websocket authentication failed.')
+	def on_message(self, message):
+		worker = self.worker_ref()
+		self.sound.write_captured_data(message, worker.sound_identifier())
+		worker.write_sound_playback_data(self.sound.data_to_write())
+	def on_close(self):
+		if self.sound:
+			self.sound.stop()
