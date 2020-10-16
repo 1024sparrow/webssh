@@ -1,5 +1,5 @@
 module.exports = {
-    target: '../compiled',
+    target: '../js_compiled',
     file:{
     },
     dir:{
