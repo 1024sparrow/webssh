@@ -1,0 +1,17 @@
+{
+	"files": [
+		{
+			"target": "gameplay.js",
+			"source": {
+				"template": "t.js",
+				"list": [
+					"screen_keyboard.js",
+					"sound.js",
+					"main.js"
+				]
+			}
+		}
+	],
+	"remove": ["."]
+}
+
