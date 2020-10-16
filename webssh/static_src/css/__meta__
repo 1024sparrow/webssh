@@ -1,0 +1,17 @@
+{
+	"files": [
+		{
+			"target": "style.css",
+			"source": {
+				"template": "t.css",
+				"list": [
+					"bootstrap.min.css",
+					"xterm.min.css",
+					"fullscreen.min.css",
+					"screen_keyboard.css"
+				]
+			}
+		}
+	],
+	"dir_proc": []
+}

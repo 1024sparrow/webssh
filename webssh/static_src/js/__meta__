@@ -1,0 +1,20 @@
+{
+	"files": [
+		{
+			"target": "prebuilt.js",
+			"source": {
+				"template": "prebuilt.js",
+				"list": []
+			}
+		},
+		{
+			"target": "gameplay.js",
+			"source": {
+				"template": "gameplay.js",
+				"list": []
+			}
+		}
+	],
+	"dir_proc": []
+}
+

@@ -1,1 +1,0 @@
-screen_keyboard/compiled/screen_keyboard.js

@@ -1,6 +1,0 @@
-class Recorder
-Поля p_config:
-- bufferLen - размер буфера в байтах
-- workerPath - путь до recorderWorker.js относительно корня сайта
-- callback - функцию, в которую передавать записанное аудиофрагмент
-- type - формат записываемого аудио (по умолчанию "audio/wav")

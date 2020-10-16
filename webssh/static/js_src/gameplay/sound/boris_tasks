@@ -1,5 +1,0 @@
-00814 tasks:
-Currently I make capturing part.
-1. copy demo. disable output muting. (i.e. run as is and ... debug :)  )
-2. real-time stream to hardcoded url. Post WAV-header to separate url.
-	Catch these data on the server side, concatenate the WAV-file and chexk result.
