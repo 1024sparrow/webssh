@@ -1,8 +1,8 @@
 width: 47,
-height: 17,
+height: 18,
 rows: [ // rows
 	{
-		height: 2,
+		height: 3,
 		buttons: [
 			// button: if id not set, use "text" field value instead
 			{ width: 3, subitems: [ { text: "esc", keycode: { normal: [ 27 ], shift: [], alt: [], ctrl: [] } } ] },
