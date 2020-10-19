@@ -11,6 +11,7 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 	  1 - pressed. If Release
 	  2 - released (we )
 	*/
+	this._fullscreen = false;
 	this._state = 0;
 	this._hostname = p_hostname;
 	this._username = p_username;
@@ -154,6 +155,28 @@ function ScreenKeyboard(p_terminal, p_socket, p_hostname, p_username){
 			);
 		}, 3000);
 	})(this);
+};
+ScreenKeyboard.prototype.toggleFullscreen = function(){
+	//this._terminal.write('F');
+	//$('#terminal .terminal').toggleClass('fullscreen');
+	//var e = document.documentElement;//.requestFullscreen();
+	var e = document.body;
+	if (!this._fullscreen){
+		if (e.requestFullscreen) {
+			e.requestFullscreen();
+		} else if (e.mozRequestFullScreen) { /* Firefox */
+			e.mozRequestFullscreen();
+		} else if (e.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+			e.webkitRequestFullscreen();
+		} else if (e.msRequestFullscreen) { /* IE/Edge */
+			e.msRequestFullscreen();
+		}
+		this._fullscreen = true;
+	}
+	else{
+		document.exitFullscreen();
+		this._fullscreen = false;
+	}
 };
 ScreenKeyboard.prototype.setVisible = function(p_on){
 	var
@@ -315,7 +338,7 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 		}
 	}
 	//else if ((this._terminalMode === 0) && p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){
-	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down', 'left', 'right'].indexOf(p_button.image) >= 0)){//
+	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down', 'left', 'right', 'f11'].indexOf(p_button.image) >= 0)){//
 		//this._terminal.write('+(' + this._terminalMode + ')');
 		if (p_button.image === 'up'){
 			this._terminal.scrollLines(-1);
@@ -340,6 +363,9 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 		}
 		else if (p_button.image === 'right'){
 			this.setOpacity('+');
+		}
+		else if (p_button.image === 'f11'){
+			this.toggleFullscreen();
 		}
 	}
 	else{
