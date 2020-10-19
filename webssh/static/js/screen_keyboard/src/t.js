@@ -169,10 +169,22 @@ ScreenKeyboard.prototype.setVisible = function(p_on){
 };
 ScreenKeyboard.prototype.setOpacity = function(p_opacity){
 	var bn;
-	for (bn of this._buttons){
-		bn.e.style.opacity = p_opacity;
+	if (p_opacity === '+'){
+		this._opacity += 0.1;
+		if (this._opacity > 1)
+			this._opacity = 1;
 	}
-	this._opacity = p_opacity;
+	else if (p_opacity === '-'){
+		this._opacity -= 0.1;
+		if (this._opacity < 0)
+			this._opacity = 0;
+	}
+	else{
+		this._opacity = p_opacity;
+	}
+	for (bn of this._buttons){
+		bn.e.style.opacity = this._opacity;
+	}
 };
 ScreenKeyboard.prototype.opacity = function(){
 	return this._opacity;
@@ -303,7 +315,7 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 		}
 	}
 	//else if ((this._terminalMode === 0) && p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){
-	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down'].indexOf(p_button.image) >= 0)){//
+	else if (p_modifier === 'shift' && (['home','end','PgUp','PgDn','up','down', 'left', 'right'].indexOf(p_button.image) >= 0)){//
 		//this._terminal.write('+(' + this._terminalMode + ')');
 		if (p_button.image === 'up'){
 			this._terminal.scrollLines(-1);
@@ -322,6 +334,12 @@ ScreenKeyboard.prototype._generateKeyEvent = function(p_button, p_modifier){
 		}
 		else if (p_button.image === 'end'){
 			this._terminal.scrollToBottom();
+		}
+		else if (p_button.image === 'left'){
+			this.setOpacity('-');
+		}
+		else if (p_button.image === 'right'){
+			this.setOpacity('+');
 		}
 	}
 	else{
