@@ -3,9 +3,12 @@
 		{
 			"target": "main.js",
 			"source": {
-				"template": "t.js",
+				"template": "t2.js",
 				"list": [
-					"sock.js"
+					"utils.js",
+					"term.js",
+					"webssh.js",
+					"ajax.js"
 				]
 			}
 		}

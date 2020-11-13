@@ -6,6 +6,10 @@ webssh/static/
 __pycache__/
 *.py[cod]
 
+# VIM
+*.swo
+*.swp
+
 # C extensions
 *.so
 

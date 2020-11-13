@@ -56,31 +56,32 @@ function stringToIntArray(p_string){
 
 jQuery(function($){
 	var status = $('#status'),
-			button = $('.btn-primary'),
-			form_container = $('.form-container'),
-			waiter = $('#waiter'),
-			term_type = $('#term'),
-			style = {},
-			default_title = 'WebSSH',
-			title_element = document.querySelector('title'),
-			form_id = '#connect',
-			debug = document.querySelector(form_id).noValidate,
-			custom_font = document.fonts ? document.fonts.values().next().value : undefined,
-			default_fonts,
-			DISCONNECTED = 0,
-			CONNECTING = 1,
-			CONNECTED = 2,
-			state = DISCONNECTED,
-			messages = {1: 'This client is connecting ...', 2: 'This client is already connnected.'},
-			key_max_size = 16384,
-			fields = ['hostname', 'port', 'username'],
-			form_keys = fields.concat(['password', 'totp']),
-			opts_keys = ['bgcolor', 'title', 'encoding', 'command', 'term'],
-			url_form_data = {},
-			url_opts_data = {},
-			validated_form_data,
-			event_origin,
-			hostname_tester = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+		button = $('.btn-primary'),
+		form_container = $('.form-container'),
+		waiter = $('#waiter'),
+		term_type = $('#term'),
+		style = {},
+		default_title = 'WebSSH',
+		title_element = document.querySelector('title'),
+		form_id = '#connect',
+		debug = document.querySelector(form_id).noValidate,
+		custom_font = document.fonts ? document.fonts.values().next().value : undefined,
+		default_fonts,
+		DISCONNECTED = 0,
+		CONNECTING = 1,
+		CONNECTED = 2,
+		state = DISCONNECTED,
+		messages = {1: 'This client is connecting ...', 2: 'This client is already connnected.'},
+		key_max_size = 16384,
+		fields = ['hostname', 'port', 'username'],
+		form_keys = fields.concat(['password', 'totp']),
+		opts_keys = ['bgcolor', 'title', 'encoding', 'command', 'term'],
+		url_form_data = {},
+		url_opts_data = {},
+		validated_form_data,
+		event_origin,
+		hostname_tester = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/
+	;
 
 
 	function store_items(names, data) {
@@ -168,6 +169,7 @@ jQuery(function($){
 
 
 	function parse_xterm_style() {
+		console.log('function·parse_xterm_style');
 		var text = $('.xterm-helpers style').text();
 		var arr = text.split('xterm-normal-char{width:');
 		style.width = parseFloat(arr[1]);
@@ -177,18 +179,34 @@ jQuery(function($){
 
 
 	function get_cell_size(term) {
+		console.log('function·get_cell_size');
 		style.width = term._core._renderService._renderer.dimensions.actualCellWidth;
 		style.height = term._core._renderService._renderer.dimensions.actualCellHeight;
 	}
 
 
+// boris e --------------------------
 	function toggle_fullscreen(term) {
-		$('#terminal .terminal').toggleClass('fullscreen');
+		document.getElementById('terminal').style.display = 'block';
+		//$('#terminal .terminal').toggleClass('fullscreen');
+
+		/*var e = document.documentElement;//.requestFullscreen();
+		if (e.requestFullscreen) {
+    e.requestFullscreen();
+  } else if (e.mozRequestFullScreen) { // Firefox
+    e.mozRequestFullScreen();
+  } else if (e.webkitRequestFullscreen) { // Chrome, Safari and Opera
+    e.webkitRequestFullscreen();
+  } else if (e.msRequestFullscreen) { // IE/Edge
+    e.msRequestFullscreen();
+  }*/
+
 		//generate_keyboard(document.getElementById('keyboard'));
 		//document.getElementById('keyboard').style.display = 'block';
 		//$('#keyboard').toggleClass('fullscreen');
 		//var eCont = document.getElementById('keyboard');
-		term.fitAddon.fit();
+
+		//term.fitAddon.fit();
 	}
 
 
@@ -201,8 +219,15 @@ jQuery(function($){
 			}
 		}
 
-		var cols = parseInt(window.innerWidth / style.width, 10) - 1;
-		var rows = parseInt(window.innerHeight / style.height, 10);
+		// boris here: can not take real font size
+
+		console.log('111 ', parseInt(window.innerWidth / style.width, 10) - 1);
+		console.log('222 ', parseInt(window.innerHeight / style.height, 10));
+
+		console.log('333 ', term.fontSize);
+
+		var cols = 40;//parseInt(window.innerWidth / style.width, 10) - 1;
+		var rows = 40;//parseInt(window.innerHeight / style.height, 10);
 		return {'cols': cols, 'rows': rows};
 	}
 
@@ -267,6 +292,7 @@ jQuery(function($){
 	}
 
 
+	// b01113: не сохранено, посколько используется исключительно в console.log-ах
 	function format_geometry(cols, rows) {
 		return JSON.stringify({'cols': cols, 'rows': rows});
 	}
@@ -330,6 +356,7 @@ jQuery(function($){
 	}
 
 
+// boris e --------------------------
 	function reset_wssh() {
 		var name;
 
@@ -360,6 +387,7 @@ jQuery(function($){
 	}
 
 
+// boris here --------------------------
 	function ajax_complete_callback(resp) {
 		button.prop('disabled', false);
 
@@ -386,6 +414,9 @@ jQuery(function($){
 			terminal = document.getElementById('terminal'),
 			term = new window.Terminal({
 				cursorBlink: true,
+				//fontSize: 20,
+				//lineHeight: 20,
+				rendererType: 'dom',
 				theme: {
 					background: url_opts_data.bgcolor || 'black'
 				}
@@ -394,6 +425,7 @@ jQuery(function($){
 			sound = false,
 			tmp
 		;
+		wssh.boris = term;//boris debug
 		sockSound = window.location.href.split(/\?|#/, 1)[0].replace('http', 'ws');
 		sockSound = sockSound + (sockSound[sockSound.length-1] === '/' ? '' : '/') + 's?id=' + msg.id;
 		sockSound = new window.WebSocket(sockSound);
@@ -582,7 +614,52 @@ jQuery(function($){
 			sock.send(JSON.stringify({'data': data}));
 		});
 
-		{%% sock.js %%}
+		sock.onopen = function() {
+			term.open(terminal);
+		if (sound){ // boris commented
+			sound.init();
+		}
+			if (skb){
+				skb.setVisible(true);
+			}
+			toggle_fullscreen(term);
+			update_font_family(term);
+			term.focus();
+			term.blur();
+			state = CONNECTED;
+			title_element.text = url_opts_data.title || default_title;
+			if (url_opts_data.command) {
+				setTimeout(function () {
+					sock.send(JSON.stringify({'data': url_opts_data.command+'\r'}));
+				}, 500);
+			}
+		};
+
+		sock.onmessage = function(msg) { // boris here 1
+			read_file_as_text(msg.data, term_write, decoder);
+		};
+
+		sock.onerror = function(e) {
+			console.error(e);
+		};
+
+		sock.onclose = function(e) {
+			document.getElementById('terminal').style.display = 'none';
+			term.dispose();
+			term = undefined;
+		/*if (sound){
+		sound.stopAll();
+		}*/
+			if (skb){
+				skb.setVisible(false);
+			}
+			sock = undefined;
+			reset_wssh();
+			log_status(e.reason, true);
+			state = DISCONNECTED;
+			default_title = 'WebSSH';
+			title_element.text = default_title;
+		};
 
 		$(window).resize(function(){
 			if (term) {
@@ -824,8 +901,7 @@ jQuery(function($){
 	function cross_origin_connect(event)
 	{
 		console.log(event.origin);
-		var prop = 'connect',
-				args;
+		var prop = 'connect', args;
 
 		try {
 			args = JSON.parse(event.data);
