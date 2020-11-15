@@ -29,10 +29,6 @@ function Webssh(){
 	this.custom_font = document.fonts ? document.fonts.values().next().value : undefined;
 	this.default_fonts;
 
-	/*this._terminal = new WebsshTerminal(
-		document.getElementById('terminal'),
-		url_opts_data.bgcolor || 'black'
-	);*/
 	this._terminal;
 
 	Utils.parse_url_data(
@@ -71,8 +67,8 @@ function Webssh(){
 
 	(function(self){
 		var f = function(event){
-			self._onFormSubmit();
 			event.preventDefault();
+			self._onFormSubmit();
 		};
 		var e = document.getElementById('form');
 		e.addEventListener('submit', f, true);
@@ -111,10 +107,14 @@ Webssh.prototype.log_status = function(p_text, p_to_populate) {
 Webssh.prototype._onResized = function(p_w, p_h){
 	console.log(`resized to ${p_w}x${p_h}`);
 
-	this._terminal = new WebsshTerminal(
+	/*this._terminal = new WebsshTerminal(
 		document.getElementById('terminal'),
 		this.url_opts_data.bgcolor || 'black'
-	);//
+	);*/
+
+	if (this._terminal){
+		this._terminal.resize_terminal();
+	}
 };
 
 Webssh.prototype._onFormSubmit = function(){
@@ -273,7 +273,7 @@ Webssh.prototype.connect_without_options = function() {
 			errorFunc: (function(self2){return function(p_isNetworkProblem){
 				self2.ajax_error_callback(p_isNetworkProblem)
 			};})(self),
-			timeout: 3000,
+			//timeout: 3000,
 			dataToPost: data
 			// addonHttpHeaders: ...
 		});
@@ -338,6 +338,15 @@ Webssh.prototype.connect_with_options = function(data) {
 
 Webssh.prototype.ajax_complete_callback = function(p_data){
 	console.log('ajax ok');
+
+	this._terminal = new WebsshTerminal(
+		document.getElementById('terminal'),
+		this.url_opts_data.bgcolor || 'black',
+		undefined // socket
+	);
+
+	document.getElementById('terminal').style.display = 'block';
+	this._terminal.resize_terminal();
 };
 
 Webssh.prototype.ajax_error_callback = function(p_isNetworkProblem){

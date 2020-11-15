@@ -25,6 +25,8 @@ function ajax(p){
 	var dataToPost = p.dataToPost;
 	var mimetype = p.mimetype;//unsupported yet: only text
 	var addonHttpHeaders = p.addonHttpHeaders;
+
+	console.log(`ajax: url: "${sourcePath}", data: "${dataToPost}"`);
 /*
 xhttp.setRequestHeader("Content-Type", "application/json");
 xhttp.setRequestHeader('Content-Type', 'text/plain')

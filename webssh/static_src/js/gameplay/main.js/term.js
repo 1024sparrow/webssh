@@ -9,9 +9,12 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 			}
 		}
 	);
+	this.open(p_element);
+	console.log("88", this._core, this._core._renderService, p_element);
 	this._width;
 	this._height;
 	this._socket = p_socket;
+	window.boris = this;//
 };
 
 WebsshTerminal.prototype = Object.create(Terminal.prototype);
@@ -21,7 +24,7 @@ WebsshTerminal.prototype.current_geometry = function(){
 	var tmp, text, arr;
 	if (!this._width || !this._height) {
 		try {
-			tmp = term._core._renderService._renderer.dimensions;
+			tmp = this._core._renderService._renderer.dimensions;
 			this._width = tmp.actualCellWidth;
 			this._height = tmp.actualCellHeight;
 		}
@@ -49,7 +52,7 @@ WebsshTerminal.prototype.resize_terminal = function(){
 
 WebsshTerminal.prototype.on_resize = function(p_cols, p_rows){
 	if (p_cols !== this.cols || p_rows !== this.rows) {
-		console.log('Resizing terminal to geometry: ' + format_geometry(p_cols, p_rows));
+		console.log('Resizing terminal to geometry: format_geometry(' + p_cols + ', ' + p_rows + ')');
 		this.resize(p_cols, p_rows);
 		this._socket.send(JSON.stringify({'resize': [p_cols, p_rows]}));
 	}
@@ -73,7 +76,7 @@ WebsshTerminal.prototype.update_font_family = function() {
 
 	if (custom_font_is_loaded()) {
 		var new_fonts =  custom_font.family + ', ' + default_fonts;
-		term.setOption('fontFamily', new_fonts);
+		this.setOption('fontFamily', new_fonts);
 		this.font_family_updated = true;
 		console.log('Using custom font family ' + new_fonts);
 	}

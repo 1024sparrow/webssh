@@ -6,10 +6,14 @@
 				"template": "t.css",
 				"list": [
 					"bootstrap.min.css",
-					"xterm.min.css",
-					"fullscreen.min.css",
 					"screen_keyboard.css"
 				]
+			}
+		},
+		{
+			"target": "xterm.min.css",
+			"source": {
+				"list": ["xterm.min.css"]
 			}
 		}
 	],
