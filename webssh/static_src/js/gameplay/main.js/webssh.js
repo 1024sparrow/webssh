@@ -112,6 +112,8 @@ Webssh.prototype._onResized = function(p_w, p_h){
 		this.url_opts_data.bgcolor || 'black'
 	);*/
 
+	document.getElementById('terminal').style.width = '' + p_w + 'px';
+	document.getElementById('terminal').style.height = '' + p_h + 'px';
 	if (this._terminal){
 		this._terminal.resize_terminal();
 	}
@@ -339,14 +341,30 @@ Webssh.prototype.connect_with_options = function(data) {
 Webssh.prototype.ajax_complete_callback = function(p_data){
 	console.log('ajax ok');
 
+	// boris here 01115: не создават экземпляр WebsshTerminal, пока не открыты все необходимые сокеты (1, если без звука; 2, если со звуком)
+
 	this._terminal = new WebsshTerminal(
 		document.getElementById('terminal'),
 		this.url_opts_data.bgcolor || 'black',
 		undefined // socket
 	);
 
-	document.getElementById('terminal').style.display = 'block';
+	document.getElementById('terminal-cont').style.display = 'block';
 	this._terminal.resize_terminal();
+
+	//{{
+	this._terminal.write('Hello, Boris!\r\n');
+	var term
+	term = this._terminal;
+	this._terminal.onData(function(data){
+		//console.log(`"${data}"`, typeof data);
+		//console.log("88888", data.charCodeAt(0));
+		if (data.charCodeAt(0) === 13)
+			term.write('\r\n');
+		else
+			term.write(data);
+	});
+	//}}
 };
 
 Webssh.prototype.ajax_error_callback = function(p_isNetworkProblem){

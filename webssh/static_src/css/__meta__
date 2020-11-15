@@ -6,14 +6,9 @@
 				"template": "t.css",
 				"list": [
 					"bootstrap.min.css",
-					"screen_keyboard.css"
+					"screen_keyboard.css",
+					"xterm.min.css"
 				]
-			}
-		},
-		{
-			"target": "xterm.min.css",
-			"source": {
-				"list": ["xterm.min.css"]
 			}
 		}
 	],

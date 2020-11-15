@@ -18,7 +18,7 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 };
 
 WebsshTerminal.prototype = Object.create(Terminal.prototype);
-WebsshTerminal.constructor = WebsshTerminal;
+WebsshTerminal.prototype.constructor = WebsshTerminal;
 
 WebsshTerminal.prototype.current_geometry = function(){
 	var tmp, text, arr;
@@ -46,6 +46,7 @@ WebsshTerminal.prototype.current_geometry = function(){
 };
 
 WebsshTerminal.prototype.resize_terminal = function(){
+	this.resize(20,20);
 	var geometry = this.current_geometry();
 	this.on_resize(geometry.cols, geometry.rows);
 };
