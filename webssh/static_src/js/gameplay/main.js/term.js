@@ -10,11 +10,14 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 		}
 	);
 	this.open(p_element);
-	console.log("88", this._core, this._core._renderService, p_element);
 	this._width;
 	this._height;
 	this._socket = p_socket;
 	window.boris = this;//
+
+	this.onData((function(p2_socket){return function(p_data){
+		p2_socket.send(JSON.stringify({data: p_data}));
+	};})(p_socket));
 };
 
 WebsshTerminal.prototype = Object.create(Terminal.prototype);

@@ -23,6 +23,7 @@ function Webssh(){
 	this.validated_form_data;
 	this.event_origin;
 	this.hostname_tester = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+	this._decoder = window.TextDecoder ? new window.TextDecoder('utf-8') : 'utf-8';
 
 
 	// shared variables
@@ -363,11 +364,11 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 	var
 		ws_url = window.location.href.split(/\?|#/, 1)[0].replace('http', 'ws'),
 		join = (ws_url[ws_url.length-1] === '/' ? '' : '/'),
-		encoding = 'utf-8',
-		decoder = window.TextDecoder ? new window.TextDecoder(encoding) : encoding,
 		sockSound,
+		i,
 		tmp,
-		sound = {}
+		sound = {},
+		sockConnection
 	;
 	this._socketSsh = new window.WebSocket(ws_url + join + 'ws?id=' + data.id);
 	if (tmp = document.getElementById('use-sound-playback')){
@@ -392,26 +393,73 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 		console.log('The deault encoding of your server is ' + data.encoding);
 	}
 
-	this._socketSsh.addEventListener('open', function(){console.log('O-O-Open');})
+	sockConnection = {
+		connectedCount: 0,
+		sockets: [this._socketSsh]
+	};
 	if (this._socketSound)
-		this._socketSound.addEventListener('open', function(){console.log('Sound O-O-Open');})
-	else
-		console.log('Sound socket is undefined');
-	return;//
+		sockConnection.sockets.push(this._socketSound);
 
+	(function(p_sockConnection, p_this){
+		function fOk(){
+			if (++(p_sockConnection.connectedCount) === p_sockConnection.sockets.length){
+				p_this._onSocketsConnected(p_sockConnection.sockets);
+			}
+		};
+		function fError(p_error){
+			console.error(p_error);
+		};
+		function fClose(){
+			for (i = 0 ; i < sockConnection.sockets.length ; ++i){
+				tmp = sockConnection.sockets[i];
+				if (tmp !== this){
+					tmp.close();
+				}
+				p_this._onSocketsDisconnected();
+			}
+		};
+		for (i = 0 ; i < sockConnection.sockets.length ; ++i){
+			tmp = sockConnection.sockets[i];
+			tmp.addEventListener('open', fOk);
+			tmp.addEventListener('error', fError);
+			tmp.addEventListener('close', fClose);
+		}
+	})(sockConnection, this);
+};
 
+Webssh.prototype.ajax_error_callback = function(p_isNetworkProblem){
+	console.log('ajax failed');
+	Utils.log_status('failed', true);
+	this.state = this.DISCONNECTED;
+	this.button.prop('disabled', false);
+};
 
+Webssh.prototype._onSocketsConnected = function(p_sockets){
+	console.log('_onSocketsConnected');
+	var i, socket;
 
 	this._terminal = new WebsshTerminal(
 		document.getElementById('terminal'),
 		this.url_opts_data.bgcolor || 'black',
-		undefined // socket
+		this._socketSsh
 	);
 
 	document.getElementById('terminal-cont').style.display = 'block';
 	this._terminal.resize_terminal();
 
-	//{{
+	for (i = 0 ; i < p_sockets.length ; ++i){
+		socket = p_sockets[i];
+		socket.addEventListener(
+			'message',
+			(function(p_this, p_socket){
+				return function(p_message){
+					p_this._onSocketMessage(p_socket, p_message);
+				};
+			})(this, socket)
+		);
+	}
+
+	/*{{
 	this._terminal.write('Hello, Boris!\r\n');
 	var term
 	term = this._terminal;
@@ -423,12 +471,28 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 		else
 			term.write(data);
 	});
-	//}}
+	//}}*/
 };
 
-Webssh.prototype.ajax_error_callback = function(p_isNetworkProblem){
-	console.log('ajax failed');
-	Utils.log_status('failed', true);
-	this.state = this.DISCONNECTED;
-	this.button.prop('disabled', false);
+Webssh.prototype._onSocketsDisconnected = function(){
+	console.log('_onSocketsDisconnected');
+	this._terminal = undefined;
+	this._socketSsh = undefined;
+	this._socketSound = undefined;
+	document.getElementById('terminal-cont').style.display = 'none';
+};
+
+Webssh.prototype._onSocketMessage = function(p_socket, p_message){
+	if (p_socket === this._socketSsh){
+		Utils.read_file_as_text(
+			p_message.data,
+			(function(p2_self){return function(p2_data){
+				p2_self._terminal.write(p2_data);
+			};})(this),
+			this._decoder
+		);
+	}
+	else if (p_socket === this._socketSound){
+		console.log('sound data taken');
+	}
 };
