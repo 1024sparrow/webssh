@@ -673,7 +673,7 @@ class SoundHandler(MixinHandler, tornado.web.RequestHandler):
 
 class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 	def initialize(self, loop, sound):
-		super(WsockSoundHandler)
+		super(WsockSoundHandler, self).initialize(loop)
 		self.worker_ref = None
 		self.sound = sound
 	def open(self):
