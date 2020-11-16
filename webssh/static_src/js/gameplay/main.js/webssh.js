@@ -482,11 +482,26 @@ Webssh.prototype._onSocketsDisconnected = function(){
 	document.getElementById('terminal-cont').style.display = 'none';
 };
 
+function borisStringToBytearray(p_str){
+	var retVal = '', i;
+	for (i = 0 ; i < p_str.length ; ++i){
+		if (retVal)
+			retVal += ', ';
+		retVal += p_str.charCodeAt(i);
+	}
+	retVal = retVal ? '[' + retVal + ']' : '<empty>';
+	return retVal;
+}
+
 Webssh.prototype._onSocketMessage = function(p_socket, p_message){
 	if (p_socket === this._socketSsh){
 		Utils.read_file_as_text(
 			p_message.data,
 			(function(p2_self){return function(p2_data){
+				// boris e: ecsape-sequence с js-кодом вьюхи (графический режим, определяемый самим приложением)
+				//console.log(
+				//	'88', borisStringToBytearray(p2_data)
+				//);
 				p2_self._terminal.write(p2_data);
 			};})(this),
 			this._decoder
