@@ -30,9 +30,11 @@ function Webssh(){
 	this.custom_font = document.fonts ? document.fonts.values().next().value : undefined;
 	this.default_fonts;
 
-	this._terminal;
 	this._socketSsh;
 	this._socketSound;
+	this._terminal;
+	this._soundOptions;
+	this._sound;
 
 	Utils.parse_url_data(
 		Utils.decode_uri(window.location.search.substring(1)) +
@@ -48,6 +50,14 @@ function Webssh(){
 	var eBody = document.getElementsByTagName('body')[0];
 	eBody.style.overflow = "hidden";
 	eBody.style.margin = '0';
+
+	if ('ontouchstart' in window){
+		document.getElementById('use-screen-keyboard').checked = true;
+		document.getElementById('screen-keyboard-checkbox-area').style.display = 'block';
+	}
+	else{
+		document.getElementById('use-screen-keyboard').checked = false;
+	}
 
 	(function(self){
 		var f = function(){
@@ -367,21 +377,21 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 		sockSound,
 		i,
 		tmp,
-		sound = {},
 		sockConnection
 	;
+	this._soundOptions = {};
 	this._socketSsh = new window.WebSocket(ws_url + join + 'ws?id=' + data.id);
 	if (tmp = document.getElementById('use-sound-playback')){
 		if (tmp.checked){
-			sound.playback = true;
+			this._soundOptions.playback = true;
 		}
 	}
 	if (tmp = document.getElementById('use-sound-capturing')){
 		if (tmp.checked){
-			sound.capture = true;
+			this._soundOptions.capture = true;
 		}
 	}
-	if (sound.playback || sound.capture){
+	if (this._soundOptions.playback || this._soundOptions.capture){
 		this._socketSound = new window.WebSocket(ws_url + join + 's?id=' + data.id);
 	}
 
@@ -438,14 +448,25 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 	console.log('_onSocketsConnected');
 	var i, socket;
 
+	// terminal
 	this._terminal = new WebsshTerminal(
 		document.getElementById('terminal'),
 		this.url_opts_data.bgcolor || 'black',
 		this._socketSsh
 	);
+	this._terminal.resize_terminal();
+
+	// sound
+	if (this._socketSound){
+		this._sound = new Sound(
+			this._socketSound,
+			document.getElementById('hostname').value,
+			document.getElementById('username').value,
+			this._soundOptions
+		);
+	}
 
 	document.getElementById('terminal-cont').style.display = 'block';
-	this._terminal.resize_terminal();
 
 	for (i = 0 ; i < p_sockets.length ; ++i){
 		socket = p_sockets[i];

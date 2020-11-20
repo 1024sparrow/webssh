@@ -4,13 +4,6 @@ var wssh = {};
 //(function(){
 	{%% ajax.js %%}
 	{%% utils.js %%}
-	if ('ontouchstart' in window){
-		document.getElementById('use-screen-keyboard').checked = true;
-		document.getElementById('screen-keyboard-checkbox-area').style.display = 'block';
-	}
-	else{
-		document.getElementById('use-screen-keyboard').checked = false;
-	}
 
 	(function() {
 	// For FormData without getter and setter

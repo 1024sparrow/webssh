@@ -1,7 +1,7 @@
 'use strict';
 
-function Sound(p_terminal, p_socket, p_hostname, p_username, p_flags) {
-	this._term = p_terminal;
+function Sound(p_socket, p_hostname, p_username, p_flags) {
+	//this._term = p_terminal;
 	this._socket = p_socket;
 	this._hostname = p_hostname;
 	this._username = p_username;
