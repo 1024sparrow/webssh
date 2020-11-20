@@ -498,6 +498,7 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 
 Webssh.prototype._onSocketsDisconnected = function(){
 	console.log('_onSocketsDisconnected');
+	this._terminal.destruct();
 	this._terminal = undefined;
 	this._socketSsh = undefined;
 	this._socketSound = undefined;

@@ -31,8 +31,6 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 			);
 		})(this);
 	}
-	//this._fitAddon = new FitAddon.FitAddon();
-	//this.loadAddon(this._fitAddon);
 
 	this.focus();
 	this.blur();
@@ -40,14 +38,14 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 	this.onData((function(p2_socket){return function(p_data){
 		p2_socket.send(JSON.stringify({data: p_data}));
 	};})(p_socket));
-
-	/*window.addEventListener('message', function(p){
-		console.log('XEXEXEXEXEX:', p);
-	}, false);*/
 };
 
 WebsshTerminal.prototype = Object.create(Terminal.prototype);
 WebsshTerminal.prototype.constructor = WebsshTerminal;
+
+WebsshTerminal.prototype.destruct = function(){
+	this.dispose();
+}
 
 WebsshTerminal.prototype.custom_font_is_loaded = function() {
 	if (!this.custom_font) {
@@ -70,7 +68,6 @@ WebsshTerminal.prototype.current_geometry = function(){
 			tmp = this._core._renderService._renderer.dimensions;
 			this._width = tmp.actualCellWidth;
 			this._height = tmp.actualCellHeight;
-			console.log(`001120 1: ${this._width}`);
 		}
 		catch (TypeError) {
 			text = $('.xterm-helpers style').text();
@@ -78,7 +75,6 @@ WebsshTerminal.prototype.current_geometry = function(){
 			this._width = parseFloat(arr[1]);
 			arr = text.split('div{height:');
 			this._height = parseFloat(arr[1]);
-			console.log(`001120 2: ${this._width}`);
 		}
 	}
 
@@ -93,8 +89,6 @@ WebsshTerminal.prototype.current_geometry = function(){
 
 WebsshTerminal.prototype.resize_terminal = function(){
 	//this.resize(20,20);
-	//$('#terminal .terminal').toggleClass('fullscreen');
-	//this._fitAddon.fit();
 	var geometry = this.current_geometry();
 	this.on_resize(geometry.cols, geometry.rows);
 };
