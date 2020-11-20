@@ -6,6 +6,7 @@
 		<title> WebSSH </title>
 		<link href={{static_url("img/favicon.png")}} rel="icon" type="image/png">
 		<link href={{static_url("css/style.css")}} rel="stylesheet" type="text/css"/>
+		<link href={{static_url("css/xterm.min.css")}} rel="stylesheet" type="text/css"/>
 		<style>
 			.row {
 				margin-top: 15px;
@@ -104,8 +105,10 @@
 			</form>
 		</div>
 		<!--<div id="terminal" style="position: absolute; z-index: 2; left: 0px; top: 0px; width: 100%; height: 100%; display:none">-->
-		<div id="terminal-cont" style="position: absolute; z-index: 2; left: 0px; top: 0px; display:none;background: black">
+		<div id="terminal-cont" style="position: absolute; z-index: 2; left: 0px; top: 0px; display:none;background: #ffffaa">
+			<div style="position:relative">
 			<div id="terminal"></div>
+			</div>
 		</div>
 		<div id="waiter" style="position: absolute; z-index: 3; left: 0px; top: 0px; width: 100%; height: 100%;display:none">
 			Please Wait

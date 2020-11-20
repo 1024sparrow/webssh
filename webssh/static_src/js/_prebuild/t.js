@@ -5,5 +5,3 @@
 {%% bootstrap.min.js %%}
 
 {%% xterm.min.js %%}
-
-{%% xterm-addon-fit.min.js %%}

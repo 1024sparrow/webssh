@@ -13,15 +13,55 @@ function WebsshTerminal(p_element, p_bgcolor, p_socket){
 	this._width;
 	this._height;
 	this._socket = p_socket;
+	this.custom_font = document.fonts ? document.fonts.values().next().value : undefined;
 	window.boris = this;//
+
+
+	this.update_font_family();
+	this.default_fonts;
+
+	if (document.fonts) {
+		(function(p_this){
+			document.fonts.ready.then(
+				function(){
+					if (p_this.custom_font_is_loaded() === false) {
+						document.body.style.fontFamily = p_this.custom_font.family;
+					}
+				}
+			);
+		})(this);
+	}
+	//this._fitAddon = new FitAddon.FitAddon();
+	//this.loadAddon(this._fitAddon);
+
+	this.focus();
+	this.blur();
 
 	this.onData((function(p2_socket){return function(p_data){
 		p2_socket.send(JSON.stringify({data: p_data}));
 	};})(p_socket));
+
+	/*window.addEventListener('message', function(p){
+		console.log('XEXEXEXEXEX:', p);
+	}, false);*/
 };
 
 WebsshTerminal.prototype = Object.create(Terminal.prototype);
 WebsshTerminal.prototype.constructor = WebsshTerminal;
+
+WebsshTerminal.prototype.custom_font_is_loaded = function() {
+	if (!this.custom_font) {
+		console.log('No custom font specified.');
+	} else {
+		console.log('Status of custom font ' + this.custom_font.family + ': ' + this.custom_font.status);
+		if (this.custom_font.status === 'loaded') {
+			return true;
+		}
+		if (this.custom_font.status === 'unloaded') {
+			return false;
+		}
+	}
+}
 
 WebsshTerminal.prototype.current_geometry = function(){
 	var tmp, text, arr;
@@ -30,6 +70,7 @@ WebsshTerminal.prototype.current_geometry = function(){
 			tmp = this._core._renderService._renderer.dimensions;
 			this._width = tmp.actualCellWidth;
 			this._height = tmp.actualCellHeight;
+			console.log(`001120 1: ${this._width}`);
 		}
 		catch (TypeError) {
 			text = $('.xterm-helpers style').text();
@@ -37,6 +78,7 @@ WebsshTerminal.prototype.current_geometry = function(){
 			this._width = parseFloat(arr[1]);
 			arr = text.split('div{height:');
 			this._height = parseFloat(arr[1]);
+			console.log(`001120 2: ${this._width}`);
 		}
 	}
 
@@ -44,12 +86,15 @@ WebsshTerminal.prototype.current_geometry = function(){
 
 	var cols = parseInt(window.innerWidth / this._width, 10) - 1;
 	var rows = parseInt(window.innerHeight / this._height, 10);
+	console.log(`this._width: ${this._width}; this._height: ${this._height}`);
 	console.log("COLS: ", cols, ", ROWS: ", rows);
 	return {'cols': cols, 'rows': rows};
 };
 
 WebsshTerminal.prototype.resize_terminal = function(){
-	this.resize(20,20);
+	//this.resize(20,20);
+	//$('#terminal .terminal').toggleClass('fullscreen');
+	//this._fitAddon.fit();
 	var geometry = this.current_geometry();
 	this.on_resize(geometry.cols, geometry.rows);
 };
@@ -74,12 +119,12 @@ WebsshTerminal.prototype.update_font_family = function() {
 		return;
 	}
 
-	if (!default_fonts) {
-		default_fonts = this.getOption('fontFamily');
+	if (!this.default_fonts) {
+		this.default_fonts = this.getOption('fontFamily');
 	}
 
-	if (custom_font_is_loaded()) {
-		var new_fonts =  custom_font.family + ', ' + default_fonts;
+	if (this.custom_font_is_loaded()) {
+		var new_fonts =  this.custom_font.family + ', ' + this.default_fonts;
 		this.setOption('fontFamily', new_fonts);
 		this.font_family_updated = true;
 		console.log('Using custom font family ' + new_fonts);
@@ -92,9 +137,9 @@ WebsshTerminal.prototype.reset_font_family = function() {
 		return;
 	}
 
-	if (default_fonts) {
-		this.setOption('fontFamily', default_fonts);
+	if (this.default_fonts) {
+		this.setOption('fontFamily', this.default_fonts);
 		this.font_family_updated = false;
-		console.log('Using default font family ' + default_fonts);
+		console.log('Using default font family ' + this.default_fonts);
 	}
 };

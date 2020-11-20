@@ -27,8 +27,6 @@ function Webssh(){
 
 
 	// shared variables
-	this.custom_font = document.fonts ? document.fonts.values().next().value : undefined;
-	this.default_fonts;
 
 	this._socketSsh;
 	this._socketSound;
@@ -364,10 +362,10 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 	catch (e){
 	}
 
+	this.button.prop('disabled', false);
 	if (!data || !data.id){
 		Utils.log_status('failed', true);
 		this.state = this.DISCONNECTED;
-		this.button.prop('disabled', false);
 		this.ajax_error_callback(false);
 		return;
 	}
@@ -410,6 +408,7 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 	if (this._socketSound)
 		sockConnection.sockets.push(this._socketSound);
 
+	this.state = this.CONNECTING;
 	(function(p_sockConnection, p_this){
 		function fOk(){
 			if (++(p_sockConnection.connectedCount) === p_sockConnection.sockets.length){
@@ -448,6 +447,8 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 	console.log('_onSocketsConnected');
 	var i, socket;
 
+	document.getElementById('terminal-cont').style.display = 'block';
+
 	// terminal
 	this._terminal = new WebsshTerminal(
 		document.getElementById('terminal'),
@@ -455,6 +456,7 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 		this._socketSsh
 	);
 	this._terminal.resize_terminal();
+	this.state = this.CONNECTED;
 
 	// sound
 	if (this._socketSound){
@@ -466,7 +468,6 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 		);
 	}
 
-	document.getElementById('terminal-cont').style.display = 'block';
 
 	for (i = 0 ; i < p_sockets.length ; ++i){
 		socket = p_sockets[i];
@@ -500,6 +501,9 @@ Webssh.prototype._onSocketsDisconnected = function(){
 	this._terminal = undefined;
 	this._socketSsh = undefined;
 	this._socketSound = undefined;
+	this.state = this.DISCONNECTED;
+	this.default_title = 'WebSSH';
+	this.title_element.text = this.default_title;
 	document.getElementById('terminal-cont').style.display = 'none';
 };
 

@@ -53,18 +53,5 @@ var wssh = {};
 	var websshPrivate = new Webssh();
 
 
-	function custom_font_is_loaded() {
-		if (!custom_font) {
-			console.log('No custom font specified.');
-		} else {
-			console.log('Status of custom font ' + custom_font.family + ': ' + custom_font.status);
-			if (custom_font.status === 'loaded') {
-				return true;
-			}
-			if (custom_font.status === 'unloaded') {
-				return false;
-			}
-		}
-	}
 
 //})();
