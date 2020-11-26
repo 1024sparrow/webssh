@@ -1,0 +1,17 @@
+{
+	"files": [
+		{
+			"target": "handler.py",
+			"source": {
+				"template": "handler.py",
+				"list": [
+					"NotFoundHandler.py",
+					"IndexHandler.py",
+					"WsockHandler.py",
+					"SoundHandler.py",
+					"WsockSoundHandler.py"
+				]
+			}
+		}
+	]
+}
