@@ -1,7 +1,0 @@
-module.exports = {
-	target: '../static',
-	file:{
-	},
-	dir:{
-	}
-}

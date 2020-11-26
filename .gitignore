@@ -1,7 +1,7 @@
 # Byte-compiled / optimized / DLL files
 
 https/
-webssh/static/
+webssh/
 
 __pycache__/
 *.py[cod]

@@ -1,0 +1,75 @@
+{
+	"files": [
+		{
+			"target": "handler.py",
+			"source": {
+				"template": "handler.py",
+				"list": []
+			}
+		},
+		{
+			"target": "__init__.py",
+			"source": {
+				"template": "__init__.py",
+				"list": []
+			}
+		},
+		{
+			"target": "main.py",
+			"source": {
+				"template": "main.py",
+				"list": []
+			}
+		},
+		{
+			"target": "policy.py",
+			"source": {
+				"template": "policy.py",
+				"list": []
+			}
+		},
+		{
+			"target": "settings.py",
+			"source": {
+				"template": "settings.py",
+				"list": []
+			}
+		},
+		{
+			"target": "sound.py",
+			"source": {
+				"template": "sound.py",
+				"list": []
+			}
+		},
+		{
+			"target": "users.py",
+			"source": {
+				"template": "users.py",
+				"list": []
+			}
+		},
+		{
+			"target": "utils.py",
+			"source": {
+				"template": "utils.py",
+				"list": []
+			}
+		},
+		{
+			"target": "worker.py",
+			"source": {
+				"template": "worker.py",
+				"list": []
+			}
+		},
+		{
+			"target": "_version.py",
+			"source": {
+				"template": "_version.py",
+				"list": []
+			}
+		}
+	],
+	"dir_proc": []
+}

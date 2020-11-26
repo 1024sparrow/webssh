@@ -677,6 +677,9 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		self.worker_ref = None
 		self.sound = sound
 	def open(self):
+		self.src_addr = self.get_client_addr()
+		logging.info('Connected from {}:{}'.format(*self.src_addr))
+
 		workers = clients.get(self.src_addr[0])
 		if not workers:
 			self.close(reason='Websocket authentication failed.')

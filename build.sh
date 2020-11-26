@@ -1,3 +1,3 @@
 #!/bin/bash
 
-compile webssh/static_src/pro
+compile src/pro
