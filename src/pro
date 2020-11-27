@@ -1,5 +1,8 @@
 module.exports = {
 				target: '../webssh',
-				file:{},
+				file:{
+					'binary-data-js': 'build-scripts/001-file-to-js-buffer.js',
+					'binary-data-py': 'build-scripts/002-file-to-python-array.py'
+				},
 				dir:{}
 			}
