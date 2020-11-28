@@ -152,10 +152,6 @@ Webssh.prototype.connect = function(
 	// for console use
 	var result, opts;
 
-	this._whoAmI.hostname = p_hostname; // boris here
-	this._whoAmI.port = p_port;
-	this._whoAmI.username = p_username;
-
 	if (this.state !== this.DISCONNECTED) {
 		console.log(this.messages[this.state]);
 		return;
@@ -277,6 +273,10 @@ Webssh.prototype.connect_without_options = function() {
 
 	data = new FormData(form);
 	pk = data.get('privatekey');
+
+	this._whoAmI.hostname = document.getElementById('hostname').value;
+	this._whoAmI.port = document.getElementById('port').value;
+	this._whoAmI.username = document.getElementById('username').value;
 
 	//enable_file_inputs
 	for (i = 0; i < inputs.length; i++) {
@@ -405,7 +405,6 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 			tmp += (tmp ? '&' : '?') + i + '=' + this._whoAmI[i]
 		}
 		this._socketSound = new window.WebSocket(ws_url + join + 's' + tmp);
-		console.log('01127.1'); // boris debug
 	}
 
 	if (!data.encoding) {
@@ -435,9 +434,6 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 		};
 		function fClose(){
 			var i, tmp;
-			console.log('01128.2: ', p_this._socketSsh, p_this._socketSound);
-			console.log('01127.3: ', this);
-			console.log('01127.4: ', JSON.stringify(this));
 			for (i = 0 ; i < sockConnection.sockets.length ; ++i){
 				tmp = sockConnection.sockets[i];
 				tmp.removeEventListener('close', fClose);
@@ -519,7 +515,6 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 
 Webssh.prototype._onSocketsDisconnected = function(){
 	console.log('_onSocketsDisconnected');
-	console.log('01127.5: ', this, this.constructor.name);
 	if (this._terminal){
 		this._terminal.destruct();
 		this._terminal = undefined;

@@ -16,6 +16,9 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		hostname = self.get_value('hostname')
 		port = self.get_value('port')
 		username = self.get_value('username')
+
+		# boris here (01128):
+		# лорп
 		print('01128.4: hostname:', hostname)
 		print('01128.4: port:', port)
 		print('01128.4: username:', username)
