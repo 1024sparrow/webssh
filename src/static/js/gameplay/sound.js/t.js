@@ -20,6 +20,10 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	catch(e){
 		alert('Your browser no supports audio');
 	}
+	
+	this._socket.addEventListener('message', function(){console.log('01127.2');}); // boris debug
+
+
 	//setInterval(this._onTimer);
 }
 /*Sound.prototype.onLoad = function(){

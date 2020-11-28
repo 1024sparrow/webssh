@@ -32,15 +32,15 @@ def make_handlers(loop, options):
 	policy = get_policy_setting(options, host_keys_settings)
 	sound_settings = get_sound_settings()
 	sound = None
-	if sound_settings['use_sound']:
-		sound = Sound(sound_settings)
-		sound.start('localhost', 'boris')
+	#if sound_settings['use_sound']:
+	#	sound = Sound(sound_settings)
+	#	sound.start('localhost', 'boris')
 
 	handlers = [
 		(r'/', IndexHandler, dict(loop=loop, policy=policy,
 			host_keys_settings=host_keys_settings, sound=sound_settings)),
 		(r'/ws', WsockHandler, dict(loop=loop, sound=sound)),
-		(r'/sound', SoundHandler, dict(loop=loop, sound=sound)),
+		#(r'/sound', SoundHandler, dict(loop=loop, sound=sound)),
 		(r'/s', WsockSoundHandler, dict(loop=loop, sound=sound))
 	]
 	return handlers

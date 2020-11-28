@@ -24,6 +24,11 @@ function Webssh(){
 	this.event_origin;
 	this.hostname_tester = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
 	this._decoder = window.TextDecoder ? new window.TextDecoder('utf-8') : 'utf-8';
+	this._whoAmI = {
+		hostname: undefined,
+		port: undefined,
+		username: undefined
+	};
 
 
 	// shared variables
@@ -146,6 +151,10 @@ Webssh.prototype.connect = function(
 ){
 	// for console use
 	var result, opts;
+
+	this._whoAmI.hostname = p_hostname; // boris here
+	this._whoAmI.port = p_port;
+	this._whoAmI.username = p_username;
 
 	if (this.state !== this.DISCONNECTED) {
 		console.log(this.messages[this.state]);
@@ -390,7 +399,13 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 		}
 	}
 	if (this._soundOptions.playback || this._soundOptions.capture){
-		this._socketSound = new window.WebSocket(ws_url + join + 's?id=' + data.id);
+		//this._socketSound = new window.WebSocket(ws_url + join + 's?id=' + data.id);
+		tmp = '';
+		for (i in this._whoAmI){
+			tmp += (tmp ? '&' : '?') + i + '=' + this._whoAmI[i]
+		}
+		this._socketSound = new window.WebSocket(ws_url + join + 's' + tmp);
+		console.log('01127.1'); // boris debug
 	}
 
 	if (!data.encoding) {
@@ -419,14 +434,20 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 			console.error(p_error);
 		};
 		function fClose(){
+			var i, tmp;
+			console.log('01128.2: ', p_this._socketSsh, p_this._socketSound);
+			console.log('01127.3: ', this);
+			console.log('01127.4: ', JSON.stringify(this));
 			for (i = 0 ; i < sockConnection.sockets.length ; ++i){
 				tmp = sockConnection.sockets[i];
+				tmp.removeEventListener('close', fClose);
 				if (tmp !== this){
 					tmp.close();
 				}
-				p_this._onSocketsDisconnected();
 			}
+			p_this._onSocketsDisconnected();
 		};
+		var i, tmp;
 		for (i = 0 ; i < sockConnection.sockets.length ; ++i){
 			tmp = sockConnection.sockets[i];
 			tmp.addEventListener('open', fOk);
@@ -459,14 +480,14 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 	this.state = this.CONNECTED;
 
 	// sound
-	if (this._socketSound){
+	/*if (this._socketSound){ // boris commented
 		this._sound = new Sound(
 			this._socketSound,
 			document.getElementById('hostname').value,
 			document.getElementById('username').value,
 			this._soundOptions
 		);
-	}
+	}*/
 
 
 	for (i = 0 ; i < p_sockets.length ; ++i){
@@ -498,8 +519,11 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 
 Webssh.prototype._onSocketsDisconnected = function(){
 	console.log('_onSocketsDisconnected');
-	this._terminal.destruct();
-	this._terminal = undefined;
+	console.log('01127.5: ', this, this.constructor.name);
+	if (this._terminal){
+		this._terminal.destruct();
+		this._terminal = undefined;
+	}
 	this._socketSsh = undefined;
 	this._socketSound = undefined;
 	this.state = this.DISCONNECTED;
