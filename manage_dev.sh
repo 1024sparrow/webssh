@@ -41,8 +41,9 @@ function startServer {
 		openssl req -x509 -nodes -newkey rsa:2048 -days 365 -keyout "${dirpath}/https/key" -subj /C=RU/ST=./L=./O=./CN=${targetDomain} -out "${dirpath}/https/cert"
 	fi
 	popd > /dev/null # $dirpath
-	SOUND_PIPE_P=boris/playback.pipe \
-	SOUND_PIPE_C=boris/capture.pipe \
+	#SOUND_PIPE_P=boris/playback.pipe \
+	#SOUND_PIPE_C=boris/capture.pipe \
+	SOUND_CONFIG_PATH=~/.stretchplayer-ssh.conf \
 	 python3 "$dirpath"/run.py \
 		--certfile="$dirpath"/https/cert \
 		--keyfile="$dirpath"/https/key \

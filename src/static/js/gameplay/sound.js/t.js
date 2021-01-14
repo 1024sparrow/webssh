@@ -22,6 +22,7 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	}
 	
 	this._socket.addEventListener('message', function(){console.log('01127.2');}); // boris debug
+	console.log('10109.1152');
 
 
 	//setInterval(this._onTimer);
@@ -74,7 +75,7 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
-	//console.log(p_chan_1);
+	//console.log(p_chan_1); // исправно получаю
 	var buffer1 = [], buffer2 = [];
 	var i;
 	for (i = 0 ; i < this._recordBufferSize ; ++i)

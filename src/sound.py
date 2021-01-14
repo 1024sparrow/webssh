@@ -11,11 +11,16 @@ class Sound:
 		# self._pipe_p = pipe_p
 		# self._pipe_c = pipe_c
 
+		print('10109.1218')
+
 		self._running = False
 		self._pC = None
 		self._pP = None
 		self._mutexRunning = None
 		# boris e: не 'use_c' и 'capturePipe', а только 'capturePipe'(Всё равно мы проверяем (и вынуждены проверять!) на сам факт наличия такого поля, пусть наличие поля означает, что опция активна)
+
+		print('playback pipe path:', p_sound['playbackPipe'])
+
 		if 'use_c' in p_sound:
 			print('******************** c')
 			self._pC = p_sound['capturePipe']
@@ -28,6 +33,7 @@ class Sound:
 			self._tP = threading.Thread(target=self.run_p)
 			self._mutexP = threading.Lock()
 			self._bufferP = bytes()
+			print('***p**')
 		if self._pC or self._pP:
 			self._mutexRunning = threading.Lock() # boris here 01008: incorrect thread stoping
 
@@ -40,28 +46,29 @@ class Sound:
 		return
 
 	def run_p(self):
-		while True: # boris stub
-			time.sleep(1)
-			print('boris 01013')
-			with self._mutexP:
-				tmp = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 '
-				tmp = tmp.encode('utf-8')
-				self._bufferP += tmp
-				print('boris 01013 a')
-			with self._mutexRunning:
-				if not self._running:
-					break
-
-		#while True:
+		#while True: # boris stub
+		#	time.sleep(1)
+		#	print('boris 01013')
 		#	with self._mutexP:
-		#		with open(self._pP, 'rb') as f:
-		#			try:
-		#				self._bufferP += f.read() # boris here 01010
-		#			except IOError as e:
-		#				pass
+		#		tmp = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 '
+		#		tmp = tmp.encode('utf-8')
+		#		self._bufferP += tmp
+		#		print('boris 01013 a')
 		#	with self._mutexRunning:
 		#		if not self._running:
 		#			break
+
+		while True:
+			with self._mutexP:
+				with open(self._pP, 'rb') as f:
+					try:
+						self._bufferP += f.read() # boris here 01010
+						print("10112 ++++++++++++++++++++") # boris here 10114: писать в вебсокет
+					except IOError as e:
+						pass
+			with self._mutexRunning:
+				if not self._running:
+					break
 
 		print('PLAYBACK THREAD NORMALLY CLOSED')
 		return

@@ -1,4 +1,5 @@
 import io
+import os # environment variables
 import json
 import logging
 import socket

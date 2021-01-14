@@ -189,9 +189,9 @@ class IndexHandler(MixinHandler, tornado.web.RequestHandler):
 			'index.html',
 			debug=self.debug,
 			font=self.font,
-			sound=self.sound_settings['use_sound'],
-			soundPlayback=self.sound_settings['use_p'],
-			soundCapturing=self.sound_settings['use_c']
+			sound=True, #self.sound_settings['use_sound'],
+			soundPlayback=True, #self.sound_settings['use_p'],
+			soundCapturing=True #self.sound_settings['use_c']
 		)
 
 	@tornado.gen.coroutine

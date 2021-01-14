@@ -2,7 +2,17 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 	def initialize(self, loop, sound):
 		super(WsockSoundHandler, self).initialize(loop)
 		self.worker_ref = None
-		#self.sound = sound
+		with open(os.environ['SOUND_CONFIG_PATH'], 'r') as f:
+			data = f.read()
+			self.conf = json.loads(data)
+		self.sound = Sound({
+			#'use_c': True,
+			'use_c': False,
+			'use_p': True,
+			'playbackPipe': self.conf['parameters']['fifoPlayback'],
+			'capturePipe': self.conf['parameters']['fifoCapture']
+		})
+		print('10109.1232', self.conf['parameters']['fifoPlayback']);
 
 	def open(self):
 		print('01128.1: open') # boris debug
@@ -22,6 +32,8 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		print('01128.4: hostname:', hostname)
 		print('01128.4: port:', port)
 		print('01128.4: username:', username)
+
+		self.sound.start(hostname, username)
 
 
 		#workers = clients.get(self.src_addr[0])
@@ -44,7 +56,9 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		#		self.close(reason='Websocket authentication failed.')
 
 	def on_message(self, message):
-		print('on_message: ', message)
+		#print('on_message: ', message) # boris here: это записанное в браузере аудио. Осталось только записать его в FIFO.
+		pass
+
 		#worker = self.worker_ref()
 		#self.sound.write_captured_data(message, worker.sound_identifier())
 		#worker.write_sound_playback_data(self.sound.data_to_write())

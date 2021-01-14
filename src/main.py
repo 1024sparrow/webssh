@@ -12,33 +12,14 @@ from webssh.settings import (
 	get_ssl_context, get_server_settings, check_encoding_setting
 )
 
-def get_sound_settings():
-	soundPipeP = os.environ['SOUND_PIPE_P']
-	soundPipeC = os.environ['SOUND_PIPE_C']
-	settings = dict(
-		use_sound = True if len(soundPipeP) or len(soundPipeC) else False,
-		use_p = True if len(soundPipeP) else False,
-		use_c = True if len(soundPipeC) else False,
-		playbackPipe = soundPipeP,
-		capturePipe = soundPipeC
-	)
-	#if settings['use_sound']:
-	#	return None
-	return settings
-
-
 def make_handlers(loop, options):
 	host_keys_settings = get_host_keys_settings(options)
 	policy = get_policy_setting(options, host_keys_settings)
-	sound_settings = get_sound_settings()
 	sound = None
-	#if sound_settings['use_sound']:
-	#	sound = Sound(sound_settings)
-	#	sound.start('localhost', 'boris')
 
 	handlers = [
 		(r'/', IndexHandler, dict(loop=loop, policy=policy,
-			host_keys_settings=host_keys_settings, sound=sound_settings)),
+			host_keys_settings=host_keys_settings, sound=None)),
 		(r'/ws', WsockHandler, dict(loop=loop, sound=sound)),
 		#(r'/sound', SoundHandler, dict(loop=loop, sound=sound)),
 		(r'/s', WsockSoundHandler, dict(loop=loop, sound=sound))

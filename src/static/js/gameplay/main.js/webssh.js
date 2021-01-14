@@ -405,6 +405,8 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 			tmp += (tmp ? '&' : '?') + i + '=' + this._whoAmI[i]
 		}
 		this._socketSound = new window.WebSocket(ws_url + join + 's' + tmp);
+		//this._socketSound = new window.WebSocket(ws_url + join + 's');//
+		console.log('10109.1: ', ws_url + join + 's' + tmp);//
 	}
 
 	if (!data.encoding) {
@@ -476,14 +478,15 @@ Webssh.prototype._onSocketsConnected = function(p_sockets){
 	this.state = this.CONNECTED;
 
 	// sound
-	/*if (this._socketSound){ // boris commented
+	if (this._socketSound){ // boris commented
 		this._sound = new Sound(
 			this._socketSound,
 			document.getElementById('hostname').value,
 			document.getElementById('username').value,
 			this._soundOptions
 		);
-	}*/
+		this._sound.init();
+	}
 
 
 	for (i = 0 ; i < p_sockets.length ; ++i){
