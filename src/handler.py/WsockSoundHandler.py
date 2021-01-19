@@ -10,7 +10,8 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 			'use_c': False,
 			'use_p': True,
 			'playbackPipe': self.conf['parameters']['fifoPlayback'],
-			'capturePipe': self.conf['parameters']['fifoCapture']
+			'capturePipe': self.conf['parameters']['fifoCapture'],
+			'websocket': self
 		})
 		print('10109.1232', self.conf['parameters']['fifoPlayback']);
 
@@ -57,6 +58,7 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 
 	def on_message(self, message):
 		#print('on_message: ', message) # boris here: это записанное в браузере аудио. Осталось только записать его в FIFO.
+		self.sound.onPSocketRead(message);
 		pass
 
 		#worker = self.worker_ref()

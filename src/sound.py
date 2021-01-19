@@ -13,6 +13,8 @@ class Sound:
 
 		print('10109.1218')
 
+		self._websocket = p_sound['websocket']
+
 		self._running = False
 		self._pC = None
 		self._pP = None
@@ -31,7 +33,7 @@ class Sound:
 			print('******************** p')
 			self._pP = p_sound['playbackPipe']
 			self._tP = threading.Thread(target=self.run_p)
-			self._mutexP = threading.Lock()
+			#self._mutexP = threading.Lock()
 			self._bufferP = bytes()
 			print('***p**')
 		if self._pC or self._pP:
@@ -41,6 +43,18 @@ class Sound:
 		print('sound destructor')
 		with self._mutexRunning:
 			self._running = False
+
+	def onPSocketRead(self, p_data):
+		# boris here 10119
+		#with open(self._pP, 'rb') as f:
+		#	try:
+		#		self._bufferP += f.read() # boris here 01010
+		#		print("10112 ++++++++++++++++++++") # boris here 10114: писать в вебсокет
+		#		self._websocket.write_message(self._bufferP, true)
+		#	except IOError as e:
+		#		pass
+
+		self._websocket.write_message(self._bufferP, true) # boris here 10119 ffd: делаю неблокирующую заглушку здеь (возвращаю статически вкомпилированный wav). Если так всё будет ok, заморачиваюсь по поводу честного считывания wav из FIFO.
 
 	def run_stub(self):
 		return
@@ -58,14 +72,16 @@ class Sound:
 		#		if not self._running:
 		#			break
 
-		while True:
-			with self._mutexP:
-				with open(self._pP, 'rb') as f:
-					try:
-						self._bufferP += f.read() # boris here 01010
-						print("10112 ++++++++++++++++++++") # boris here 10114: писать в вебсокет
-					except IOError as e:
-						pass
+		while False:
+			#with self._mutexP:
+			print('10114.2331:', self._pP)
+			with open(self._pP, 'rb') as f:
+				try:
+					self._bufferP += f.read() # boris here 01010
+					print("10112 ++++++++++++++++++++") # boris here 10114: писать в вебсокет
+					#self._websocket.write_message(self._bufferP, true)
+				except IOError as e:
+					pass
 			with self._mutexRunning:
 				if not self._running:
 					break
