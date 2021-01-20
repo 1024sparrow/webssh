@@ -27,7 +27,7 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 		(
 			function(p_this){
 				return function(p_message){
-					p_this._onPlaybackDataTaken(p_message);
+					p_this._onPlaybackDataTaken(p_message.data);
 				};
 			}
 		)(this)
@@ -88,11 +88,12 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._onPlaybackDataTaken = function(p){
-	console.log('10119.0507');
+	console.log('10119.0507:', p.constructor);
 	var tmp = window.AudioContext || window.webkitAudioContext;
 	var audioContext = new tmp();
 
-	const audioBuffer = audioContext.decodeAudioData(p, function(){
+	// p must be an ArrayBuffer
+	const audioBuffer = audioContext.decodeAudioData(p.arrayBuffer(), function(){ // boris here 10120: incorrect Blob to ArrayBuffer conversion: see https://riptutorial.com/javascript/example/1390/converting-between-blobs-and-arraybuffers
 		// create audio source
 		const source = audioContext.createBufferSource();
 		source.buffer = audioBuffer;
