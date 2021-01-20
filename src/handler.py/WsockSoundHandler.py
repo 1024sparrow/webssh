@@ -57,7 +57,7 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		#		self.close(reason='Websocket authentication failed.')
 
 	def on_message(self, message):
-		#print('on_message: ', message) # boris here: это записанное в браузере аудио. Осталось только записать его в FIFO.
+		print('on_message: ', message) # boris here: это записанное в браузере аудио. Осталось только записать его в FIFO.
 		self.sound.onPSocketRead(message);
 		pass
 

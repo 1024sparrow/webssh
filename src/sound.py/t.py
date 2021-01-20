@@ -54,7 +54,8 @@ class Sound:
 		#	except IOError as e:
 		#		pass
 
-		self._websocket.write_message(self._bufferP, true) # boris here 10119 ffd: делаю неблокирующую заглушку здеь (возвращаю статически вкомпилированный wav). Если так всё будет ok, заморачиваюсь по поводу честного считывания wav из FIFO.
+		#self._websocket.write_message(self._bufferP, True) # boris here 10119 ffd: делаю неблокирующую заглушку здеь (возвращаю статически вкомпилированный wav). Если так всё будет ok, заморачиваюсь по поводу честного считывания wav из FIFO.
+		self._websocket.write_message({%% sound.wav %%}, True)
 
 	def run_stub(self):
 		return

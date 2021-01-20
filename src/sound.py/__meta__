@@ -1,0 +1,16 @@
+{
+	"files": [
+		{
+			"target": "sound.py",
+			"source": {
+				"template": "t.py",
+				"list": [
+					"sound.wav"
+				],
+				"types": {
+					"sound.wav": [ "binary-data-py" ]
+				}
+			}
+		}
+	]
+}
