@@ -87,21 +87,24 @@ Sound.prototype.startStream = function(stream){
 	console.log('ready');
 }
 
-Sound.prototype._onPlaybackDataTaken = function(p){
+Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 	console.log('10119.0507:', p.constructor);
 	var tmp = window.AudioContext || window.webkitAudioContext;
 	var audioContext = new tmp();
 
-	// p must be an ArrayBuffer
-	const audioBuffer = audioContext.decodeAudioData(p.arrayBuffer(), function(){ // boris here 10120: incorrect Blob to ArrayBuffer conversion: see https://riptutorial.com/javascript/example/1390/converting-between-blobs-and-arraybuffers
-		// create audio source
-		const source = audioContext.createBufferSource();
-		source.buffer = audioBuffer;
-		source.connect(audioContext.destination);
+	var fileReader = new FileReader();
+	fileReader.onload = function(){
+		const audioBuffer = audioContext.decodeAudioData(this.result, function(p_audioBuffer){
+			// create audio source
+			const source = audioContext.createBufferSource();
+			source.buffer = p_audioBuffer;
+			source.connect(audioContext.destination);
 
-		// play audio
-		source.start();
-	});
+			// play audio
+			source.start();
+		});
+	};
+	fileReader.readAsArrayBuffer(p);
 };
 
 Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
