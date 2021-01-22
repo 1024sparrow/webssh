@@ -7,6 +7,14 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	this._username = p_username;
 	this._flags = p_flags; // {playback: true|false, capture: true|false}
 	this._recordBufferSize = 4096;
+	/* States: // boris here 10122.1: расписать диаграмму состояний (и поведение сервера тоже определить). Здесь мы должны определить поведение в случах разрыва связи и задержек сети. Надо избежать возможности обработки слишком поздно пришедшего ответа.
+	0 - initial (silent)
+	1 - decoding (playing)
+	2 - playing
+	*/
+	this._state = 0;
+
+
 	//this._nodeRecorder;
 
 	/*if (!navigator.getUserMedia) { // boris stub: чтоб страница не тупила
@@ -91,10 +99,11 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 	console.log('10119.0507:', p.constructor);
 	var tmp = window.AudioContext || window.webkitAudioContext;
 	var audioContext = new tmp();
+	var self = this;
 
 	var fileReader = new FileReader();
 	fileReader.onload = function(){
-		const audioBuffer = audioContext.decodeAudioData(this.result, function(p_audioBuffer){
+		/*const audioBuffer = audioContext.decodeAudioData(this.result, function(p_audioBuffer){
 			// create audio source
 			const source = audioContext.createBufferSource();
 			source.buffer = p_audioBuffer;
@@ -102,9 +111,23 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 
 			// play audio
 			source.start();
-		});
+		});*/
+
+		audioContext.decodeAudioData(this.result, function(p_audioBuffer){self._onPlaybackDataDecoded(p_audioBuffer)});
 	};
 	fileReader.readAsArrayBuffer(p);
+};
+
+Sound.prototype._onPlaybackDataDecoded = function(p){
+	// boris here 10122.2: audioContext is still in local function inside _onPlaybackDataTaken (oops...)
+
+	// create audio source
+	const source = audioContext.createBufferSource();
+	source.buffer = p_audioBuffer;
+	source.connect(audioContext.destination);
+
+	// play audio
+	source.start();
 };
 
 Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
@@ -135,7 +158,7 @@ Sound.prototype.init = function(){ // start data streaming
 	/*navigator.getUserMedia({audio:true}, this.startStream.bind(this), function(e) { // boris stub: чтоб страница не тупила
 		alert('no audio stream...');
 	});*/
-	this._socket.send('1'); // boris here 10119: почему "_socket is undefined" ?
+	this._socket.send('1');
 }
 
 // boris here 2
