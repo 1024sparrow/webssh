@@ -99,8 +99,14 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
-	console.log('10119.0507:', p.constructor);
+	//console.log('10119.0507:', p.constructor, p);
 	var self = this;
+
+	if (p.size === 0){
+		this._preloaded = undefined;
+		this._socket.send('1');
+		return;
+	}
 
 	var fileReader = new FileReader();
 	fileReader.onload = function(){
