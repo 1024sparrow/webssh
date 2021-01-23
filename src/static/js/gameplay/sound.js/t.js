@@ -12,7 +12,10 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 	1 - decoding (playing)
 	2 - playing
 	*/
-	this._state = 0;
+	this._playing = false;
+	this._preloaded = undefined;
+	var tmp = window.AudioContext || window.webkitAudioContext;
+	this._audioContext = new tmp();
 
 
 	//this._nodeRecorder;
@@ -97,8 +100,6 @@ Sound.prototype.startStream = function(stream){
 
 Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 	console.log('10119.0507:', p.constructor);
-	var tmp = window.AudioContext || window.webkitAudioContext;
-	var audioContext = new tmp();
 	var self = this;
 
 	var fileReader = new FileReader();
@@ -113,22 +114,52 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 			source.start();
 		});*/
 
-		audioContext.decodeAudioData(this.result, function(p_audioBuffer){self._onPlaybackDataDecoded(p_audioBuffer)});
+		self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){self._onPlaybackDataDecoded(p_audioBuffer)});
 	};
 	fileReader.readAsArrayBuffer(p);
 };
 
 Sound.prototype._onPlaybackDataDecoded = function(p){
+
+	this._preloaded = p;
+
+	if (!this._playing)
+	{
+		this._playNextChunk();
+	}
+
 	// boris here 10122.2: audioContext is still in local function inside _onPlaybackDataTaken (oops...)
 
 	// create audio source
-	const source = audioContext.createBufferSource();
+	/*const source = audioContext.createBufferSource();
 	source.buffer = p_audioBuffer;
 	source.connect(audioContext.destination);
 
 	// play audio
-	source.start();
+	source.start();*/
 };
+
+Sound.prototype._playNextChunk = function(){
+	if (!this._preloaded){
+		this._playing = false;
+		return;
+	}
+	this._playing = true;
+	this._socket.send('1');
+	const source = this._audioContext.createBufferSource();
+	source.buffer = this._preloaded;
+	this._preloaded = undefined;
+	source.connect(this._audioContext.destination);
+	source.onended = (function(p_this){return function(){console.log('chunk playback finished');p_this._playNextChunk();};})(this);
+
+	// play audio
+	source.start();
+	console.log('chunk playback started');
+};
+
+
+
+
 
 Sound.prototype._takeChunkRecord = function(p_chan_1, p_chan_2){
 	//console.log(p_chan_1); // исправно получаю
