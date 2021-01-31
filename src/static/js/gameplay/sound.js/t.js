@@ -100,6 +100,7 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
+	console.log('Sound.prototype._onPlaybackDataTake()');
 	console.log('10119.0507:', p.constructor, p);
 	var self = this;
 

@@ -557,5 +557,6 @@ Webssh.prototype._onSocketMessage = function(p_socket, p_message){
 	}
 	else if (p_socket === this._socketSound){
 		console.log('sound data taken');
+		this._sound._onPlaybackDataTaken(p_message.data);
 	}
 };

@@ -23,6 +23,7 @@ class Sound:
 		self._cvP = threading.Condition()
 		self._qP = Queue()
 		self._mutexRunning = None
+		self._buferP = bytes()
 		# boris e: не 'use_c' и 'capturePipe', а только 'capturePipe'(Всё равно мы проверяем (и вынуждены проверять!) на сам факт наличия такого поля, пусть наличие поля означает, что опция активна)
 
 		print('playback pipe path:', p_sound['playbackPipe'])
@@ -64,9 +65,15 @@ class Sound:
 		# boris here 10128: just queue task, do not execute emetially
 		#with open(self._pP, 'rb') as f:
 		#	self._websocket.write_message(f.read(), True)
+		print('10131.0856.1')
 		self._qP.put('play')
+		print('10131.0856.2')
 		with self._cvP:
 			self._cvP.notify_all()
+		print('10131.0856.3')
+		# ждём считывающий поток, пока не появятся данные
+		#self._websocket.write_message(self._bufferP, True)
+		print('10131.0856.4')
 
 	def run_stub(self):
 		return
@@ -74,34 +81,36 @@ class Sound:
 	def run_p(self):
 		#while self._running: # boris here
 		while True:
+			print('10131.1331 ............')
 			with self._cvP:
-				while self._qP.empty():
-					self._cvP.wait()
+				#while self._qP.empty():
+				#	self._cvP.wait()
 				print('10130.1140')
-				#try:
-				order = self._qP.get_nowait()
-				if order == 'exit':
-					break
-				elif order == 'play':
-					print('### play request taken')
-					with open(self._pP, 'rb') as f:
-						print('sending wav-data to websocket') #
-						data = f.read()
-						print('sending wav-data read successfully') #
-						#self._websocket.write_message(data, True) # boris commented
-						self._websocket.write_message('hello boris') # boris here 10131: exception
-						#self._websocket.write_message(bytes({%% sound.wav %%}), True) # boris commented
-						#self._websocket.send({%% sound.wav %%}, binary=True) # boris commented
+				try:
+					order = self._qP.get_nowait()
+					if order == 'exit':
+						break
+					elif order == 'play':
+						print('### play request taken')
+						with open(self._pP, 'rb') as f:
+							print('sending wav-data to websocket') #
+							data = f.read()
+							print('sending wav-data read successfully') #
+							self._bufferP = bytes({%% sound.wav %%})
+							#self._websocket.write_message(data, True) # boris commented
+							#self._websocket.write_message('hello boris') # boris here 10131: exception
+							#self._websocket.write_message(bytes({%% sound.wav %%}), True) # boris commented
+							#self._websocket.send({%% sound.wav %%}, binary=True) # boris commented
 
 
-						#self._websocket.send(data + '\n\0')
-						print('sending wav-data to websocket: done') #
-				#except tornado.websocket.WebSocketClosedError:
-				#	print('---- boris 10131.0126 ----')
-				#except:
-				#	print('---- EXCEPTION 10131.0121 ----')
-				#	pass
-				time.sleep(0.1) # boris e: а надо ли?
+							#self._websocket.send(data + '\n\0')
+							print('sending wav-data to websocket: done') #
+				except tornado.websocket.WebSocketClosedError:
+					print('---- boris 10131.0126 ----')
+				except:
+					print('---- EXCEPTION 10131.0121 ----')
+					pass
+				time.sleep(3) # boris e: а надо ли?
 
 
 		#while True: # boris stub
