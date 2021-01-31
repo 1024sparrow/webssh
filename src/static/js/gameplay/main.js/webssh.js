@@ -373,7 +373,7 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 
 	this.button.prop('disabled', false);
 	if (!data || !data.id){
-		Utils.log_status('failed', true);
+		this.log_status('failed', true);
 		this.state = this.DISCONNECTED;
 		this.ajax_error_callback(false);
 		return;
@@ -457,7 +457,7 @@ Webssh.prototype.ajax_complete_callback = function(p_data){
 
 Webssh.prototype.ajax_error_callback = function(p_isNetworkProblem){
 	console.log('ajax failed');
-	Utils.log_status('failed', true);
+	this.log_status('failed', true);
 	this.state = this.DISCONNECTED;
 	this.button.prop('disabled', false);
 };

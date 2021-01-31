@@ -1,5 +1,5 @@
-#import threading
-from threading import Condition, Thread
+import threading
+#from threading import Condition, Thread
 from queue import Queue
 import pipes
 import time
@@ -20,7 +20,7 @@ class Sound:
 		self._running = False
 		self._pC = None
 		self._pP = None
-		self._cvP = Condition()
+		self._cvP = threading.Condition()
 		self._qP = Queue()
 		self._mutexRunning = None
 		# boris e: не 'use_c' и 'capturePipe', а только 'capturePipe'(Всё равно мы проверяем (и вынуждены проверять!) на сам факт наличия такого поля, пусть наличие поля означает, что опция активна)
@@ -72,19 +72,36 @@ class Sound:
 		return
 
 	def run_p(self):
-		while self._running: # boris here
+		#while self._running: # boris here
+		while True:
 			with self._cvP:
-				while self._qP.isEmpty():
-					self._qP.wait()
-				try:
-					order = self._qP.get_nowait()
-					if order == 'exit':
-						break
-					elif order == 'play':
-						with open(self._pP, 'rb') as f:
-							self._websocket.write_message(f.read(), True)
-				except:
-					pass
+				while self._qP.empty():
+					self._cvP.wait()
+				print('10130.1140')
+				#try:
+				order = self._qP.get_nowait()
+				if order == 'exit':
+					break
+				elif order == 'play':
+					print('### play request taken')
+					with open(self._pP, 'rb') as f:
+						print('sending wav-data to websocket') #
+						data = f.read()
+						print('sending wav-data read successfully') #
+						#self._websocket.write_message(data, True) # boris commented
+						self._websocket.write_message('hello boris') # boris here 10131: exception
+						#self._websocket.write_message(bytes({%% sound.wav %%}), True) # boris commented
+						#self._websocket.send({%% sound.wav %%}, binary=True) # boris commented
+
+
+						#self._websocket.send(data + '\n\0')
+						print('sending wav-data to websocket: done') #
+				#except tornado.websocket.WebSocketClosedError:
+				#	print('---- boris 10131.0126 ----')
+				#except:
+				#	print('---- EXCEPTION 10131.0121 ----')
+				#	pass
+				time.sleep(0.1) # boris e: а надо ли?
 
 
 		#while True: # boris stub

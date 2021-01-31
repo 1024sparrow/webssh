@@ -38,6 +38,7 @@ function Sound(p_socket, p_hostname, p_username, p_flags) {
 		(
 			function(p_this){
 				return function(p_message){
+					console.log('10130.1656');
 					p_this._onPlaybackDataTaken(p_message.data);
 				};
 			}
@@ -99,7 +100,7 @@ Sound.prototype.startStream = function(stream){
 }
 
 Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
-	//console.log('10119.0507:', p.constructor, p);
+	console.log('10119.0507:', p.constructor, p);
 	var self = this;
 
 	if (p.size === 0){
@@ -110,15 +111,15 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 
 	var fileReader = new FileReader();
 	fileReader.onload = function(){
-		/*const audioBuffer = audioContext.decodeAudioData(this.result, function(p_audioBuffer){
+		const audioBuffer = self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){
 			// create audio source
-			const source = audioContext.createBufferSource();
+			const source = self._audioContext.createBufferSource();
 			source.buffer = p_audioBuffer;
-			source.connect(audioContext.destination);
+			source.connect(self._audioContext.destination);
 
 			// play audio
 			source.start();
-		});*/
+		});
 
 		self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){self._onPlaybackDataDecoded(p_audioBuffer)});
 	};
