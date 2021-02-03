@@ -43,7 +43,10 @@ function startServer {
 	popd > /dev/null # $dirpath
 	#SOUND_PIPE_P=boris/playback.pipe \
 	#SOUND_PIPE_C=boris/capture.pipe \
-	SOUND_CONFIG_PATH='~/.stretchplayer-ssh.conf' \
+
+	#SOUND_CONFIG_PATH='~/.stretchplayer-ssh.conf' \
+
+	SOUND_CONFIG_PATH=~/.stretchplayer-ssh.conf \
 	 python3 "$dirpath"/run.py \
 		--certfile="$dirpath"/https/cert \
 		--keyfile="$dirpath"/https/key \

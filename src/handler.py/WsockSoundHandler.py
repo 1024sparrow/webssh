@@ -5,7 +5,7 @@ class WsockSoundHandler(MixinHandler, tornado.websocket.WebSocketHandler):
 		with open(os.environ['SOUND_CONFIG_PATH'], 'r') as f:
 			data = f.read()
 			self.conf = json.loads(data)
-		self.sound = Sound({
+		self.sound = Sound(loop, {
 			#'use_c': True,
 			'use_c': False,
 			'use_p': True,
