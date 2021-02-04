@@ -112,7 +112,7 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 
 	var fileReader = new FileReader();
 	fileReader.onload = function(){
-		const audioBuffer = self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){
+		/*const audioBuffer = self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){
 			// create audio source
 			const source = self._audioContext.createBufferSource();
 			source.buffer = p_audioBuffer;
@@ -120,7 +120,7 @@ Sound.prototype._onPlaybackDataTaken = function(p){ // boris here 10122
 
 			// play audio
 			source.start();
-		});
+		});*/
 
 		self._audioContext.decodeAudioData(this.result, function(p_audioBuffer){self._onPlaybackDataDecoded(p_audioBuffer)});
 	};
